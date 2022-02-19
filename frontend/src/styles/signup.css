@@ -1,0 +1,8 @@
+.signup__container {
+  max-width: 50%;
+}
+
+.error {
+  color: red;
+  font-size: 0.75rem;
+}

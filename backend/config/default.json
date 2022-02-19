@@ -1,0 +1,11 @@
+{
+  "DB": {
+    "host": "localhost",
+    "username": "rushabh",
+    "password": "admin",
+    "port": 3306,
+    "database": "etsy"
+  },
+  "jwtPrivateKey": "1234",
+  "port": "3000"
+}
