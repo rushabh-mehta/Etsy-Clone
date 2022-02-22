@@ -4,7 +4,7 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import api from '../services/post';
 import 'bootstrap/dist/css/bootstrap.css';
-import '../styles/signup.css';
+import '../styles/login.css';
 import LoadingIcons from 'react-loading-icons';
 import {useNavigate, useLocation} from "react-router-dom";
 import {Link} from 'react-router-dom';
@@ -104,47 +104,50 @@ const Login = () => {
         e.preventDefault();
         loginUser();
     }
-
+    
     return (
         <section>
-            <h1 className="signup__header">Login</h1>
             <form action="" onSubmit={handleUserLoginSubmit}>
-                <div className="container signup__container">
-                    <div className="signup__item form-group">
-                        <label htmlFor="useremail">Email</label>
+                <div className="container">
+                    <div className="login_container col-md-3 col-sm-12">
+                        <h1 className="login__header">Log In</h1>
+                    <div className="login_item_container form-group">
+                        <label htmlFor="useremail" className="login_item_label">Email</label>
                         {validEmail && <FontAwesomeIcon icon={faCheck}/> }
                         {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
-                        <input ref={emailRef} className="form-control" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
+                        <input ref={emailRef} className="form-control login_item_input" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
                         onBlur={() => setEmailFocus(false)}>
                         </input>
                         {emailFocus && !validEmail && 
-                            <p>
+                            <small className="form-text text-muted login_item_text_container">
                                 <FontAwesomeIcon icon={faInfoCircle} />
-                                Invalid Email
-                            </p>
+                                <span className="login_item_text">Invalid Email</span>
+                            </small>
                         }    
                     </div>
-                    <div className="signup__item form-group">
-                        <label htmlFor="userpassword">Password</label>
+                    <div className="login_item_container form-group">
+                        <label className="login_item_label" htmlFor="userpassword">Password</label>
                         {validPassword && <FontAwesomeIcon icon={faCheck}/> }
                         {(!validPassword && password) && <FontAwesomeIcon icon={faTimes} />}
-                        <input className="form-control" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
+                        <input className="form-control login_item_input" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
                         onBlur={() => setPasswordFocus(false)}>
                         </input>
                         {passwordFocus && !validPassword && 
-                            <p>
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            8 to 24 characters.<br />
-                            Must include uppercase and lowercase letters, a number and a special character.<br />
-                            Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                        </p>
+                            <small className="form-text text-muted login_item_text_container">
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                                <span className="login_item_text">
+                                8 to 24 characters.<br />
+                                Must include uppercase and lowercase letters, a number and a special character.<br />
+                                Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span></span>
+                            </small>
                         }    
                     </div>
-                    <div className="signup_item form-group">
-                        <button  className="btn btn-primary" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
-                        {loggingIn && <LoadingIcons.ThreeDots stroke="#98ff98" fill="#98ff98"/>}
+                    <div className="login_item_container form-group">
+                        <button  className="btn btn-primary login_btn" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
+                        {loggingIn && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
                         {errorMsg && <p className="error">{errorMsg}</p>}
                         <p><Link to={REGISTER_URL}>Dont have an account? Register here!</Link></p>
+                    </div>
                     </div>
                 </div>
             </form>

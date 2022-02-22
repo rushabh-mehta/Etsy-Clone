@@ -1,0 +1,45 @@
+.login_item_container {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.login_item_label {
+  margin-right: 5px;
+}
+
+.login_container {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+}
+
+.login__header {
+  font-size: 1.25rem;
+}
+
+.error {
+  color: red;
+  font-size: 0.6rem;
+  margin-top: 5px;
+}
+
+.login_item_input {
+  height: 32px;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.25rem;
+}
+
+.login_btn {
+  max-height: 32px;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.25rem;
+}
+
+.login_item_text {
+  margin-left: 5px;
+}
+
+.login_item_text_container {
+  margin-top: 5px;
+  display: inline-block;
+}

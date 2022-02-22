@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useNavigate} from 'react-router-dom';
 import api from '../services/post';
 import 'bootstrap/dist/css/bootstrap.css';
-import '../styles/signup.css';
+import '../styles/register.css';
 import LoadingIcons from 'react-loading-icons';
 import {Link} from 'react-router-dom';
 
@@ -117,74 +117,77 @@ const Register = () => {
 
     return (
         <section>
-            <h1 className="signup__header">Register</h1>
             <form action="" onSubmit={handleUserRegistrationSubmit}>
-                <div className="container signup__container">
-                    <div className="signup__item form-group">
-                        <label htmlFor="username">Name</label>
-                        {validName && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validName && name) && <FontAwesomeIcon icon={faTimes} />}
-                        <input ref={nameRef} className="form-control" id="username" name="username" type="text" onChange={(e)=>{setName(e.target.value)}} onFocus={() => setUserFocus(true)} 
-                        onBlur={() => setUserFocus(false)}>
-                        </input>
-                        {userFocus && !validName && 
-                            <p>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                4 to 24 characters.<br />
-                                Must begin with a letter.<br />
-                                Letters, numbers, underscores, hyphens allowed.
-                            </p>
-                        }    
-                    </div>
-                    <div className="signup__item form-group">
-                        <label htmlFor="useremail">Email</label>
-                        {validEmail && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
-                        <input className="form-control" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
-                        onBlur={() => setEmailFocus(false)}>
-                        </input>
-                        {emailFocus && !validEmail && 
-                            <p>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                Invalid Email
-                            </p>
-                        }    
-                    </div>
-                    <div className="signup__item form-group">
-                        <label htmlFor="userpassword">Password</label>
-                        {validPassword && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validPassword && password) && <FontAwesomeIcon icon={faTimes} />}
-                        <input className="form-control" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
-                        onBlur={() => setPasswordFocus(false)}>
-                        </input>
-                        {passwordFocus && !validPassword && 
-                            <p>
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            8 to 24 characters.<br />
-                            Must include uppercase and lowercase letters, a number and a special character.<br />
-                            Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                        </p>
-                        }    
-                    </div>
-                    <div className="signup__item form-group">
-                        <label htmlFor="usermatchpassword">Confirm Password</label>
-                        {validMatchPassword && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validMatchPassword && matchPassword) && <FontAwesomeIcon icon={faTimes} />}
-                        <input className="form-control" id="usermatchpassword" name="usermatchpassword" type="password" onChange={(e)=>{setMatchPassword(e.target.value)}} onFocus={() => setMatchPasswordFocus(true)} 
-                        onBlur={() => setMatchPasswordFocus(false)}>
-                        </input>
-                        {matchPasswordFocus && !validMatchPassword && 
-                            <p>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                Must match the first password input field.
-                            </p>
-                        }    
-                    </div>
-                    <div className="signup_item form-group">
-                        <button  className="btn btn-primary" type="submit" disabled={!validName || !validEmail || !validPassword || !validMatchPassword || registering}>Register</button>
-                        {registering && <LoadingIcons.ThreeDots stroke="#98ff98" fill="#98ff98"/>}
-                        {errorMsg && <p className="error">{errorMsg}</p>}
-                        <p><Link to={LOGIN_URL}>Already Have an account? Login here!</Link></p>
+                <div className="container">
+                    <div className="register_container col-md-3 col-sm-12">
+                        <h1 className="register__header">Register</h1>
+                        <div className="register_item_container form-group">
+                            <label className="register_item_label" htmlFor="username">Name</label>
+                            {validName && <FontAwesomeIcon icon={faCheck}/> }
+                            {(!validName && name) && <FontAwesomeIcon icon={faTimes} />}
+                            <input ref={nameRef} className="form-control register_item_input" id="username" name="username" type="text" onChange={(e)=>{setName(e.target.value)}} onFocus={() => setUserFocus(true)} 
+                            onBlur={() => setUserFocus(false)}>
+                            </input>
+                            {userFocus && !validName && 
+                                <small className="form-text text-muted register_item_text_container">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span className="register_item_text">4 to 24 characters.<br />
+                                    Must begin with a letter.<br />
+                                    Letters, numbers, underscores, hyphens allowed.</span>
+                                </small>
+                            }    
+                        </div>
+                        <div className="register_item_container form-group">
+                            <label className="register_item_label" htmlFor="useremail">Email</label>
+                            {validEmail && <FontAwesomeIcon icon={faCheck}/> }
+                            {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
+                            <input className="form-control register_item_input" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
+                            onBlur={() => setEmailFocus(false)}>
+                            </input>
+                            {emailFocus && !validEmail && 
+                                <small className="form-text text-muted register_item_text_container">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span className="register_item_text">Invalid Email</span>
+                                </small>
+                            }    
+                        </div>
+                        <div className="register_item_container form-group">
+                            <label className="register_item_label" htmlFor="userpassword">Password</label>
+                            {validPassword && <FontAwesomeIcon icon={faCheck}/> }
+                            {(!validPassword && password) && <FontAwesomeIcon icon={faTimes} />}
+                            <input className="form-control register_item_input" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
+                            onBlur={() => setPasswordFocus(false)}>
+                            </input>
+                            {passwordFocus && !validPassword && 
+                                <small className="form-text text-muted register_item_text_container">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span className="register_item_text">
+                                    8 to 24 characters.<br />
+                                    Must include uppercase and lowercase letters, a number and a special character.<br />
+                                    Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span></span>
+                                </small>
+                            }    
+                        </div>
+                        <div className="register_item_container form-group">
+                            <label className="register_item_label" htmlFor="usermatchpassword">Confirm Password</label>
+                            {validMatchPassword && <FontAwesomeIcon icon={faCheck}/> }
+                            {(!validMatchPassword && matchPassword) && <FontAwesomeIcon icon={faTimes} />}
+                            <input className="form-control register_item_input" id="usermatchpassword" name="usermatchpassword" type="password" onChange={(e)=>{setMatchPassword(e.target.value)}} onFocus={() => setMatchPasswordFocus(true)} 
+                            onBlur={() => setMatchPasswordFocus(false)}>
+                            </input>
+                            {matchPasswordFocus && !validMatchPassword && 
+                                <small className="form-text text-muted register_item_text_container">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span className="register_item_text">Must match the first password input field.</span>
+                                </small>
+                            }    
+                        </div>
+                        <div className="register_item_container form-group">
+                            <button  className="btn btn-primary register_btn" type="submit" disabled={!validName || !validEmail || !validPassword || !validMatchPassword || registering}>Register</button>
+                            {registering && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
+                            {errorMsg && <p className="error">{errorMsg}</p>}
+                            <p><Link to={LOGIN_URL}>Already Have an account? Login here!</Link></p>
+                        </div>
                     </div>
                 </div>
             </form>
