@@ -6,8 +6,8 @@ import api from '../services/post';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/login.css';
 import LoadingIcons from 'react-loading-icons';
-import {useNavigate, useLocation} from "react-router-dom";
 import {Link} from 'react-router-dom';
+import {useNavigate, useLocation, } from "react-router-dom";
 
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
