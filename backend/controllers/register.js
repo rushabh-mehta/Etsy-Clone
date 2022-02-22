@@ -10,7 +10,7 @@ const encrypt = require("../services/encrypt");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-    const {username:name,useremail:email, userpassword: password} = req.body;
+    const {name,email,password} = req.body;
     const userRegObj = {name,email,password};
     const response = {};
     try{

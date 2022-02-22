@@ -3,7 +3,8 @@ const cors = require('cors');
 const config = require("config");
 const mysql = require("mysql2");
 const auth = require("./middleware/auth");
-const signup = require("./controllers/signup");
+const register = require("./controllers/register");
+const login = require("./controllers/login");
 const home = require("./controllers/home");
 
 const app = express();
@@ -16,6 +17,7 @@ app.listen(3000, ()=>{
 })
 
 
-app.use('/api/signup',signup);
+app.use('/api/register',register);
+app.use('/api/login',login);
 app.use('/api/home',home);
 

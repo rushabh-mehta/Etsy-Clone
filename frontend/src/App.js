@@ -1,14 +1,16 @@
 import './App.css';
-import {Route, Routes, Link} from 'react-router-dom';
-import Signup from './components/Signup';
+import {Route, Routes} from 'react-router-dom';
+import Register from './components/Register';
+import Login from './components/Login';
 import Home from './components/Home';
-import ProtectedRoute from './services/protectedroute';
 
 function App() {
   return (
     <Routes>
-        <Route exact path="/signup" element={<Signup/>} />
-        <Route exact path="/home" element={<Home/>}/>
+        <Route exact path="register" element={<Register/>} />
+        <Route exact path="login" element={<Login/>} />
+        <Route exact path="/" element={<Home/>}/>
+        <Route exact path="home" element={<Home/>}/>
     </Routes>
   );
 }
