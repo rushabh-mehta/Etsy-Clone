@@ -13,43 +13,52 @@ router.post("/", async (req, res) => {
     const {name,email,password} = req.body;
     const userRegObj = {name,email,password};
     const response = {};
-    try{
-        const exists = await User.checkExists(userRegObj);
-        console.log("exists"+JSON.stringify(exists));
-        if(exists && exists.userFound){
-            response.success = false;
-            response.error = "User already exists";
-            response.status = "400";
-            return res.status(400).send(response);
-        }
-
-        const encryptedPassword = await encrypt.cryptPassword(password);
-        userRegObj.password = encryptedPassword;
-        userRegObj.id = uuidv4();
-        const result = await User.addUser(userRegObj);
-        
-        delete userRegObj.password;
-        // Create token
-        const token = jwt.sign(
-            userRegObj,
-            config.get("jwtPrivateKey"),
-            {
-                expiresIn: "2h",
+    if(userRegObj.name && userRegObj.email && userRegObj.password){
+        try{
+            const exists = await User.checkExists(userRegObj);
+            console.log("exists"+JSON.stringify(exists));
+            if(exists && exists.userFound){
+                response.success = false;
+                response.error = "User already exists";
+                response.status = "400";
+                return res.status(400).send(response);
             }
-        );
-        userRegObj.token = token;
-        response.user = userRegObj;
-        response.success = true;
-        response.status = "200";
-        response.result = result;
-        return res.status(200).send(response);
-    }catch(e){
+
+            const encryptedPassword = await encrypt.cryptPassword(password);
+            userRegObj.password = encryptedPassword;
+            userRegObj.id = uuidv4();
+            const result = await User.addUser(userRegObj);
+            
+            delete userRegObj.password;
+            // Create token
+            const token = jwt.sign(
+                userRegObj,
+                config.get("jwtPrivateKey"),
+                {
+                    expiresIn: "2h",
+                }
+            );
+            userRegObj.token = token;
+            response.user = userRegObj;
+            response.success = true;
+            response.status = "200";
+            response.result = result;
+            return res.status(200).send(response);
+        }catch(e){
+            console.log(e);
+            response.success = false;
+            response.error = "Some error occurred. Please try again later";
+            response.status = "500";
+            res.status(500).send(response);
+        }
+    }else{
         console.log(e);
         response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
+        response.error = "Invalid credentials";
+        response.status = "400";
+        res.status(400).send(response);
     }
+    
 });
 
 

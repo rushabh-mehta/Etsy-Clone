@@ -10,14 +10,12 @@ import LoadingIcons from 'react-loading-icons';
 import {Link} from 'react-router-dom';
 
 
-// const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-// const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-const USER_REGEX = /.*/;
-const PWD_REGEX = /.*/;
-const EMAIL_REGEX = /.*/;
-
+const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const REGISTER_API = '/api/register';
+const HOMEPAGE = "/"; 
+const LOGIN_URL = "/login";
 
 const Register = () => {
     const nameRef = useRef();
@@ -48,7 +46,7 @@ const Register = () => {
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
         if(token && user){
-            navigate("/", {replace:true});
+            navigate(HOMEPAGE, {replace:true});
         }
     },[]);
 
@@ -67,7 +65,7 @@ const Register = () => {
 
     useEffect(() => {
         setValidPassword(PWD_REGEX.test(password));
-        setValidMatchPassword(password === matchPassword);
+        setValidMatchPassword(PWD_REGEX.test(matchPassword) && password === matchPassword);
     }, [password, matchPassword])
 
     useEffect(() => {
@@ -79,7 +77,7 @@ const Register = () => {
         try{
             setRegistering(true);
             const user = {name,email,password};
-            const response = await api.post('/api/register/',user);
+            const response = await api.post(REGISTER_API,user);
             if(response && response.data){
                 if(response.data.success){
                     const user = response.data.user;
@@ -89,12 +87,12 @@ const Register = () => {
                         localStorage.setItem("user",JSON.stringify(user));
                         setRegistering(false);
                         setSuccess(true);
-                        navigate("/home",{replace:true});
+                        navigate(HOMEPAGE,{replace:true});
                     }
                 }else{
                     // TODO show error message from response
                     setSuccess(false);
-                    setErrorMsg(response.data.error);
+                    setErrorMsg("Some unexpected error occurred!");
                     setRegistering(false);
                 }
             }else{
@@ -122,11 +120,10 @@ const Register = () => {
             <h1 className="signup__header">Register</h1>
             <form action="" onSubmit={handleUserRegistrationSubmit}>
                 <div className="container signup__container">
-                    {errorMsg && <p className="error">{errorMsg}</p>}
                     <div className="signup__item form-group">
                         <label htmlFor="username">Name</label>
                         {validName && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validName || !name) && <FontAwesomeIcon icon={faTimes} />}
+                        {(!validName && name) && <FontAwesomeIcon icon={faTimes} />}
                         <input ref={nameRef} className="form-control" id="username" name="username" type="text" onChange={(e)=>{setName(e.target.value)}} onFocus={() => setUserFocus(true)} 
                         onBlur={() => setUserFocus(false)}>
                         </input>
@@ -142,7 +139,7 @@ const Register = () => {
                     <div className="signup__item form-group">
                         <label htmlFor="useremail">Email</label>
                         {validEmail && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validEmail || !email) && <FontAwesomeIcon icon={faTimes} />}
+                        {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
                         <input className="form-control" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
                         onBlur={() => setEmailFocus(false)}>
                         </input>
@@ -156,7 +153,7 @@ const Register = () => {
                     <div className="signup__item form-group">
                         <label htmlFor="userpassword">Password</label>
                         {validPassword && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validPassword || !password) && <FontAwesomeIcon icon={faTimes} />}
+                        {(!validPassword && password) && <FontAwesomeIcon icon={faTimes} />}
                         <input className="form-control" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
                         onBlur={() => setPasswordFocus(false)}>
                         </input>
@@ -172,7 +169,7 @@ const Register = () => {
                     <div className="signup__item form-group">
                         <label htmlFor="usermatchpassword">Confirm Password</label>
                         {validMatchPassword && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validMatchPassword || !matchPassword) && <FontAwesomeIcon icon={faTimes} />}
+                        {(!validMatchPassword && matchPassword) && <FontAwesomeIcon icon={faTimes} />}
                         <input className="form-control" id="usermatchpassword" name="usermatchpassword" type="password" onChange={(e)=>{setMatchPassword(e.target.value)}} onFocus={() => setMatchPasswordFocus(true)} 
                         onBlur={() => setMatchPasswordFocus(false)}>
                         </input>
@@ -186,7 +183,8 @@ const Register = () => {
                     <div className="signup_item form-group">
                         <button  className="btn btn-primary" type="submit" disabled={!validName || !validEmail || !validPassword || !validMatchPassword || registering}>Register</button>
                         {registering && <LoadingIcons.ThreeDots stroke="#98ff98" fill="#98ff98"/>}
-                        <p><Link to="/login">Already Have an account? Login here!</Link></p>
+                        {errorMsg && <p className="error">{errorMsg}</p>}
+                        <p><Link to={LOGIN_URL}>Already Have an account? Login here!</Link></p>
                     </div>
                 </div>
             </form>

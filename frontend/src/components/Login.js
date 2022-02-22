@@ -10,13 +10,12 @@ import {useNavigate, useLocation} from "react-router-dom";
 import {Link} from 'react-router-dom';
 
 
-// const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-// const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-const USER_REGEX = /.*/;
-const PWD_REGEX = /.*/;
-const EMAIL_REGEX = /.*/;
+const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const LOGIN_API = '/api/login/';
+const HOMEPAGE = "/";
+const REGISTER_URL = "/register";
 
 
 const Login = () => {
@@ -43,7 +42,7 @@ const Login = () => {
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
         if(token && user){
-            navigate("/", {replace:true});
+            navigate(HOMEPAGE, {replace:true});
         }
     },[]);
 
@@ -68,7 +67,7 @@ const Login = () => {
         setLoggingIn(true);
         const user = {email,password};
         try{
-            const response = await api.post('/api/login/',user);
+            const response = await api.post(LOGIN_API,user);
             if(response && response.data){
                 if(response.data.success){
                     const user = response.data.user;
@@ -79,11 +78,11 @@ const Login = () => {
                         localStorage.setItem("user",JSON.stringify(user));
                         setLoggingIn(false);
                         setSuccess(true);
-                        navigate("/", {replace:true});
+                        navigate(HOMEPAGE, {replace:true});
                     }
                 }else{
                     setSuccess(false);
-                    setErrorMsg(response.data.error);
+                    setErrorMsg("Some unexpected error occurred!");
                     setLoggingIn(false);
                 }
             }else{
@@ -98,7 +97,6 @@ const Login = () => {
             }
             setLoggingIn(false);
         }
-        
     }
     
     
@@ -115,7 +113,7 @@ const Login = () => {
                     <div className="signup__item form-group">
                         <label htmlFor="useremail">Email</label>
                         {validEmail && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validEmail || !email) && <FontAwesomeIcon icon={faTimes} />}
+                        {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
                         <input ref={emailRef} className="form-control" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
                         onBlur={() => setEmailFocus(false)}>
                         </input>
@@ -129,7 +127,7 @@ const Login = () => {
                     <div className="signup__item form-group">
                         <label htmlFor="userpassword">Password</label>
                         {validPassword && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validPassword || !password) && <FontAwesomeIcon icon={faTimes} />}
+                        {(!validPassword && password) && <FontAwesomeIcon icon={faTimes} />}
                         <input className="form-control" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
                         onBlur={() => setPasswordFocus(false)}>
                         </input>
@@ -146,7 +144,7 @@ const Login = () => {
                         <button  className="btn btn-primary" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
                         {loggingIn && <LoadingIcons.ThreeDots stroke="#98ff98" fill="#98ff98"/>}
                         {errorMsg && <p className="error">{errorMsg}</p>}
-                        <p><Link to="/register">Dont have an account? Register here!</Link></p>
+                        <p><Link to={REGISTER_URL}>Dont have an account? Register here!</Link></p>
                     </div>
                 </div>
             </form>

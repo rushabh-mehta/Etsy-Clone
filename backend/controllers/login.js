@@ -11,45 +11,56 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
     const {name,email,password} = req.body;
-    const userObj = {name,email,password};
+    const userObj = {email,password};
+    console.log(email);
+    console.log(password);
     const response = {};
-    try{
-        const exists = await User.checkExists(userObj);
-        if(exists && exists.userFound){
-            const passwordMatch = await encrypt.comparePassword(userObj.password, exists.user.password);
-            if(passwordMatch){
-                delete userObj.password;
-                const token = jwt.sign(
-                    userObj,
-                    config.get("jwtPrivateKey"),
-                    {
-                        expiresIn: "2h",
-                    }
-                );
-                userObj.token = token;
-                response.user = userObj;
-                response.success = true;
-                response.status = "200";
-                return res.status(200).send(response);
+    if(userObj.email && userObj.password){
+        try{
+            const exists = await User.checkExists(userObj);
+            if(exists && exists.userFound){
+                const passwordMatch = await encrypt.comparePassword(userObj.password, exists.user.password);
+                console.log(passwordMatch);
+                if(passwordMatch){
+                    delete userObj.password;
+                    const token = jwt.sign(
+                        userObj,
+                        config.get("jwtPrivateKey"),
+                        {
+                            expiresIn: "2h",
+                        }
+                    );
+                    userObj.token = token;
+                    response.user = userObj;
+                    response.success = true;
+                    response.status = "200";
+                    return res.status(200).send(response);
+                }else{
+                    response.success = false;
+                    response.status = "400";
+                    response.error = "Invalid credentials";
+                    return res.status(400).send(response);
+                }
             }else{
                 response.success = false;
                 response.status = "400";
                 response.error = "Invalid credentials";
-                return res.status(400).send(response);
+                return res.status(400).send(response);  
             }
-        }else{
+        }catch(e){
+            console.log(e);
             response.success = false;
-            response.status = "400";
-            response.error = "Invalid credentials";
-            return res.status(200).send(response);  
+            response.error = "Some error occurred. Please try again later";
+            response.status = "500";
+            res.status(200).send(response);
         }
-    }catch(e){
-        console.log(e);
+    }else{
         response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(200).send(response);
+        response.status = "400";
+        response.error = "Invalid credentials";
+        return res.status(400).send(response);
     }
+
 });
 
 
