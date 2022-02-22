@@ -1,10 +1,14 @@
 import React from 'react';
 import {useState} from 'react';
-import api from '../services/posts';
+import {useNavigate} from 'react-router-dom';
+import api from '../services/post';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/signup.css';
+import LoadingIcons from 'react-loading-icons'
 
 const Signup = () => {
+    const [registering, setRegistering] = useState(false);
+    let navigate = useNavigate();
     const [userRegistration, setUserRegistration] = useState({
         username:"",
         useremail:"",
@@ -43,14 +47,36 @@ const Signup = () => {
 
     const registerUser = async ()=>{
         // make AXIOS api call
+        setRegistering(true);
         const response = await api.post('/api/signup/',userRegistration);
-        console.log(response);
+        if(response && response.data){
+            if(response.data.success){
+                const user = response.data.user;
+                if(user && user.token){
+                    localStorage.setItem("token",user.token);
+                    delete user.token;
+                    localStorage.setItem("user",JSON.stringify(user));
+                    setRegistering(false);
+                    navigate("/home",{replace:true});
+                }
+            }else{
+                // TODO show error message from response
+                setRegistering(false);
+            }
+        }else{
+            //TODO show unexpected error
+            setRegistering(false);
+        }
     }
 
     const handleUserRegistrationSubmit = (e)=>{
         e.preventDefault();
-        setErrors(validateUserRegistration());
-        registerUser();
+        let errorsObj = validateUserRegistration()
+        if(Object.keys(errorsObj).length){
+            setErrors(errorsObj);
+        }else{
+            registerUser();
+        }
     }
 
   return (
@@ -79,7 +105,8 @@ const Signup = () => {
                     {errors.userconfirmpassword && <p className="error">{errors.userconfirmpassword}</p>}
                 </div>
                 <div className="signup_item form-group">
-                    <button  className="btn btn-primary" type="submit">Sign Up</button>
+                    <button  className="btn btn-primary" type="submit" disabled={registering}>Sign Up</button>
+                    {registering && <LoadingIcons.ThreeDots stroke="#98ff98" fill="#98ff98"/>}
                 </div>
             </div>
             

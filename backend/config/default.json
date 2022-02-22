@@ -2,7 +2,7 @@
   "DB": {
     "host": "localhost",
     "username": "rushabh",
-    "password": "admin",
+    "password": "rushabh",
     "port": 3306,
     "database": "etsy"
   },

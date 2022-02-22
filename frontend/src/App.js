@@ -1,12 +1,15 @@
 import './App.css';
+import {Route, Routes, Link} from 'react-router-dom';
 import Signup from './components/Signup';
-import {Route, Routes} from 'react-router-dom';
+import Home from './components/Home';
+import ProtectedRoute from './services/protectedroute';
 
 function App() {
   return (
-      <Routes>
+    <Routes>
         <Route exact path="/signup" element={<Signup/>} />
-      </Routes>
+        <Route exact path="/home" element={<Home/>}/>
+    </Routes>
   );
 }
 
