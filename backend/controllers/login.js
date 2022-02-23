@@ -23,6 +23,7 @@ router.post("/", async (req, res) => {
                 console.log(passwordMatch);
                 if(passwordMatch){
                     delete userObj.password;
+                    delete exists.user.password;
                     const token = jwt.sign(
                         userObj,
                         config.get("jwtPrivateKey"),
@@ -30,10 +31,11 @@ router.post("/", async (req, res) => {
                             expiresIn: "2h",
                         }
                     );
-                    userObj.token = token;
-                    response.user = userObj;
+                    exists.user.token = token;
+                    response.user = exists.user;
                     response.success = true;
                     response.status = "200";
+                    console.log("sent");
                     return res.status(200).send(response);
                 }else{
                     response.success = false;

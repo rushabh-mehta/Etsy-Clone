@@ -51,6 +51,28 @@ class User{
         });
     }
 
+    static getUserById = async ({id})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `select id,name,email from ${tableName} WHERE id="${id}"`;
+            console.log("SQL: ", sqlQuery);
+            con.query(sqlQuery, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                console.log("USER EXISTS RESULTS: ", results);
+                let userObj = {};
+                if(results && results.length){
+                    userObj.userFound = true;
+                    userObj.user = results[0];
+                }else{
+                    userObj.userFound = false; 
+                }
+                return resolve(userObj);
+            });
+        });
+    }
+
 }
 
 module.exports.User = User;

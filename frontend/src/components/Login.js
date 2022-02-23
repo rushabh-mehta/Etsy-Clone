@@ -71,10 +71,12 @@ const Login = () => {
             if(response && response.data){
                 if(response.data.success){
                     const user = response.data.user;
+                    console.log(user);
                     if(user && user.token){
                         const token = user.token;
                         localStorage.setItem("token",token);
                         delete user.token;
+                        console.log(user);
                         localStorage.setItem("user",JSON.stringify(user));
                         setLoggingIn(false);
                         setSuccess(true);
