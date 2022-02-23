@@ -7,6 +7,7 @@ const register = require("./controllers/register");
 const login = require("./controllers/login");
 const home = require("./controllers/home");
 const user = require("./controllers/user");
+const country = require("./controllers/country");
 
 const app = express();
 
@@ -22,4 +23,5 @@ app.use('/api/register',register);
 app.use('/api/login',login);
 app.use('/api/home',home);
 app.use('/api/user',user);
+app.use('/api/country',country);
 

@@ -16,7 +16,6 @@ const ViewProfile = () => {
         try{
             const response = await authapi.get(GET_USER_API+id);
             if(response && response.data && response.data.success && response.data.user){
-                console.log(JSON.stringify(response.data.user));
                 setUser(response.data.user);
                 setViewProfileLoading(false);
             }else{
@@ -43,10 +42,10 @@ const ViewProfile = () => {
         if(!token || !user){
             navigate("/login", {replace:true});
         }else{
-            console.log(user);
             getUser(user);
         }
     },[]);
+
   return (
     <div>
         <MainNavbar />

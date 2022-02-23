@@ -20,7 +20,6 @@ router.post("/", async (req, res) => {
             const exists = await User.checkExists(userObj);
             if(exists && exists.userFound){
                 const passwordMatch = await encrypt.comparePassword(userObj.password, exists.user.password);
-                console.log(passwordMatch);
                 if(passwordMatch){
                     delete userObj.password;
                     delete exists.user.password;
@@ -35,7 +34,6 @@ router.post("/", async (req, res) => {
                     response.user = exists.user;
                     response.success = true;
                     response.status = "200";
-                    console.log("sent");
                     return res.status(200).send(response);
                 }else{
                     response.success = false;
@@ -54,7 +52,7 @@ router.post("/", async (req, res) => {
             response.success = false;
             response.error = "Some error occurred. Please try again later";
             response.status = "500";
-            res.status(200).send(response);
+            res.status(500).send(response);
         }
     }else{
         response.success = false;
