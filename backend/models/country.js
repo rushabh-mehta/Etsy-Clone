@@ -7,7 +7,7 @@ class Country{
 
     static getCountries = async ()=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `select name from ${tableName}`;
+            const sqlQuery = `select name,id from ${tableName}`;
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);

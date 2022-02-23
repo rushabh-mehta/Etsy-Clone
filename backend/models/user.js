@@ -53,7 +53,7 @@ class User{
 
     static getUserById = async ({id})=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `select id,name,email from ${tableName} WHERE id="${id}"`;
+            const sqlQuery = `select id,name,email,gender,dob,phone,address,city,country from ${tableName} WHERE id="${id}"`;
             console.log("SQL: ", sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
@@ -67,6 +67,26 @@ class User{
                     userObj.user = results[0];
                 }else{
                     userObj.userFound = false; 
+                }
+                return resolve(userObj);
+            });
+        });
+    }
+
+    static editUser = async ({id,name,email,gender,dob,phone,address,city,country})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `update ${tableName} set name = '${name}', email = '${email}', gender = '${gender}', dob = '${dob}', phone = '${phone}', address = '${address}', city = '${city}', country = '${country}' where id = '${id}'`;
+            con.query(sqlQuery, (error, result) => {
+                console.log("USER UPDATED RESULT"+JSON.stringify(result));
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                let userObj = {};
+                if(result){
+                    userObj.userEdited = true;
+                }else{
+                    userObj.userEdited = false; 
                 }
                 return resolve(userObj);
             });

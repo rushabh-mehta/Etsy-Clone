@@ -9,6 +9,8 @@ import '../styles/viewprofile.css';
 import authapi from '../services/authpost';
 
 const GET_USER_API = '/api/user/';
+const GET_COUNTRY_API = '/api/country/';
+
 
 const ViewProfile = () => {
 
@@ -16,6 +18,17 @@ const ViewProfile = () => {
         try{
             const response = await authapi.get(GET_USER_API+id);
             if(response && response.data && response.data.success && response.data.user){
+                let date = new Date(response.data.user.dob);
+                let year = date.getFullYear();
+                let month = date.getMonth()+1;
+                let dt = date.getDate();
+                if (dt < 10) {
+                dt = '0' + dt;
+                }
+                if (month < 10) {
+                month = '0' + month;
+                }
+                response.data.user.dob = month+"/"+dt+"/"+year;
                 setUser(response.data.user);
                 setViewProfileLoading(false);
             }else{
@@ -29,10 +42,29 @@ const ViewProfile = () => {
         }
     }
 
-    
-    const [user, setUser] = useState();
+    const getCountries = async () => {
+        setGettingCountries(true);
+        try{
+            const response = await authapi.get(GET_COUNTRY_API);
+            if(response && response.data && response.data.success && response.data.countries){
+                setCountries(response.data.countries);
+                setGettingCountries(false);
+            }else{
+                setError("Some unexpected error occurred!");
+                setGettingCountries(false);
+            }
+        }catch(e){
+            console.log(e);
+            setError("Some unexpected error occurred!");
+            setGettingCountries(false);
+        }
+    }
+
+    const [countries, setCountries] = useState([]);
+    const [user, setUser] = useState("");
     const [error, setError] = useState(false);
     const [viewProfileLoading, setViewProfileLoading] = useState(true);
+    const [gettingCountries, setGettingCountries] = useState(true);
 
     const navigate = useNavigate();
 
@@ -43,13 +75,14 @@ const ViewProfile = () => {
             navigate("/login", {replace:true});
         }else{
             getUser(user);
+            getCountries();
         }
     },[]);
 
   return (
     <div>
         <MainNavbar />
-        {!viewProfileLoading && <div>
+        {!gettingCountries && !viewProfileLoading && <div>
             <div>View Profile</div>
             <div className="container">
                 <div className="row">
@@ -59,6 +92,27 @@ const ViewProfile = () => {
                     </div>
                     <div className="col-md-2 col-sm-12">
                         {user && user.name}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {user && user.email}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {user && user.gender}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {user && user.dob}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {user && user.phone}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {user && user.address}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {user && user.city}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}
                     </div>
                     <div className="col-md-2 col-sm-12">
                         <Link to="/edit-profile"><FontAwesomeIcon icon={faPen}/></Link>

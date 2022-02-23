@@ -32,4 +32,31 @@ router.get("/:id", auth, async (req, res) => {
     }
 });
 
+router.put("/:id", auth, async (req, res) => {
+    const id = req.params.id;
+    const user = req.body;
+    const response = {};
+    try{
+        const updatedResult = await User.editUser(user);
+        if(updatedResult && updatedResult.userEdited){
+            const findResult = await User.getUserById(user);
+            response.success = true;
+            response.user = findResult.user;
+            response.status = "200";
+            res.status(200).send(response);
+        }else{
+            response.success = false;
+            response.error = "User not found";
+            response.status = "400";
+            res.status(400).send(response);
+        }
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
+});
+
 module.exports = router;

@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
                         userObj,
                         config.get("jwtPrivateKey"),
                         {
-                            expiresIn: "2h",
+                            expiresIn: "24h",
                         }
                     );
                     exists.user.token = token;
