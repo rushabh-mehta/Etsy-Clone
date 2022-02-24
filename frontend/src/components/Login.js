@@ -6,8 +6,7 @@ import api from '../services/post';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/login.css';
 import LoadingIcons from 'react-loading-icons';
-import {Link} from 'react-router-dom';
-import {useNavigate, useLocation, } from "react-router-dom";
+import {Link, useNavigate, useLocation } from "react-router-dom";
 
 
 

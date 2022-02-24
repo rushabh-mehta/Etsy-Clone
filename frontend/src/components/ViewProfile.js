@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
+import LoadingIcons from 'react-loading-icons';
 import authapi from '../services/authpost';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/viewprofile.css';
@@ -83,47 +84,46 @@ const ViewProfile = () => {
     <div>
         <MainNavbar />
         {!gettingCountries && !viewProfileLoading && <div>
-            <div>View Profile</div>
+            <div><span className="view_profile_header">View Profile</span></div>
             <div className="container">
                 <div className="row">
-                    <div className="col-md-3 col-sm-12">
-                        <img className="profile_picture"></img>
-                        <FontAwesomeIcon icon={faCamera}/>
+                    <div className="col-md-2 col-sm-12">
+                        <div><img className="profile_picture"></img></div>
+                        <div><FontAwesomeIcon icon={faCamera}/></div>
+                    </div>
+                    <div className="viewprofile_username col-md-8 col-sm-12">
+                        <div>{user && user.name}</div>
+                        <div className="row">
+                            <div className="viewprofile_useremail col-md-12 col-sm-12">
+                                {user && user.email}
+                            </div>
+                            <div className="viewprofile_usergendercountry col-md-12 col-sm-12">
+                                {user && user.gender}, {countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}
+                            </div>
+                            <div className="viewprofile_userdob col-md-12 col-sm-12">
+                                {user && <p>Birthdate: {user.dob}</p>}
+                            </div>
+                            <div className="viewprofile_userphone col-md-12 col-sm-12">
+                                 {user && <p>Phone: {user.phone}</p>}
+                            </div>
+                            <div className="viewprofile_useraddress col-md-12 col-sm-12">
+                                {user && user.address}
+                            </div>
+                            <div className="viewprofile_usercity col-md-12 col-sm-12">
+                                {user && user.city}
+                            </div>
+                            <div className="viewprofile_userabout col-md-12 col-sm-12">
+                                <p>{user && user.about}</p>
+                            </div>
+                        </div>
                     </div>
                     <div className="col-md-2 col-sm-12">
-                        {user && user.name}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {user && user.email}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {user && user.gender}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {user && user.dob}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {user && user.phone}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {user && user.address}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {user && user.city}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        {user && user.about}
-                    </div>
-                    <div className="col-md-2 col-sm-12">
-                        <Link to="/edit-profile"><FontAwesomeIcon icon={faPen}/></Link>
+                        <Link to="/edit-profile"><FontAwesomeIcon className="edit_icon" icon={faPen}/></Link>
                     </div>
                 </div>
             </div>
         </div>}
-        {viewProfileLoading && <div>Loading</div>}
+        {!viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
     </div>
   )
 }
