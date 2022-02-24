@@ -1,5 +1,4 @@
-import React from 'react';
-import {useState, useRef, useEffect} from 'react';
+import React,{useState, useRef, useEffect} from 'react';
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useNavigate} from 'react-router-dom';

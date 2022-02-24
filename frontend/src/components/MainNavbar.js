@@ -1,16 +1,53 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import {Link, Navigate, useNavigate} from "react-router-dom";
-import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl, } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes, faInfoCircle, faMagnifyingGlass, faCartShopping, faUser, faHeart} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faInfoCircle, faMagnifyingGlass, faCartShopping, faUser, faHeart, faShop} from "@fortawesome/free-solid-svg-icons";
+import authapi from '../services/authpost';
+
+const USER_SHOP_API = "api/shop/user/";
+const LOGIN_PAGE = "/login/";
+const SHOP_HOME_PAGE = "/shop/home";
+const SHOP_CREATE_PAGE = "/shop/create";
 
 const MainNavbar = ()=>{
     const navigate = useNavigate();
+
     const logout = ()=>{
         localStorage.removeItem("user");
         localStorage.removeItem("token");
-        navigate("/login",{replace:true});
+        navigate(LOGIN_PAGE,{replace:true});
+    }
+
+    const goToShop = async ()=>{
+        const token = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        if(!token || !user){
+            navigate(LOGIN_PAGE, {replace:true});
+        }else{
+            try{
+                const response = await authapi.get(USER_SHOP_API+user.id);
+                if(response && response.data){
+                    if(response.data.success){
+                        if(response.data.shopFound){
+                            const shop = response.data.shop;
+                            navigate(SHOP_HOME_PAGE);
+                        }else{
+                            navigate(SHOP_CREATE_PAGE);
+                        }
+                    }else{
+                        console.log(response);
+                    }
+                }else{
+                   console.log(response);
+                }
+            }catch(err){
+                if(err && err.response && err.response.data && err.response.data.error){
+                    console.log(err.response.data.error);
+                }
+            }
+        }
     }
     return(
         <Navbar bg="light" expand="lg">
@@ -33,6 +70,7 @@ const MainNavbar = ()=>{
                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="#home"><FontAwesomeIcon icon={faHeart}/></Nav.Link>
+                    <Nav.Link onClick={goToShop}><FontAwesomeIcon icon={faShop}/></Nav.Link>
                     <Nav.Link href="#link"><FontAwesomeIcon icon={faCartShopping}/></Nav.Link>
                 </Nav>
                 </Navbar.Collapse>

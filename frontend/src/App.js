@@ -6,6 +6,8 @@ import Login from './components/Login';
 import Home from './components/Home';
 import ViewProfile from './components/ViewProfile';
 import EditProfile from './components/EditProfile';
+import ShopCreate from './components/ShopCreate';
+import ShopHome from './components/ShopHome';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route exact path="home" element={<Home/>}/>
         <Route exact path="view-profile" element={<ViewProfile/>}/>
         <Route exact path="edit-profile" element={<EditProfile/>}/>
+        <Route exact path="shop/create" element={<ShopCreate/>}/>
+        <Route exact path="shop/home" element={<ShopHome/>}/>
         <Route exact path="/" element={<Home/>}/>
     </Routes>
   );
