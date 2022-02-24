@@ -23,6 +23,8 @@ const NAME_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const EditProfile = () => {
     const [user, setUser] = useState({});
 
+    const [profilePicture, setProfilePicture] = useState("");
+
     const [name, setName] = useState("");
     const [validName, setValidName] = useState(false);
     const [nameFocus, setNameFocus] = useState(false);
@@ -54,6 +56,10 @@ const EditProfile = () => {
     const [country, setCountry] = useState("");
     const [validCountry, setValidCountry] = useState();
     const [countryFocus, setCountryFocus] = useState();
+
+    const [about, setAbout] = useState("");
+    const [validAbout, setValidAbout] = useState();
+    const [aboutFocus, setAboutFocus] = useState();
 
     const [countries, setCountries] = useState([]);
 
@@ -99,7 +105,11 @@ const EditProfile = () => {
             const response = await authapi.get(GET_USER_API+id);
             if(response && response.data && response.data.success && response.data.user){
                 const userObj = response.data.user;
+                console.log(userObj);
                 setUser(userObj);
+                if(userObj.profilePicture){
+                    setProfilePicture(userObj.profilePicture);
+                }
                 if(userObj.name){
                     setName(userObj.name);
                 }
@@ -124,6 +134,9 @@ const EditProfile = () => {
                 if(userObj.country){
                     setCountry(userObj.country);
                 }
+                if(userObj.about){
+                    setAbout(userObj.about);
+                }
                 setEditProfileLoading(false);
             }else{
                 setError("Some unexpected error occurred!");
@@ -142,6 +155,9 @@ const EditProfile = () => {
             const userObj = {};
             if(user.id){
                 userObj.id = user.id;
+            }
+            if(profilePicture){
+                userObj.profilePicture = profilePicture;
             }
             if(name){
                 userObj.name = name;
@@ -167,10 +183,16 @@ const EditProfile = () => {
             if(country){
                 userObj.country = country;
             }
+            if(about){
+                userObj.about = about;
+            }
             const response = await authapi.put(EDIT_USER_API+id,userObj);
             if(response && response.data && response.data.success && response.data.user){
                 const userObj = response.data.user;
                 setUser(userObj);
+                if(userObj.profilePicture){
+                    setProfilePicture(userObj.profilePicture);
+                }
                 if(userObj.name){
                     setName(userObj.name);
                 }
@@ -190,12 +212,15 @@ const EditProfile = () => {
                     setAddress(userObj.address);
                 }
                 if(userObj.city){
-                    setAddress(userObj.city);
+                    setCity(userObj.city);
                 }
                 if(userObj.country){
-                    setAddress(userObj.country);
+                    setCountry(userObj.country);
                 }
-                //localStorage.setItem('user', JSON.stringify(userObj));
+                if(userObj.about){
+                    setAbout(userObj.about);
+                }
+                localStorage.setItem('user', JSON.stringify(userObj));
                 setEditingProfile(false);
                 navigate("/view-profile", {replace:true});
             }else{
@@ -214,7 +239,10 @@ const EditProfile = () => {
         <div>Edit Profile</div>
         <div className="container">
             <div className="row">
-                <div className="col-md-12">Profile Picture</div>
+                <div className="col-md-12">
+                    Profile Picture
+                    <img className="profile_picture"></img>
+                </div>
                 <div className="col-md-12">
                    <label htmlFor="username" className="editprofile_item_label">Name</label>
                         {validName && <FontAwesomeIcon icon={faCheck}/> }
@@ -303,6 +331,12 @@ const EditProfile = () => {
                         })
                     }
                     </Form.Select>
+               </div>
+               <div className="col-md-12">
+                   <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>About</Form.Label>
+                        <Form.Control value={about} as="textarea" rows={3} onChange={(e)=>{setAbout(e.target.value)}} />
+                    </Form.Group>
                </div>
             </div>
         </div>

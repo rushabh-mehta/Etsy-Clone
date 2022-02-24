@@ -53,7 +53,7 @@ class User{
 
     static getUserById = async ({id})=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `select id,name,email,gender,dob,phone,address,city,country from ${tableName} WHERE id="${id}"`;
+            const sqlQuery = `select id,profilePicture,name,email,gender,dob,phone,address,city,country,about from ${tableName} WHERE id="${id}"`;
             console.log("SQL: ", sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
@@ -73,9 +73,9 @@ class User{
         });
     }
 
-    static editUser = async ({id,name,email,gender,dob,phone,address,city,country})=>{
+    static editUser = async ({id,profilePicture,name,email,gender,dob,phone,address,city,country,about})=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `update ${tableName} set name = '${name}', email = '${email}', gender = '${gender}', dob = '${dob}', phone = '${phone}', address = '${address}', city = '${city}', country = '${country}' where id = '${id}'`;
+            const sqlQuery = `update ${tableName} set profilePicture = '${profilePicture}', name = '${name}', email = '${email}', gender = '${gender}', dob = '${dob}', phone = '${phone}', address = '${address}', city = '${city}', country = '${country}', about = '${about}' where id = '${id}'`;
             con.query(sqlQuery, (error, result) => {
                 console.log("USER UPDATED RESULT"+JSON.stringify(result));
                 if (error) {

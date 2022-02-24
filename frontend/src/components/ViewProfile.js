@@ -4,9 +4,9 @@ import {useEffect, useState} from 'react';
 import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
+import authapi from '../services/authpost';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/viewprofile.css';
-import authapi from '../services/authpost';
 
 const GET_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
@@ -113,6 +113,9 @@ const ViewProfile = () => {
                     </div>
                     <div className="col-md-2 col-sm-12">
                         {countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}
+                    </div>
+                    <div className="col-md-2 col-sm-12">
+                        {user && user.about}
                     </div>
                     <div className="col-md-2 col-sm-12">
                         <Link to="/edit-profile"><FontAwesomeIcon icon={faPen}/></Link>
