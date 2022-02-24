@@ -16,6 +16,7 @@ const GET_COUNTRY_API = '/api/country/';
 const ViewProfile = () => {
 
     const getUser = async ({id})=>{
+        setViewProfileLoading(true);
         try{
             const response = await authapi.get(GET_USER_API+id);
             if(response && response.data && response.data.success && response.data.user){
@@ -123,7 +124,7 @@ const ViewProfile = () => {
                 </div>
             </div>
         </div>}
-        {!viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
+        {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
     </div>
   )
 }

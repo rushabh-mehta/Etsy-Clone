@@ -18,9 +18,12 @@ const GET_USER_API = '/api/user/';
 const EDIT_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
 
-const NAME_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-
-
+const NAME_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const PHONE_REGEX = /^[0-9]{10}$/;
+const ADDRESS_REGEX = /[A-z0-9-_ ,]{3,100}$/;
+const CITY_REGEX = /[A-z][A-z-_ ,]{3,10}$/;
+const ABOUT_REGEX = /[A-z][A-z0-9-_ ,]{3,100}$/;
 
 const EditProfile = () => {
     const [user, setUser] = useState({});
@@ -76,6 +79,26 @@ const EditProfile = () => {
     useEffect(() => {
         setValidName(NAME_REGEX.test(name));
     }, [name])
+
+    useEffect(() => {
+        setValidEmail(EMAIL_REGEX.test(email));
+    }, [email])
+
+    useEffect(() => {
+        setValidPhone(PHONE_REGEX.test(phone));
+    }, [phone])
+
+    useEffect(() => {
+        setValidCity(CITY_REGEX.test(city));
+    }, [city])
+
+    useEffect(() => {
+        setValidAddress(ADDRESS_REGEX.test(address));
+    }, [address])
+
+    useEffect(() => {
+        setValidAbout(ABOUT_REGEX.test(about));
+    }, [about])
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -294,7 +317,7 @@ const EditProfile = () => {
                                 <input value={phone} className="form-control editprofile_item_input" id="userphone" name="userphone" type="text" onChange={(e)=>{setPhone(e.target.value)}} onFocus={() => setPhoneFocus(true)} 
                                 onBlur={() => setPhoneFocus(false)}>
                                 </input>
-                                {phoneFocus && !validEmail && 
+                                {phoneFocus && !validPhone && 
                                     <small className="form-text text-muted editprofile_item_text_container">
                                         <FontAwesomeIcon icon={faInfoCircle} />
                                         <span className="editprofile_item_text">Invalid Phone</span>
@@ -342,12 +365,20 @@ const EditProfile = () => {
                         </div>
                         <div className="col-md-12">
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                                    <Form.Label>About</Form.Label>
-                                    <Form.Control value={about} as="textarea" rows={3} onChange={(e)=>{setAbout(e.target.value)}} />
-                                </Form.Group>
+                                <Form.Label>About</Form.Label>
+                                {validAbout && <FontAwesomeIcon icon={faCheck}/> }
+                                {(!validAbout && about) && <FontAwesomeIcon icon={faTimes} />}
+                                <Form.Control value={about} as="textarea" rows={3} onChange={(e)=>{setAbout(e.target.value)}} />
+                            </Form.Group>
+                            {about && !validAbout && 
+                                <small className="form-text text-muted editprofile_item_text_container">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span className="editprofile_item_text">Invalid About</span>
+                                </small>
+                            }
                         </div>
                         <div className="col-md-12">
-                            <button className="btn btn-primary" onClick={()=>{editProfile(user)}} disabled={editingProfile}>Save</button>
+                            <button className="btn btn-primary" onClick={()=>{editProfile(user)}} disabled={editingProfile || !validName || !validEmail || !validPhone || !validAddress || !validCity || !validAbout}>Save</button>
                             <button className="btn btn-danger" onClick={()=>{navigate("/view-profile")}} disabled={editingProfile}>Cancel</button>
                         </div>
                     </div>
