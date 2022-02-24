@@ -27,7 +27,6 @@ class Shop{
     }
 
     static checkNameAvailable = async ({shopName})=>{
-        console.log(shopName);
         return new Promise((resolve, reject) => {
             const sqlQuery = `select name,owner,displayPicture from ${tableName} where name='${shopName}'`;
             con.query(sqlQuery, (error, results) => {
