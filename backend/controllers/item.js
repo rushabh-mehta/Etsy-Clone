@@ -30,8 +30,8 @@ router.post("/add", auth, async (req, res) => {
     const data = {};
     const item = req.body;
     try{
-        const items = await Item.addItem(item);
-        response.items = items;
+        const itemResult= await Item.addItem(item);
+        response.item = itemResult;
         response.success = true;
         response.status = "200";
         return res.status(200).send(response);
@@ -49,8 +49,8 @@ router.post("/edit", auth, async (req, res) => {
     const data = {};
     const item = req.body;
     try{
-        const items = await Item.editItem(item);
-        response.items = items;
+        const itemResult = await Item.editItem(item);
+        response.item = itemResult;
         response.success = true;
         response.status = "200";
         return res.status(200).send(response);

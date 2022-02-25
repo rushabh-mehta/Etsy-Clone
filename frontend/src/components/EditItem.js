@@ -59,7 +59,6 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         try{
             const response = await authapi.post(EDIT_ITEM_API,item);
             if(response && response.data && response.data.success){
-                
                 setEditingItem(false);
                 handleClose();
             }else{

@@ -55,6 +55,7 @@ const AddShopItem = ({setItems,items,id}) => {
         try{
             const response = await authapi.post(ADD_ITEM_API,item);
             if(response && response.data && response.data.success){
+                item.id = response.data.item.insertId;
                 setItems([...items,item]);
                 setAddingItem(false);
                 handleClose();
@@ -103,17 +104,17 @@ const AddShopItem = ({setItems,items,id}) => {
                     <img className="profile_picture"></img>
                     <div><FontAwesomeIcon icon={faCamera}/></div>
                 </div>
-                <Form.Group className="mb-3" onChange={(e)=>{setName(e.target.value)}}>
+                <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
-                    <Form.Control value={name}  type="text" placeholder="Name" />
+                    <Form.Control value={name} onChange={(e)=>{setName(e.target.value)}} type="text" placeholder="Name" />
                 </Form.Group>
-                <Form.Group  className="mb-3" onChange={(e)=>{setPrice(e.target.value)}}>
+                <Form.Group  className="mb-3">
                     <Form.Label>Price</Form.Label>
-                    <Form.Control value={price} type="number" placeholder="Price" />
+                    <Form.Control value={price} onChange={(e)=>{setPrice(e.target.value)}} type="number" placeholder="Price" />
                 </Form.Group>
-                <Form.Group className="mb-3" onChange={(e)=>{setQuantity(e.target.value)}}>
+                <Form.Group className="mb-3">
                     <Form.Label>Quantity</Form.Label>
-                    <Form.Control value={quantity} type="number" placeholder="Quantity" />
+                    <Form.Control value={quantity} onChange={(e)=>{setQuantity(e.target.value)}} type="number" placeholder="Quantity" />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
@@ -126,9 +127,9 @@ const AddShopItem = ({setItems,items,id}) => {
                         }
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3" onChange={(e)=>{setDescription(e.target.value)}}>
+                <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control value={description} as="textarea" placeholder="Description" />
+                    <Form.Control value={description} onChange={(e)=>{setDescription(e.target.value)}} as="textarea" placeholder="Description" />
                 </Form.Group>
             </Form>
         </Modal.Body>
