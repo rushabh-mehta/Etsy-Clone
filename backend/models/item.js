@@ -23,6 +23,31 @@ class Item{
             return new Promise((resolve, reject)=>{
                 try{
                     const sqlQuery = `INSERT INTO ${tableName} (name, displayPicture, category, description, price, quantity, salesCount, shop) VALUES ('${name}', '${displayPicture}', '${category}', '${description}', '${price}', '${quantity}', '${salesCount}', '${shopId}')`;
+                    
+                    con.query(sqlQuery,(error, results)=>{
+                        if(error){
+                            console.log(error);
+                            return reject(error);
+                        }
+                        console.log("ADD Item RESULTS: ", results);
+                        return resolve(results);
+                    });
+                }catch(e){
+                    console.log(e);
+                    return reject(e);
+                }
+            });
+        }catch(e){
+            console.log(e);
+            throw Error(e);
+        }
+    }
+
+    static editItem = async ({id, name, displayPicture, category, description, price, quantity})=>{
+        try{
+            return new Promise((resolve, reject)=>{
+                try{
+                    const sqlQuery = `update ${tableName} set name = '${name}', displayPicture = '${displayPicture}', category = '${category}', description = '${description}', price = '${price}', quantity = '${quantity}' where id = '${id}'`;
                     con.query(sqlQuery,(error, results)=>{
                         if(error){
                             console.log(error);

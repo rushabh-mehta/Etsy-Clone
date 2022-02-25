@@ -5,7 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 import LoadingIcons from 'react-loading-icons';
-import AddShopItem from './AddShopItem';
+import AddShopItem from './AddItem';
 import Item from './Item';
 
 const GET_SHOP_API = "/api/shop/";
@@ -100,8 +100,8 @@ const ShopHome = () => {
                     }
                     </div>
                     <div>
-                        {items && items.length && items.map((eachItem)=>{
-                            return <Item key={eachItem.id} item={eachItem}/>
+                        {items && items.length && items.map((eachItem,index)=>{
+                            return <Item key={eachItem.id} index={index} setItems={setItems} items={items}/>
                         })}
                     </div>
                 </div>
