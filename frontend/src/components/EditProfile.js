@@ -385,7 +385,7 @@ const EditProfile = () => {
                 </div>
             </div>
         }
-        {!editProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
+        {editProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
     </div>
   )
 }

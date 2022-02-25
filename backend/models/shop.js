@@ -2,6 +2,7 @@ const con = require("../db");
 
 
 const tableName = "shop";
+const userTableName = "user";
 
 class Shop{
 
@@ -43,6 +44,49 @@ class Shop{
                     queryResult.shopFound = false;
                     return resolve(queryResult);
                 }
+            });
+        });
+    }
+
+    static createShop = async({shopName,user})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `INSERT INTO ${tableName} (name,owner) VALUES ("${shopName}","${user}")`;
+            con.query(sqlQuery, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }else if(results){
+                    const queryResult = {};
+                    queryResult.shopCreated = true;
+                    queryResult.shop = results;
+                    return resolve(queryResult);
+                }else{
+                    const queryResult = {};
+                    queryResult.shopCreated = false;
+                    return resolve(queryResult);
+                }
+            });
+        });
+    }
+
+    static getShopByUser = async ({userId})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `select ${tableName}.id,${tableName}.name,${tableName}.owner,${tableName}.displayPicture, ${userTableName}.name as ownerName, ${userTableName}.email as ownerEmail, ${userTableName}.phone as ownerPhone, ${userTableName}.profilePicture from ${tableName} INNER JOIN ${userTableName} ON owner=${userTableName}.id WHERE owner="${userId}"`;
+            console.log("SQL: ", sqlQuery);
+            con.query(sqlQuery, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                console.log("USER EXISTS RESULTS: ", results);
+                let userObj = {};
+                if(results && results.length){
+                    userObj.shopFound = true;
+                    userObj.shop = results[0];
+                }else{
+                    userObj.shopFound = false; 
+                }
+                return resolve(userObj);
             });
         });
     }

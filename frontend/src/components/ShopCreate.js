@@ -1,14 +1,19 @@
 import React,{useState, useEffect} from 'react';
 import {InputGroup, FormControl, Button} from 'react-bootstrap';
 import authapi from '../services/authpost';
+import {useNavigate} from "react-router-dom";
 
 const SHOP_NAME_AVAIL_API = "api/shop/name";
+const SHOP_CREATE_API = "api/shop/create";
+const SHOP_HOME_PAGE = "/shop/home";
 
 const CreateShop = () => {
+  const navigate = useNavigate();
   const [shopName, setShopName] = useState("");
   const [shopAvailable, setShopNameAvailable] = useState(false);
   const [canShowAvailResult, setCanShowAvailResult] = useState(false);
-
+  const [creatingShop, setCreatingShop] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     setCanShowAvailResult(false);
@@ -17,8 +22,8 @@ const CreateShop = () => {
   const checkShopNameAvailable = async ()=>{
       const reqBody = {};
       reqBody.shopName = shopName;
-      const response = await authapi.post(SHOP_NAME_AVAIL_API,reqBody);
       try{
+        const response = await authapi.post(SHOP_NAME_AVAIL_API,reqBody);
         if(response && response.data){
           if(response.data.shopFound){
             setShopNameAvailable(false);
@@ -37,6 +42,29 @@ const CreateShop = () => {
       }
   }
 
+  const createShop = async()=>{
+    setCreatingShop(true);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const reqBody = {};
+    reqBody.user = user.id;
+    reqBody.shopName = shopName;
+    try{
+      const response = await authapi.post(SHOP_CREATE_API,reqBody);
+      if(response && response.data && response.data.success){
+        setCreatingShop(false);
+        navigate(SHOP_HOME_PAGE);
+      }else{
+         console.log("Some unexpected error!");
+         setCreatingShop(false);
+      }
+    }catch(err){
+      if(err && err.response && err.response.data && err.response.data.error){
+          setErrorMsg(err.response.data.error);
+      }
+      setCreatingShop(false);
+    }
+  }
+
   return (
     <div>
       <div>Name your Shop</div>
@@ -52,7 +80,7 @@ const CreateShop = () => {
       {canShowAvailResult && shopAvailable &&
          <div>
           <div>Available</div>
-          <Button variant="outline-secondary" id="button-addon2">Create Shop</Button>
+          <Button onClick={createShop} variant="outline-secondary" id="button-addon2">Create Shop</Button>
         </div>
       }
       {canShowAvailResult && !shopAvailable &&
