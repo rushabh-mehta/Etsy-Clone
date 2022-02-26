@@ -104,13 +104,11 @@ class Item{
             if(sortBy==="salesCount"){
                 sqlQuery+=` ORDER BY salesCount`;
             }
-            console.log(sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
                     return reject(error);
                 }
-                console.log(results);
                 return resolve(results);
             });
         });
