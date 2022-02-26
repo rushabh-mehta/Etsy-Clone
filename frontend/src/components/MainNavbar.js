@@ -11,7 +11,7 @@ const LOGIN_PAGE = "/login/";
 const SHOP_HOME_PAGE = "/shop/home";
 const SHOP_CREATE_PAGE = "/shop/create";
 
-const MainNavbar = ()=>{
+const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
     const navigate = useNavigate();
 
     const logout = ()=>{
@@ -56,10 +56,9 @@ const MainNavbar = ()=>{
                 <InputGroup>
                     <FormControl
                     placeholder="Search.."
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
+                    value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}}
                     />
-                    <InputGroup.Text id="basic-addon2"><FontAwesomeIcon icon={faMagnifyingGlass}/></InputGroup.Text>
+                    <InputGroup.Text onClick={getOtherFilterItems} id="basic-addon2"><FontAwesomeIcon icon={faMagnifyingGlass}/></InputGroup.Text>
                 </InputGroup>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

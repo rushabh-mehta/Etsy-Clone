@@ -53,7 +53,7 @@ class User{
 
     static getUserById = async ({id})=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `select id,profilePicture,name,email,gender,dob,phone,address,city,country,about from ${tableName} WHERE id="${id}"`;
+            const sqlQuery = `select id,profilePicture,name,email,gender,dob,phone,address,city,country,about,shop from ${tableName} WHERE id="${id}"`;
             console.log("SQL: ", sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {

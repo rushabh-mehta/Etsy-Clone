@@ -63,5 +63,42 @@ router.post("/edit", auth, async (req, res) => {
     }
 });
 
+router.post("/other", auth, async (req, res) => {
+    const response = {};
+    const data = {};
+    const user = req.body;
+    try{
+        const itemsResult = await Item.getOtherItems(user);
+        response.items = itemsResult;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
+});
+
+router.post("/other/filter", auth, async (req, res) => {
+    const response = {};
+    const data = req.body;
+    try{
+        const itemsResult = await Item.getOtherFilteredItems(data);
+        response.items = itemsResult;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
+});
+
 
 module.exports = router;

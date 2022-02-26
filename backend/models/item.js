@@ -67,6 +67,55 @@ class Item{
         }
     }
 
+    static getOtherItems = async ({shop})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `select * from ${tableName} WHERE shop!='${shop}'`;
+            con.query(sqlQuery, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                return resolve(results);
+            });
+        });
+    }
+
+    static getOtherFilteredItems = async ({shop,searchQuery,minPrice,maxPrice,inStock,sortPrice,sortBy})=>{
+        return new Promise((resolve, reject) => {
+            let sqlQuery = `select * from ${tableName} WHERE shop!='${shop}'`;
+            if(searchQuery){
+                sqlQuery+=` AND name LIKE '%${searchQuery}%'`; 
+            }
+            if(minPrice){
+                sqlQuery+=` AND price>=${minPrice}`; 
+            }
+            if(maxPrice){
+                sqlQuery+=` AND price<=${maxPrice}`; 
+            }
+            if(inStock){
+                sqlQuery+=` AND quantity>salesCount`;
+            }
+            if(sortBy==="price"){
+                sqlQuery+=` ORDER BY price`;
+            }
+            if(sortBy==="quantity"){
+                sqlQuery+=` ORDER BY quantity`;
+            }
+            if(sortBy==="salesCount"){
+                sqlQuery+=` ORDER BY salesCount`;
+            }
+            console.log(sqlQuery);
+            con.query(sqlQuery, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                console.log(results);
+                return resolve(results);
+            });
+        });
+    }
+
 }
 
 module.exports.Item = Item;
