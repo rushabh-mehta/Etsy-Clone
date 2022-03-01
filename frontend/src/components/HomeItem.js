@@ -1,10 +1,26 @@
-import React from 'react';
+import React,{useEffect} from 'react';
+import {useNavigate} from "react-router-dom";
 
 const HomeItem = ({item}) => {
-    
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+        if(!token || !user){
+            navigate("/login", {replace:true});
+        }
+    });
+
+    const viewItemOverview = ({id})=>{
+        if(id) {
+             navigate("/item/overview/"+id);
+        }
+    }
+
     return (
         <div>
-            <div>
+            <div onClick={()=>{viewItemOverview(item)}}>
                 <div>
                     <img className="profile_picture"></img>
                 </div>

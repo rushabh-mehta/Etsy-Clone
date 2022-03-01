@@ -8,6 +8,7 @@ import ViewProfile from './components/ViewProfile';
 import EditProfile from './components/EditProfile';
 import ShopCreate from './components/ShopCreate';
 import ShopHome from './components/ShopHome';
+import ItemOverview from './components/ItemOverview';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route exact path="shop/create" element={<ShopCreate/>}/>
         <Route exact path="shop/home" element={<ShopHome/>}/>
         <Route exact path="/" element={<Home/>}/>
+        <Route exact path="item/overview/:id" element={<ItemOverview/>}/>
     </Routes>
   );
 }

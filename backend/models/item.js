@@ -2,6 +2,7 @@ const con = require("../db");
 
 
 const tableName = "item";
+const shopTableName = "shop";
 
 class Item{
 
@@ -14,6 +15,23 @@ class Item{
                     return reject(error);
                 }
                 return resolve(results);
+            });
+        });
+    }
+
+    static getItem = async ({itemId})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `select ${tableName}.name as itemName, ${tableName}.displayPicture as itemDisplayPicture, ${tableName}.category as category, ${tableName}.description as itemDescription, ${tableName}.price as itemPrice, ${tableName}.quantity as itemQuantity, ${tableName}.salesCount as itemSalesCount, ${shopTableName}.id as shopId, ${shopTableName}.owner as shopOwner, ${shopTableName}.name as shopName, ${shopTableName}.displayPicture as shopDisplayPicture from ${tableName} INNER JOIN ${shopTableName} ON ${tableName}.shop=${shopTableName}.id WHERE ${tableName}.id='${itemId}'`;
+            con.query(sqlQuery, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }else if(results){
+                    console.log(results);
+                    return resolve(results[0]);
+                }else{
+                    return reject("Some unexpected error occurred!");
+                }
             });
         });
     }

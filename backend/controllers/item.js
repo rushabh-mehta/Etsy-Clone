@@ -25,6 +25,25 @@ router.get("shop/:shopId", auth, async (req, res) => {
     }
 });
 
+router.get("/:itemId", auth, async (req, res) => {
+    const response = {};
+    const data = {};
+    data.itemId = req.params.itemId;
+    try{
+        const item = await Item.getItem(data);
+        response.item = item;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
+});
+
 router.post("/add", auth, async (req, res) => {
     const response = {};
     const data = {};
