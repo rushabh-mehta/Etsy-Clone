@@ -27,7 +27,6 @@ class Item{
                     console.log(error);
                     return reject(error);
                 }else if(results){
-                    console.log(results);
                     return resolve(results[0]);
                 }else{
                     return reject("Some unexpected error occurred!");
