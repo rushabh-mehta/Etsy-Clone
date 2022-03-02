@@ -4,8 +4,9 @@ import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
 
 
-const GET_ITEM_API = "/api/item/"
-    const ItemOverview = () => {
+const GET_ITEM_API = "/api/item/";
+const ADD_CART_API = "api/cart/add/";
+const ItemOverview = () => {
     const [item,setItem] = useState({});
     const navigate = useNavigate();
     const [itemLoading,setItemLoading] = useState(true);
@@ -13,6 +14,7 @@ const GET_ITEM_API = "/api/item/"
     const search = useLocation().search;
     const {id} = new useParams(search);
     const [orderQuantity,setOrderQuantity] = useState(0);
+    const [addToCartSuccessMsg,setAddToCartSuccessMsg] = useState("");
 
     const getItem = async (itemId)=>{
         setItemLoading(true);
@@ -21,7 +23,6 @@ const GET_ITEM_API = "/api/item/"
         if(response && response.data){
             if(response.data.success){
                 const item = response.data.item;
-                console.log(item);
                 setItem(item);
                 setItemLoading(false);
             }else{
@@ -40,8 +41,38 @@ const GET_ITEM_API = "/api/item/"
         }
     }
 
-    const addToCart = ()=>{
-
+    const addToCart = async ()=>{
+        const data = {};
+        const user =  JSON.parse(localStorage.getItem("user"));
+        data.userId = user.id;
+        data.itemId = id;
+        data.orderQuantity = item.orderQuantity;
+        try{
+            const response = await authapi.post(ADD_CART_API,data);
+            if(response && response.data){
+                if(response.data.success){
+                    console.log(JSON.stringify(response.data));
+                    if(response.data.addedItem){
+                        const shop = response.data.addedItem;
+                        setOrderQuantity(0);
+                        setAddToCartSuccessMsg("Item added to cart successfully!");
+                        setTimeout(()=>{
+                            setAddToCartSuccessMsg("");
+                        },5000);
+                    }else{
+                    console.log(response);
+                    }
+                }else{
+                    console.log(response);
+                }
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            if(err && err.response && err.response.data && err.response.data.error){
+                console.log(err.response.data.error);
+            }
+        }
     }
 
     useEffect(() => {
@@ -76,6 +107,7 @@ const GET_ITEM_API = "/api/item/"
                     <Form.Control value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
                 </Form.Group>
                 <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
+                {addToCartSuccessMsg && <div>{addToCartSuccessMsg}</div>}
             </div>
         </div>  
     )

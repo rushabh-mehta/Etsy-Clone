@@ -7,7 +7,8 @@ import { faCheck, faTimes, faInfoCircle, faMagnifyingGlass, faCartShopping, faUs
 import authapi from '../services/authpost';
 
 const USER_SHOP_API = "api/shop/user/";
-const LOGIN_PAGE = "/login/";
+const CART_PAGE = "/cart";
+const LOGIN_PAGE = "/login";
 const SHOP_HOME_PAGE = "/shop/home";
 const SHOP_CREATE_PAGE = "/shop/create";
 
@@ -49,6 +50,16 @@ const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
             }
         }
     }
+
+    const goToCart = async ()=>{
+        const token = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        if(!token || !user){
+            navigate(LOGIN_PAGE, {replace:true});
+        }else{
+            navigate(CART_PAGE);
+        }
+    }
     return(
         <Navbar bg="light" expand="lg">
             <Container>
@@ -68,9 +79,9 @@ const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="#home"><FontAwesomeIcon icon={faHeart}/></Nav.Link>
+                    <Nav.Link href="#favorites"><FontAwesomeIcon icon={faHeart}/></Nav.Link>
                     <Nav.Link onClick={goToShop}><FontAwesomeIcon icon={faShop}/></Nav.Link>
-                    <Nav.Link href="#link"><FontAwesomeIcon icon={faCartShopping}/></Nav.Link>
+                    <Nav.Link onClick={goToCart}><FontAwesomeIcon icon={faCartShopping}/></Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Container>
