@@ -16,6 +16,7 @@ const db = mysql.createConnection({
     password: config.get("DB.password"),
     port: config.get("DB.port"),
     database: config.get("DB.database"),
+    multipleStatements: true
 });
 
 db.connect((err)=>{
