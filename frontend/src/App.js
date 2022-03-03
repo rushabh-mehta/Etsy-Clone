@@ -10,6 +10,7 @@ import ShopCreate from './components/ShopCreate';
 import ShopHome from './components/ShopHome';
 import ItemOverview from './components/ItemOverview';
 import Cart from './components/Cart';
+import Orders from './components/Orders';
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
         <Route exact path="/" element={<Home/>}/>
         <Route exact path="item/overview/:id" element={<ItemOverview/>}/>
         <Route exact path="cart" element={<Cart/>}/>
-
+        <Route exact path="orders" element={<Orders/>}/>
     </Routes>
   );
 }

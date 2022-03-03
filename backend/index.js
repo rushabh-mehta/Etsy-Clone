@@ -12,6 +12,7 @@ const shop = require("./controllers/shop");
 const category = require("./controllers/category");
 const item = require("./controllers/item");
 const cart = require("./controllers/cart");
+const order = require("./controllers/order");
 
 const app = express();
 
@@ -32,3 +33,4 @@ app.use('/api/shop',shop);
 app.use('/api/category',category);
 app.use('/api/item',item);
 app.use('/api/cart',cart);
+app.use('/api/order',order);

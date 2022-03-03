@@ -1,33 +1,30 @@
-import React,{useState, useEffect} from 'react';
-import CartItem from './CartItem';
+import React,{useState,useEffect} from 'react'
+import OrderItem from './OrderItem';
 import {useNavigate} from "react-router-dom";
 import authapi from '../services/authpost';
-import { Form, Button } from 'react-bootstrap';
 
-
-const CART_ITEMS_API = "/api/cart/get/";
+const ORDER_ITEMS_API = "/api/order/get/";
 const LOGIN_PAGE = "/login";
 
-
-const Cart = () => {
+const Orders = () => {
   const navigate = useNavigate();
-  const [cartItems,setCartItems] = useState([]);
+  const [orderItems,setOrderItems] = useState();
 
-  const getCartItems = async ()=>{
+  const getOrderItems = async ()=>{
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
       if(!token || !user){
           navigate(LOGIN_PAGE, {replace:true});
       }else{
           try{
-              const response = await authapi.get(CART_ITEMS_API+user.id);
+              const response = await authapi.get(ORDER_ITEMS_API+user.id);
               if(response && response.data){
                   if(response.data.success){
                       if(response.data.items){
                           console.log(response.data.items);
-                          setCartItems(response.data.items);
+                          setOrderItems(response.data.items);
                       }else{
-                          setCartItems([]);
+                          setOrderItems([]);
                       }
                   }else{
                       console.log(response);
@@ -43,28 +40,23 @@ const Cart = () => {
       }
   }
 
-  const placeOrder = ()=>{
-
-  }
-
   useEffect(() => {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("user");
       if(!token || !user){
           navigate("/login", {replace:true});
       }else{
-          getCartItems();
+          getOrderItems();
       }
   },[]);
 
   return (
     <div>
-      {cartItems && cartItems.length && cartItems.map((eachCartItem)=>{
-        return <CartItem key={eachCartItem.cartId} item={eachCartItem}/>
+      {orderItems && orderItems.length && orderItems.map((eachOrderItem)=>{
+        return <OrderItem key={eachOrderItem.id} item={eachOrderItem}/>
       })}
-       <Button variant="primary" onClick={placeOrder}>Order</Button>
     </div>
   )
 }
 
-export default Cart
+export default Orders

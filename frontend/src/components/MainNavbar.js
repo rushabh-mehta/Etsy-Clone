@@ -77,6 +77,8 @@ const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
                     <NavDropdown title={<FontAwesomeIcon icon={faUser}/>} id="basic-nav-dropdown">
                     <NavDropdown.Item href="/view-profile">Profile</NavDropdown.Item>
                     <NavDropdown.Divider />
+                    <NavDropdown.Item href="/orders">My Orders</NavDropdown.Item>
+                    <NavDropdown.Divider />
                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link href="#favorites"><FontAwesomeIcon icon={faHeart}/></Nav.Link>
