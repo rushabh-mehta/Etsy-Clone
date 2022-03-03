@@ -118,7 +118,7 @@ class Order{
                                                 console.log(orderCreated);
                                                 let createOrderItemsQuery = "";
                                                 updatedItems.forEach((eachItem)=>{
-                                                    const query = `INSERT INTO ${orderItemTableName} (orderId,name,displayPicture,price,orderQuantity,date,shopName,itemId) VALUES ("${orderId}","${eachItem.itemName}","${eachItem.itemDisplayPicture}",${eachItem.itemPrice},"${eachItem.itemOrderQuantity}",${null},"${eachItem.shopName}","${eachItem.itemId}")`;
+                                                    const query = `INSERT INTO ${orderItemTableName} (orderId,name,displayPicture,price,orderQuantity,date,shopName,itemId) VALUES ("${orderId}","${eachItem.itemName}","${eachItem.itemDisplayPicture}",${eachItem.itemPrice},"${eachItem.itemOrderQuantity}",${null},"${eachItem.shopName}","${eachItem.itemId}");`;
                                                     createOrderItemsQuery+=query;
                                                 })
                                                 console.log(createOrderItemsQuery);
