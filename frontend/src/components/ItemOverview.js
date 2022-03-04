@@ -13,8 +13,8 @@ const ItemOverview = () => {
     const [errorMsg,setErrorMsg] = useState("");
     const search = useLocation().search;
     const {id} = new useParams(search);
-    const [orderQuantity,setOrderQuantity] = useState(0);
     const [addToCartSuccessMsg,setAddToCartSuccessMsg] = useState("");
+    const [itemExistsMsg,setItemExistsMsg] = useState("");
 
     const getItem = async (itemId)=>{
         setItemLoading(true);
@@ -46,7 +46,6 @@ const ItemOverview = () => {
         const user =  JSON.parse(localStorage.getItem("user"));
         data.userId = user.id;
         data.itemId = id;
-        data.orderQuantity = item.orderQuantity;
         try{
             const response = await authapi.post(ADD_CART_API,data);
             if(response && response.data){
@@ -54,7 +53,6 @@ const ItemOverview = () => {
                     console.log(JSON.stringify(response.data));
                     if(response.data.addedItem){
                         const shop = response.data.addedItem;
-                        setOrderQuantity(0);
                         setAddToCartSuccessMsg("Item added to cart successfully!");
                         setTimeout(()=>{
                             setAddToCartSuccessMsg("");
@@ -70,7 +68,14 @@ const ItemOverview = () => {
             }
         }catch(err){
             if(err && err.response && err.response.data && err.response.data.error){
-                console.log(err.response.data.error);
+                if(err.response.data.itemExists){
+                    setItemExistsMsg("Item already added to cart!");
+                    setTimeout(()=>{
+                        setItemExistsMsg("");
+                    },5000);
+                }else{
+                    console.log(err.response.data.error);
+                }
             }
         }
     }
@@ -85,9 +90,7 @@ const ItemOverview = () => {
         }
     },[]);
 
-    useEffect(() => {
-        setItem({...item,orderQuantity});
-    },[orderQuantity]);
+    
 
     return (
         <div>
@@ -102,12 +105,9 @@ const ItemOverview = () => {
                 <div>{item.itemQuantity}</div>
                 <div>{item.itemSalesCount}</div>
                 <div>{item.itemDescription}</div>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="quantity">Quantity</Form.Label>
-                    <Form.Control value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
-                </Form.Group>
                 <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
                 {addToCartSuccessMsg && <div>{addToCartSuccessMsg}</div>}
+                {itemExistsMsg && <div>{itemExistsMsg}</div>}
             </div>
         </div>  
     )

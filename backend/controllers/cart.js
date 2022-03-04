@@ -20,9 +20,16 @@ router.post("/add", auth, async (req, res) => {
     }catch(e){
         console.log(e);
         response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
+        if(e.itemExists){
+            response.itemExists = true;
+            response.error = "Item already added";
+            response.status = "400";
+            res.status(400).send(response);
+        }else{
+            response.error = "Some error occurred. Please try again later";
+            response.status = "500";
+            res.status(500).send(response);
+        }
     }
 });
 
