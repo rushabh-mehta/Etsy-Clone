@@ -86,7 +86,7 @@ const Cart = () => {
   return (
     <div>
       {cartItems && cartItems.length && cartItems.map((eachCartItem)=>{
-        return <CartItem key={eachCartItem.cartId} item={eachCartItem}/>
+        return <CartItem key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
       })}
        <Button variant="primary" onClick={placeOrder}>Order</Button>
     </div>
