@@ -19,26 +19,28 @@ const CartItem = ({item,cartItems,setCartItems}) => {
     });
 
     useEffect(async () => {
-        item.orderQuantity = orderQuantity;
-        try{
-            const user = JSON.parse(localStorage.getItem("user"));
-            const data = {};
-            console.log(item);
-            data.cartId = item.cartId;
-            data.userId = user.id;
-            data.itemId = item.itemId;
-            data.orderQuantity = orderQuantity;
-            const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API,data);
-            if(response && response.data && response.data.success){
-                let filteredCartItems = cartItems.filter((eachCartItem)=>{
-                    return eachCartItem.cartId!=item.cartId;
-                });
-                setCartItems([...filteredCartItems,item]);
-            }else{
-                console.log("Error updating quantity");
-            }
-        }catch(e){
+        if(orderQuantity){
+            item.orderQuantity = orderQuantity;
+            try{
+                const user = JSON.parse(localStorage.getItem("user"));
+                const data = {};
+                console.log(item);
+                data.cartId = item.cartId;
+                data.userId = user.id;
+                data.itemId = item.itemId;
+                data.orderQuantity = orderQuantity;
+                const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API,data);
+                if(response && response.data && response.data.success){
+                    let filteredCartItems = cartItems.filter((eachCartItem)=>{
+                        return eachCartItem.cartId!=item.cartId;
+                    });
+                    setCartItems([...filteredCartItems,item]);
+                }else{
+                    console.log("Error updating quantity");
+                }
+            }catch(e){
 
+            }
         }
     },[orderQuantity]);
 
