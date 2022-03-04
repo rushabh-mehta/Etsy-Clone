@@ -4,10 +4,12 @@ import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
 
 const REMOVE_ITEM_CART_API="/api/cart/delete";
+const UPDATE_ITEM_QUANTITY_CART_API="/api/cart/item/quantity";
+
 
 const CartItem = ({item,cartItems,setCartItems}) => {
     const navigate = useNavigate();
-    const [orderQuantity,setOrderQuantity] = useState(0);
+    const [orderQuantity,setOrderQuantity] = useState(item.orderQuantity);
     useEffect(() => {
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
@@ -16,29 +18,51 @@ const CartItem = ({item,cartItems,setCartItems}) => {
         }
     });
 
-    useEffect(() => {
+    useEffect(async () => {
         item.orderQuantity = orderQuantity;
-        let filteredCartItems = cartItems.filter((eachCartItem)=>{
-            return eachCartItem.cartId!=item.cartId;
-        });
-         setCartItems([...filteredCartItems,item]);
+        try{
+            const user = JSON.parse(localStorage.getItem("user"));
+            const data = {};
+            console.log(item);
+            data.cartId = item.cartId;
+            data.userId = user.id;
+            data.itemId = item.itemId;
+            data.orderQuantity = orderQuantity;
+            const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API,data);
+            if(response && response.data && response.data.success){
+                let filteredCartItems = cartItems.filter((eachCartItem)=>{
+                    return eachCartItem.cartId!=item.cartId;
+                });
+                setCartItems([...filteredCartItems,item]);
+            }else{
+                console.log("Error updating quantity");
+            }
+        }catch(e){
+
+        }
     },[orderQuantity]);
 
     const removeItem = async ()=>{
         const data = {};
         data.id = item.cartId;
-        const response = await authapi.post(REMOVE_ITEM_CART_API,data);
-        if(response && response.data){
-            if(response.data.success){
-                const filteredCartItems = cartItems.filter((eachCartItem)=>{
-                    return eachCartItem.cartId!=item.cartId;
-                });
-                setCartItems(filteredCartItems);
+        try{
+            const response = await authapi.post(REMOVE_ITEM_CART_API,data);
+            if(response && response.data){
+                if(response.data.success){
+                    const filteredCartItems = cartItems.filter((eachCartItem)=>{
+                        return eachCartItem.cartId!=item.cartId;
+                    });
+                    setCartItems(filteredCartItems);
+                }else{
+                console.log("Error removing item");
+                }
             }else{
-            console.log("Error placing order");
+                console.log(response);
             }
-        }else{
-            console.log(response);
+        }catch(err){
+            if(err && err.response && err.response.data && err.response.data.error){
+                console.log(err.response.data.error);
+            }
         }
     }
     return (
@@ -52,7 +76,6 @@ const CartItem = ({item,cartItems,setCartItems}) => {
                 <div>{item.itemCategory}</div>
                 <div>{item.itemPrice}</div>
                 <div>{item.itemQuantity}</div>
-                <div>{item.orderQuantity}</div>
                 <div>{item.itemDescription}</div>
                 <Form.Group className="mb-3">
                     <Form.Label htmlFor="quantity">Quantity</Form.Label>

@@ -71,6 +71,24 @@ router.get("/get/:userId", auth, async (req, res) => {
     }
 });
 
+router.post("/item/quantity", auth, async (req, res) => {
+    const response = {};
+    const data = req.body;
+    try{
+        const updatedItem = await Cart.updateItemOrderQuantity(data);
+        response.updatedItem = updatedItem;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
+});
+
 
 
 module.exports = router;

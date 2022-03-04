@@ -46,6 +46,7 @@ const ItemOverview = () => {
         const user =  JSON.parse(localStorage.getItem("user"));
         data.userId = user.id;
         data.itemId = id;
+        data.orderQuantity = 1;
         try{
             const response = await authapi.post(ADD_CART_API,data);
             if(response && response.data){
