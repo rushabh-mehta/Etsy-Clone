@@ -6,8 +6,6 @@ const encrypt = require("../services/encrypt");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
-
-
 router.post("/add", auth, async (req, res) => {
     const response = {};
     const data = req.body;
@@ -63,11 +61,11 @@ router.get("/:userId", auth, async (req, res) => {
     }
 });
 
-router.post("/other/filter", auth, async (req, res) => {
+router.post("/filter", auth, async (req, res) => {
     const response = {};
     const data = req.body;
     try{
-        const itemsResult = await Item.getOtherFilteredItems(data);
+        const itemsResult = await FavoriteItem.getFilteredFavoriteItems(data);
         response.items = itemsResult;
         response.success = true;
         response.status = "200";

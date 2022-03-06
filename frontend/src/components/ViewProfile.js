@@ -3,19 +3,21 @@ import MainNavbar from './MainNavbar';
 import {useEffect, useState} from 'react';
 import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faCamera, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import LoadingIcons from 'react-loading-icons';
 import authapi from '../services/authpost';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/viewprofile.css';
 import FavoriteItem from './FavoriteItem.js';
+import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'react-bootstrap';
 
 const GET_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
 const GET_FAVORITE_ITEMS_API = 'api/favoriteitem/';
+const GET_FAVORITE_ITEMS_FILTER_API = 'api/favoriteitem/filter';
 
 const ViewProfile = () => {
-
+    const [searchQuery,setSearchQuery] = useState("");
     const getUser = async ({id})=>{
         setViewProfileLoading(true);
         try{
@@ -82,6 +84,35 @@ const ViewProfile = () => {
         }
     }
 
+    const getFilteredFavoriteItems = async ()=>{
+        setGettingFavoriteItems(true);
+        const user = JSON.parse(localStorage.getItem("user"));
+        const filterData = {};
+        filterData.searchQuery = searchQuery;
+        filterData.userId = user.id;
+        try{
+        const response = await authapi.post(GET_FAVORITE_ITEMS_FILTER_API,filterData);
+        if(response && response.data){
+            if(response.data.success){
+                const items = response.data.items;
+                setFavoriteItems(items);
+                setGettingFavoriteItems(false);
+            }else{
+                setError("Some unexpected error occurred!");
+                setGettingFavoriteItems(false);
+            }
+        }else{
+            setError("Some unexpected error occurred!");
+            setGettingFavoriteItems(false);
+        }
+        }catch(err){
+            if(err && err.response && err.response.data && err.response.data.error){
+                setError(err.response.data.error);
+            }
+            setGettingFavoriteItems(false);
+        }
+  }
+
     const [countries, setCountries] = useState([]);
     const [favoriteItems, setFavoriteItems] = useState([]);
     const [user, setUser] = useState("");
@@ -144,6 +175,15 @@ const ViewProfile = () => {
                         <Link to="/edit-profile"><FontAwesomeIcon className="edit_icon" icon={faPen}/></Link>
                     </div>
                 </div>
+            </div>
+            <div>
+                <InputGroup>
+                    <FormControl
+                    placeholder="Search.."
+                    value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}}
+                    />
+                    <InputGroup.Text onClick={getFilteredFavoriteItems} id="basic-addon2"><FontAwesomeIcon icon={faMagnifyingGlass}/></InputGroup.Text>
+                </InputGroup>
             </div>
             <div>
                 {favoriteItems && favoriteItems.map((eachFavoriteItem,index)=>{

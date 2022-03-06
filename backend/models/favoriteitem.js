@@ -67,9 +67,9 @@ class FavoriteItem{
         }
     }
 
-    static getFilteredFavoriteItems = async ({searchQuery})=>{
+    static getFilteredFavoriteItems = async ({searchQuery,userId})=>{
         return new Promise((resolve, reject) => {
-            let sqlQuery = `select * from ${tableName} JOIN ${itemTableName} ON ${tableName}.itemId=${itemTableName}.id WHERE ${itemTableName}.name LIKE '%${searchQuery}%'`;
+            let sqlQuery = `select ${tableName}.id as favoriteItemId, ${itemTableName}.id as itemId, ${itemTableName}.name as itemName, ${itemTableName}.quantity as itemQuantity, ${itemTableName}.description as itemDescription, ${itemTableName}.category as itemCategory, ${itemTableName}.price as itemPrice from ${tableName} JOIN ${itemTableName} ON ${tableName}.item=${itemTableName}.id WHERE ${itemTableName}.name LIKE '%${searchQuery}%' AND user='${userId}'`;
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
