@@ -8,10 +8,11 @@ import LoadingIcons from 'react-loading-icons';
 import authapi from '../services/authpost';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/viewprofile.css';
+import FavoriteItem from './FavoriteItem.js';
 
 const GET_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
-
+const GET_FAVORITE_ITEMS_API = 'api/favoriteitem/';
 
 const ViewProfile = () => {
 
@@ -62,12 +63,32 @@ const ViewProfile = () => {
         }
     }
 
+    const getFavoriteItems = async () => {
+        setGettingFavoriteItems(true);
+        try{
+            const user = JSON.parse(localStorage.getItem("user"));
+            const response = await authapi.get(GET_FAVORITE_ITEMS_API+user.id);
+            if(response && response.data && response.data.success && response.data.favoriteItems){
+                setFavoriteItems(response.data.favoriteItems);
+                setGettingFavoriteItems(false);
+            }else{
+                setError("Some unexpected error occurred!");
+                setGettingFavoriteItems(false);
+            }
+        }catch(e){
+            console.log(e);
+            setError("Some unexpected error occurred!");
+            setGettingFavoriteItems(false);
+        }
+    }
+
     const [countries, setCountries] = useState([]);
+    const [favoriteItems, setFavoriteItems] = useState([]);
     const [user, setUser] = useState("");
     const [error, setError] = useState(false);
     const [viewProfileLoading, setViewProfileLoading] = useState(true);
     const [gettingCountries, setGettingCountries] = useState(true);
-
+    const [gettingFavoriteItems, setGettingFavoriteItems] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -78,13 +99,14 @@ const ViewProfile = () => {
         }else{
             getUser(user);
             getCountries();
+            getFavoriteItems();
         }
     },[]);
 
   return (
     <div>
         <MainNavbar />
-        {!gettingCountries && !viewProfileLoading && <div>
+        {!gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
             <div><span className="view_profile_header">View Profile</span></div>
             <div className="container">
                 <div className="row">
@@ -122,6 +144,11 @@ const ViewProfile = () => {
                         <Link to="/edit-profile"><FontAwesomeIcon className="edit_icon" icon={faPen}/></Link>
                     </div>
                 </div>
+            </div>
+            <div>
+                {favoriteItems && favoriteItems.map((eachFavoriteItem,index)=>{
+                    return <FavoriteItem index={index} favoriteItems={favoriteItems} setFavoriteItems={setFavoriteItems} key={eachFavoriteItem.favoriteItemId} item={eachFavoriteItem}/>
+                })}
             </div>
         </div>}
         {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}

@@ -44,13 +44,13 @@ router.post("/remove", auth, async (req, res) => {
     }
 });
 
-router.post("/other", auth, async (req, res) => {
+router.get("/:userId", auth, async (req, res) => {
     const response = {};
     const data = {};
-    const user = req.body;
+    data.userId = req.params.userId;
     try{
-        const itemsResult = await Item.getOtherItems(user);
-        response.items = itemsResult;
+        const favoriteItemResult = await FavoriteItem.getFavoriteItems(data);
+        response.favoriteItems = favoriteItemResult;
         response.success = true;
         response.status = "200";
         return res.status(200).send(response);

@@ -8,7 +8,7 @@ class FavoriteItem{
 
     static getFavoriteItems = async ({userId})=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `select * from ${tableName} WHERE user='${userId}'`;
+            const sqlQuery = `select ${tableName}.id as favoriteItemId, ${itemTableName}.id as itemId, ${itemTableName}.name as itemName, ${itemTableName}.quantity as itemQuantity, ${itemTableName}.description as itemDescription, ${itemTableName}.category as itemCategory, ${itemTableName}.price as itemPrice from ${tableName} JOIN ${itemTableName} ON ${tableName}.item=${itemTableName}.id WHERE user='${userId}'`;
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);

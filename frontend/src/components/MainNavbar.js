@@ -81,7 +81,7 @@ const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="#favorites"><FontAwesomeIcon icon={faHeart}/></Nav.Link>
+                    <Nav.Link href="/view-profile"><FontAwesomeIcon icon={faHeart}/></Nav.Link>
                     <Nav.Link onClick={goToShop}><FontAwesomeIcon icon={faShop}/></Nav.Link>
                     <Nav.Link onClick={goToCart}><FontAwesomeIcon icon={faCartShopping}/></Nav.Link>
                 </Nav>
