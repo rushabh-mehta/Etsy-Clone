@@ -13,6 +13,8 @@ const category = require("./controllers/category");
 const item = require("./controllers/item");
 const cart = require("./controllers/cart");
 const order = require("./controllers/order");
+const favoriteitem = require("./controllers/favoriteitem");
+
 
 const app = express();
 
@@ -34,3 +36,5 @@ app.use('/api/category',category);
 app.use('/api/item',item);
 app.use('/api/cart',cart);
 app.use('/api/order',order);
+app.use('/api/favoriteitem',favoriteitem);
+

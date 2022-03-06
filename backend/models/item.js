@@ -3,6 +3,7 @@ const con = require("../db");
 
 const tableName = "item";
 const shopTableName = "shop";
+const favoriteItemTableName = "favoriteitem";
 
 class Item{
 
@@ -19,15 +20,30 @@ class Item{
         });
     }
 
-    static getItem = async ({itemId})=>{
+    static getItem = async ({itemId,userId})=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `select ${tableName}.name as itemName, ${tableName}.displayPicture as itemDisplayPicture, ${tableName}.category as category, ${tableName}.description as itemDescription, ${tableName}.price as itemPrice, ${tableName}.quantity as itemQuantity, ${tableName}.salesCount as itemSalesCount, ${shopTableName}.id as shopId, ${shopTableName}.owner as shopOwner, ${shopTableName}.name as shopName, ${shopTableName}.displayPicture as shopDisplayPicture from ${tableName} INNER JOIN ${shopTableName} ON ${tableName}.shop=${shopTableName}.id WHERE ${tableName}.id='${itemId}'`;
+            const sqlQuery = `select ${tableName}.id as itemId, ${tableName}.name as itemName, ${tableName}.displayPicture as itemDisplayPicture, ${tableName}.category as category, ${tableName}.description as itemDescription, ${tableName}.price as itemPrice, ${tableName}.quantity as itemQuantity, ${tableName}.salesCount as itemSalesCount, ${shopTableName}.id as shopId, ${shopTableName}.owner as shopOwner, ${shopTableName}.name as shopName, ${shopTableName}.displayPicture as shopDisplayPicture from ${tableName} INNER JOIN ${shopTableName} ON ${tableName}.shop=${shopTableName}.id WHERE ${tableName}.id='${itemId}'`;
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
                     return reject(error);
                 }else if(results){
-                    return resolve(results[0]);
+                    const item = results[0];
+                    const sqlQuery = `select * from ${favoriteItemTableName} where item=${itemId} AND user='${userId}' `
+                    con.query(sqlQuery, (error, favResults) => {
+                        if(error){
+                            console.log(error);
+                            return reject(error);
+                        }else if(favResults && favResults.length){
+                            item.favorite = true;
+                            return resolve(item);
+                        }else if(favResults && !favResults.length){
+                            item.favorite = false;
+                            return resolve(item);
+                        }else{
+                            return reject("Some unexpected error occurred!");
+                        }
+                    });
                 }else{
                     return reject("Some unexpected error occurred!");
                 }
@@ -40,7 +56,6 @@ class Item{
             return new Promise((resolve, reject)=>{
                 try{
                     const sqlQuery = `INSERT INTO ${tableName} (name, displayPicture, category, description, price, quantity, salesCount, shop) VALUES ('${name}', '${displayPicture}', '${category}', '${description}', '${price}', '${quantity}', '${salesCount}', '${shopId}')`;
-                    
                     con.query(sqlQuery,(error, results)=>{
                         if(error){
                             console.log(error);

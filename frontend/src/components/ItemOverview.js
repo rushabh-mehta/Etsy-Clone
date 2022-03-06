@@ -2,10 +2,14 @@ import React,{useState, useEffect} from 'react';
 import { useLocation , useNavigate, useParams} from 'react-router-dom';
 import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
+import { faTimes, faHeart} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 const GET_ITEM_API = "/api/item/";
 const ADD_CART_API = "api/cart/add/";
+const ADD_FAVORITE_ITEM_API = "api/favoriteitem/add";
+
 const ItemOverview = () => {
     const [item,setItem] = useState({});
     const navigate = useNavigate();
@@ -20,8 +24,10 @@ const ItemOverview = () => {
 
     const getItem = async (itemId)=>{
         setItemLoading(true);
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userId = user.id;
         try{
-        const response = await authapi.get(GET_ITEM_API+itemId);
+        const response = await authapi.get(GET_ITEM_API+itemId+"/"+userId);
         if(response && response.data){
             if(response.data.success){
                 const item = response.data.item;
@@ -91,6 +97,46 @@ const ItemOverview = () => {
         }
     }
 
+    const removeFavoriteItem = async ()=>{
+
+    }
+
+    const addFavoriteItem = async ()=>{
+        const user = JSON.parse(localStorage.getItem("user"));
+        const data = {};
+        data.itemId = item.itemId;
+        data.userId = user.id;
+        try{
+            const response = await authapi.post(ADD_FAVORITE_ITEM_API,data);
+            if(response && response.data){
+                if(response.data.success){
+                    if(response.data.favoriteItem){
+                        const itemCopy = JSON.parse(JSON.stringify(item));
+                        itemCopy.favorite = true
+                        setItem(itemCopy);
+                    }else{
+                    console.log(response);
+                    }
+                }else{
+                    console.log(response);
+                }
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            if(err && err.response && err.response.data && err.response.data.error){
+                if(err.response.data.itemExists){
+                    setItemExistsMsg("Item already added to cart!");
+                    setTimeout(()=>{
+                        setItemExistsMsg("");
+                    },5000);
+                }else{
+                    console.log(err.response.data.error);
+                }
+            }
+        }
+    }
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
@@ -122,6 +168,8 @@ const ItemOverview = () => {
                     <Form.Label htmlFor="quantity">Quantity</Form.Label>
                     <Form.Control value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
                 </Form.Group>
+                {!item.favorite && <div><FontAwesomeIcon onClick={addFavoriteItem} icon={faHeart}/></div>}
+                {item.favorite && <div><FontAwesomeIcon onClick={removeFavoriteItem} icon={faTimes}/></div>}
                 <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
                 {addToCartSuccessMsg && <div>{addToCartSuccessMsg}</div>}
                 {itemExistsMsg && <div>{itemExistsMsg}</div>}
