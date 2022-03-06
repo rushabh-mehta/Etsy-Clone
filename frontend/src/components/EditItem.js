@@ -7,6 +7,8 @@ import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 
 const GET_CATEGORIES_API = "/api/category/";
 const EDIT_ITEM_API = "/api/item/edit";
+const ADD_CATEGORY_API = "/api/category/add";
+
 
 const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDisplayPicture,category,setCategory,description,setDescription,price,setPrice,quantity,setQuantity}) => {
     const navigate = useNavigate();
@@ -15,6 +17,8 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
     const [error, setError] = useState("");
     const [show, setShow] = useState(false);
     const [editingItem, setEditingItem] = useState(false);
+    const [newCategory,setNewCategory] = useState("");
+
     
     const getCategories = async ({id}) => {
         setGettingCategories(true);
@@ -71,6 +75,28 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         handleClose();
     }
 
+    const addCategory = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const data = {};
+        data.name = newCategory;
+        data.userId = user.id;
+        try{
+            const response = await authapi.post(ADD_CATEGORY_API,data);
+            if(response && response.data && response.data.success){
+                setCategories([...categories,{name:data.name,id: response.data.addedCategory.insertId}]);
+                setNewCategory("");
+                setNewCategory("");
+            }else{
+                setError("Some unexpected error occurred!");
+                setNewCategory("");
+            }
+        }catch(e){
+            console.log(e);
+            setError("Some unexpected error occurred!");
+            setNewCategory("");
+        }
+    }
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user"));
@@ -116,6 +142,11 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
                             })
                         }
                     </Form.Select>
+                </Form.Group>
+                 <Form.Group className="mb-3">
+                    <Form.Label>New Category</Form.Label>
+                    <Form.Control value={newCategory} onChange={(e)=>{setNewCategory(e.target.value)}} type="text" placeholder="Add a new category" />
+                    <Button variant="primary" onClick={addCategory}>Add Category</Button>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
