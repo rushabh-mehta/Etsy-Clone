@@ -72,9 +72,6 @@ const ShopHome = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-2 col-sm-12">
-                        <Link to="/edit-shop"><FontAwesomeIcon className="edit_icon" icon={faPen}/></Link>
-                    </div>
                     <div className="viewprofile_username col-md-4 col-sm-12">
                         <div className="row">
                             <div className="col-md-2 col-sm-12">
