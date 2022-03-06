@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const GET_ITEM_API = "/api/item/";
 const ADD_CART_API = "api/cart/add/";
 const ADD_FAVORITE_ITEM_API = "api/favoriteitem/add";
+const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
 
 const ItemOverview = () => {
     const [item,setItem] = useState({});
@@ -65,7 +66,6 @@ const ItemOverview = () => {
                 const response = await authapi.post(ADD_CART_API,data);
                 if(response && response.data){
                     if(response.data.success){
-                        console.log(JSON.stringify(response.data));
                         if(response.data.addedItem){
                             const shop = response.data.addedItem;
                             setOrderQuantity(0);
@@ -84,21 +84,41 @@ const ItemOverview = () => {
                 }
             }catch(err){
                 if(err && err.response && err.response.data && err.response.data.error){
-                    if(err.response.data.itemExists){
-                        setItemExistsMsg("Item already added to cart!");
-                        setTimeout(()=>{
-                            setItemExistsMsg("");
-                        },5000);
-                    }else{
                         console.log(err.response.data.error);
-                    }
                 }
             }
         }
     }
 
     const removeFavoriteItem = async ()=>{
-
+        const user = JSON.parse(localStorage.getItem("user"));
+        const data = {};
+        data.itemId = item.itemId;
+        data.userId = user.id;
+        try{
+            const response = await authapi.post(REMOVE_FAVORITE_ITEM_API,data);
+            if(response && response.data){
+                if(response.data.success){
+                    if(response.data.removeItem){
+                        const itemCopy = JSON.parse(JSON.stringify(item));
+                        itemCopy.favorite = false;
+                        setItem(itemCopy);
+                    }else{
+                    console.log(response);
+                    }
+                }else{
+                    console.log(response);
+                }
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            if(err && err.response && err.response.data && err.response.data.error){
+                if(err.response.data.itemExists){
+                    console.log(err.response.data.error);
+                }
+            }
+        }
     }
 
     const addFavoriteItem = async ()=>{

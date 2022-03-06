@@ -43,11 +43,11 @@ class FavoriteItem{
         }
     }
 
-    static removeItem = async ({id})=>{
+    static removeItem = async ({userId,itemId})=>{
         try{
             return new Promise((resolve, reject)=>{
                 try{
-                    const sqlQuery = `DELETE from ${tableName} WHERE id='${id}'`;
+                    const sqlQuery = `DELETE from ${tableName} WHERE user='${userId}' AND item='${itemId}'`;
                     con.query(sqlQuery,(error, results)=>{
                         if(error){
                             console.log(error);

@@ -28,11 +28,10 @@ router.post("/add", auth, async (req, res) => {
 
 router.post("/remove", auth, async (req, res) => {
     const response = {};
-    const data = {};
-    const item = req.body;
+    const data = req.body;
     try{
-        const itemResult = await Item.editItem(item);
-        response.item = itemResult;
+        const removeItem = await FavoriteItem.removeItem(data);
+        response.removeItem = removeItem;
         response.success = true;
         response.status = "200";
         return res.status(200).send(response);
