@@ -85,10 +85,9 @@ router.post("/edit", auth, async (req, res) => {
 
 router.post("/other", auth, async (req, res) => {
     const response = {};
-    const data = {};
-    const user = req.body;
+    const data = req.body;
     try{
-        const itemsResult = await Item.getOtherItems(user);
+        const itemsResult = await Item.getOtherItems(data);
         response.items = itemsResult;
         response.success = true;
         response.status = "200";
@@ -105,6 +104,7 @@ router.post("/other", auth, async (req, res) => {
 router.post("/other/filter", auth, async (req, res) => {
     const response = {};
     const data = req.body;
+    console.log(data);
     try{
         const itemsResult = await Item.getOtherFilteredItems(data);
         response.items = itemsResult;

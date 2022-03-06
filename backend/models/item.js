@@ -99,7 +99,7 @@ class Item{
         }
     }
 
-    static getOtherItems = async ({shop})=>{
+    static getOtherItems = async ({shop,id})=>{
         return new Promise((resolve, reject) => {
             const sqlQuery = `select * from ${tableName} WHERE shop!='${shop}'`;
             con.query(sqlQuery, (error, results) => {
@@ -107,12 +107,33 @@ class Item{
                     console.log(error);
                     return reject(error);
                 }
-                return resolve(results);
+                const itemIds = results.map((eachResult)=>{
+                    return eachResult.id;
+                });
+                const favitemsSqlQuery = `select * from ${favoriteItemTableName} WHERE user='${id}' AND ${favoriteItemTableName}.item IN (${itemIds})`;
+                con.query(favitemsSqlQuery,(error, favItems)=>{
+                    if(error){
+                        console.log(error);
+                        return reject(error);
+                    }else{
+                        const favItemIds = favItems.map((eachFavItem)=>{
+                            return eachFavItem.item;
+                        });
+                        results.forEach((eachResult)=>{
+                            if(favItemIds.includes(eachResult.id)){
+                                eachResult.favorite=true;
+                            }else{
+                                eachResult.favorite=false;
+                            }
+                        })
+                        return resolve(results);
+                    }
+                })
             });
         });
     }
 
-    static getOtherFilteredItems = async ({shop,searchQuery,minPrice,maxPrice,inStock,sortPrice,sortBy})=>{
+    static getOtherFilteredItems = async ({shop,searchQuery,minPrice,maxPrice,inStock,sortBy,userId})=>{
         return new Promise((resolve, reject) => {
             let sqlQuery = `select * from ${tableName} WHERE shop!='${shop}'`;
             if(searchQuery){
@@ -141,7 +162,28 @@ class Item{
                     console.log(error);
                     return reject(error);
                 }
-                return resolve(results);
+                const itemIds = results.map((eachResult)=>{
+                    return eachResult.id;
+                });
+                const favitemsSqlQuery = `select * from ${favoriteItemTableName} WHERE user='${userId}' AND ${favoriteItemTableName}.item IN (${itemIds})`;
+                con.query(favitemsSqlQuery,(error, favItems)=>{
+                    if(error){
+                        console.log(error);
+                        return reject(error);
+                    }else{
+                        const favItemIds = favItems.map((eachFavItem)=>{
+                            return eachFavItem.item;
+                        });
+                        results.forEach((eachResult)=>{
+                            if(favItemIds.includes(eachResult.id)){
+                                eachResult.favorite=true;
+                            }else{
+                                eachResult.favorite=false;
+                            }
+                        })
+                        return resolve(results);
+                    }
+                })
             });
         });
     }

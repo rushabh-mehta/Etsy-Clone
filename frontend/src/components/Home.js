@@ -22,9 +22,10 @@ const Home = () => {
   const [sortBy,setSortBy] = useState("");
   const [inStock,setInStock] = useState(false);
 
-  const getOtherItems = async (user)=>{
+  const getOtherItems = async ()=>{
     setItemsLoading(true);
     try{
+      const user = JSON.parse(localStorage.getItem("user"));
       const response = await authapi.post(GET_OTHER_ITEMS_API,user);
       if(response && response.data){
           if(response.data.success){
@@ -57,6 +58,7 @@ const Home = () => {
     filterData.inStock = inStock;
     filterData.sortBy=sortBy;
     filterData.shop = user.shop;
+    filterData.userId = user.id;
     try{
       const response = await authapi.post(GET_OTHER_ITEMS_FILTER_API,filterData);
       if(response && response.data){
@@ -86,7 +88,7 @@ const Home = () => {
     if(!token || !user){
         navigate("/login", {replace:true});
     }else{
-      getOtherItems(user);
+      getOtherItems();
     }
   },[]);
 
@@ -113,8 +115,8 @@ const Home = () => {
       </Form.Group>
        <Button variant="primary" onClick={getOtherFilterItems}>Filter</Button>
       {
-        !itemsLoading && items.map((eachItem)=>{
-          return <HomeItem key={eachItem.id} item={eachItem} />
+        !itemsLoading && items.map((eachItem,index)=>{
+          return <HomeItem key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
         })
       }
       
