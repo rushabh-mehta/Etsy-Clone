@@ -6,7 +6,7 @@ import authapi from '../services/authpost';
 
 
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
-const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index}) => {
+const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
 
     const removeFavoriteItem = async ()=>{
         const user = JSON.parse(localStorage.getItem("user"));
@@ -49,7 +49,7 @@ const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index}) => {
                 <div>{item.itemId}</div>
                 <div>{item.itemName}</div>
                 <div>{item.itemCategory}</div>
-                <div>{item.itemPrice}</div>
+                <div>{currency.name+" "+item.itemPrice}</div>
                 <div>{item.itemDescription}</div>
                 <div><FontAwesomeIcon onClick={removeFavoriteItem} icon={faTimes}/></div>
             </div>
