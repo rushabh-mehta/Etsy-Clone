@@ -14,6 +14,7 @@ const item = require("./controllers/item");
 const cart = require("./controllers/cart");
 const order = require("./controllers/order");
 const favoriteitem = require("./controllers/favoriteitem");
+const currency = require("./controllers/currency");
 
 
 const app = express();
@@ -37,4 +38,6 @@ app.use('/api/item',item);
 app.use('/api/cart',cart);
 app.use('/api/order',order);
 app.use('/api/favoriteitem',favoriteitem);
+app.use('/api/currency',currency);
+
 

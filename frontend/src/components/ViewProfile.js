@@ -1,5 +1,6 @@
 import React from 'react';
 import MainNavbar from './MainNavbar';
+import MainFooter from './MainFooter';
 import {useEffect, useState} from 'react';
 import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -192,6 +193,7 @@ const ViewProfile = () => {
             </div>
         </div>}
         {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
+        <MainFooter/>
     </div>
   )
 }

@@ -93,6 +93,28 @@ class User{
         });
     }
 
+    static updateUserCurrency = async ({userId,currencyId}) => {
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `update ${tableName} set currency = '${currencyId}' where id = '${userId}'`;
+            con.query(sqlQuery, (error, result) => {
+                console.log("USER UPDATED RESULT"+JSON.stringify(result));
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                let userObj = {};
+                if(result){
+                    userObj.userEdited = true;
+                }else{
+                    userObj.userEdited = false; 
+                }
+                return resolve(userObj);
+            });
+        });
+    }
+
+
+
 }
 
 module.exports.User = User;
