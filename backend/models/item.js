@@ -189,6 +189,26 @@ class Item{
         });
     }
 
+    static updateDisplayPicture = async ({key,itemId})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `update ${tableName} set displayPicture = '${key}' where id = '${itemId}'`;
+            con.query(sqlQuery, (error, result) => {
+                console.log("USER UPDATED RESULT"+JSON.stringify(result));
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                let itemObj = {};
+                if(result){
+                    itemObj.itemEdited = true;
+                }else{
+                    itemObj.itemEdited = false; 
+                }
+                return resolve(itemObj);
+            });
+        });
+    }
+
 }
 
 module.exports.Item = Item;

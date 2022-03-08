@@ -8,10 +8,15 @@ import LoadingIcons from 'react-loading-icons';
 import AddShopItem from './AddItem';
 import Item from './Item';
 import MainFooter from './MainFooter';
+import config from '../config/config';
 
 
 const GET_SHOP_API = "/api/shop/home/";
 const GET_USER_CURRENCY_API = "api/currency/";
+const UPLOAD_SHOP_PIC_API = "api/shop/display-picture/upload";
+const GET_SHOP_PIC_API = config.baseUrl+"/api/shop/display-picture/";
+const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
+
 
 const ShopHome = () => {
     const search = useLocation().search;
@@ -66,6 +71,25 @@ const ShopHome = () => {
       }
   }
 
+  const shopPictureSelected = async (event) => {
+        let formData = new FormData();
+        const image = event.target.files[0];
+        formData.append("image", image);
+        formData.append("shopId",shop.id);
+        try{
+            const response = await authapi.post(UPLOAD_SHOP_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
+            if(response && response.data && response.data.imageKey){
+                const shopCopy = JSON.parse(JSON.stringify(shop));
+                shopCopy.displayPicture = response.data.imageKey;
+                setShop(shopCopy);
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+	}
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user"));
@@ -92,8 +116,11 @@ const ShopHome = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-2 col-sm-12">
-                        <div><img className="profile_picture"></img></div>
-                        {editRights && <div><FontAwesomeIcon icon={faCamera}/></div>}
+                        <div><img src={GET_SHOP_PIC_API+shop.displayPicture} className="profile_picture"></img></div>
+                        { editRights && <div>
+                            <label htmlFor="shop-display-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                            <input onChange={shopPictureSelected} style={{display: "none"}} id="shop-display-pic" type="file"></input>
+                        </div>}
                     </div>
                     <div className="viewprofile_username col-md-4 col-sm-12">
                         <div>{shop && shop.name}</div>
@@ -106,7 +133,7 @@ const ShopHome = () => {
                     <div className="viewprofile_username col-md-4 col-sm-12">
                         <div className="row">
                             <div className="col-md-2 col-sm-12">
-                                <div><img className="profile_picture"></img></div>
+                                <div><img src={GET_PROFILE_PIC_API+shop.profilePicture} className="profile_picture"></img></div>
                             </div>
                             <div className="viewprofile_useremail col-md-12 col-sm-12">
                                 {shop && shop.ownerName}

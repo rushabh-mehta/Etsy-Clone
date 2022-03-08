@@ -3,9 +3,10 @@ import {useNavigate} from "react-router-dom";
 import authapi from '../services/authpost';
 import { faTimes, faHeart} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import config from '../config/config';
 
 
-
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
 const ADD_FAVORITE_ITEM_API = "api/favoriteitem/add";
 
@@ -91,10 +92,9 @@ const HomeItem = ({item,items,setItems,index,currency}) => {
     return (
         <div>
             <div onClick={()=>{viewItemOverview(item)}}>
-                <div>
-                    <img className="profile_picture"></img>
+                <div className="col-md-12">
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.displayPicture} className="profile_picture"></img></div>
                 </div>
-                <div>{item.displayPicture}</div>
                 <div>{item.name}</div>
                 <div>{item.category}</div>
                 <div>{currency.name+" "+item.price}</div>

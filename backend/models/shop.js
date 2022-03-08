@@ -117,6 +117,25 @@ class Shop{
         });
     }
 
+    static updateDisplayPicture = async ({key,shopId})=>{
+        return new Promise((resolve, reject) => {
+            const sqlQuery = `update ${tableName} set displayPicture = '${key}' where id = '${shopId}'`;
+            con.query(sqlQuery, (error, result) => {
+                console.log("USER UPDATED RESULT"+JSON.stringify(result));
+                if (error) {
+                    console.log(error);
+                    return reject(error);
+                }
+                let userObj = {};
+                if(result){
+                    userObj.userEdited = true;
+                }else{
+                    userObj.userEdited = false; 
+                }
+                return resolve(userObj);
+            });
+        });
+    }
 }
 
 module.exports.Shop = Shop;

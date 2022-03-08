@@ -4,6 +4,7 @@ import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
 import { faTimes, faHeart} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import config from '../config/config';
 
 
 const GET_ITEM_API = "/api/item/";
@@ -12,6 +13,7 @@ const ADD_FAVORITE_ITEM_API = "api/favoriteitem/add";
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
 const GET_USER_CURRENCY_API = "api/currency/";
 const SHOP_HOME_PAGE = "/shop/home/";
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 
 
 const ItemOverview = () => {
@@ -195,10 +197,9 @@ const ItemOverview = () => {
     return (
         <div>
             <div>
-                <div>
-                    <img className="profile_picture"></img>
+                <div className="col-md-12">
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="profile_picture"></img></div>
                 </div>
-                <div>{item.itemDisplayPicture}</div>
                 <div>{item.itemName}</div>
                 <Link to={SHOP_HOME_PAGE+item.shopId}>{item.shopName}</Link>
                 <div>{item.categoryName}</div>

@@ -3,9 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faHeart} from "@fortawesome/free-solid-svg-icons";
 import EditItem from './EditItem';
 import authapi from '../services/authpost';
+import config from '../config/config';
 
 
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
+
 const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
 
     const removeFavoriteItem = async ()=>{
@@ -43,8 +46,8 @@ const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
         <div>
             
             <div>
-                <div>
-                    <img className="profile_picture"></img>
+                <div className="col-md-12">
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="profile_picture"></img></div>
                 </div>
                 <div>{item.itemId}</div>
                 <div>{item.itemName}</div>

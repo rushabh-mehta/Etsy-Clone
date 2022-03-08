@@ -19,7 +19,7 @@ const GET_COUNTRY_API = '/api/country/';
 const GET_FAVORITE_ITEMS_API = 'api/favoriteitem/';
 const GET_FAVORITE_ITEMS_FILTER_API = 'api/favoriteitem/filter';
 const GET_USER_CURRENCY_API = "api/currency/";
-const UPLOAD_PROFILE_PIC_API = "api/user/profile_picture/upload";
+const UPLOAD_PROFILE_PIC_API = "api/user/profile-picture/upload";
 const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
 
 const ViewProfile = () => {

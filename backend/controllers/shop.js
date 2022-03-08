@@ -7,6 +7,13 @@ const encrypt = require("../services/encrypt");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+const { uploadFile, getFileStream } = require('../services/s3');
+
+
 router.get("/user/:id", auth, async (req, res) => {
     const response = {};
     const data = {};
@@ -144,6 +151,32 @@ router.post("/home/", auth, async (req, res) => {
             response.status = "200";
             return res.status(200).send(response);
         }
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
+});
+
+router.get('/display-picture/:key', (req, res) => {
+  const key = req.params.key;
+  const readStream = getFileStream(key);
+  readStream.pipe(res);
+});
+
+router.post("/display-picture/upload", auth, upload.single("image"),async (req, res) => {
+    const file = req.file;
+    const response = {};
+    try{
+        const result = await uploadFile(file);
+        result.shopId = req.body.shopId;
+        const userUpdate = await Shop.updateDisplayPicture(result);
+        response.success = true;
+        response.status = "200";
+        response.imageKey = result.key;
+        res.status(200).send(response);
     }catch(e){
         console.log(e);
         response.success = false;

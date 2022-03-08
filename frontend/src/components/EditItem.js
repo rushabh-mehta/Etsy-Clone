@@ -4,11 +4,15 @@ import authapi from '../services/authpost';
 import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
+import config from '../config/config';
 
 const GET_CATEGORIES_API = "/api/category/";
 const EDIT_ITEM_API = "/api/item/edit";
 const ADD_CATEGORY_API = "/api/category/add";
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
+const UPLOAD_ITEM_DISPLAY_PIC_API = "api/item/display-picture/upload";
 
+//
 
 const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDisplayPicture,category,setCategory,description,setDescription,price,setPrice,quantity,setQuantity,currency}) => {
     const navigate = useNavigate();
@@ -97,6 +101,23 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         }
     }
 
+    const itemDisplayPictureSelected = async (event) => {
+        let formData = new FormData();
+        const image = event.target.files[0];
+        formData.append("image", image);
+        formData.append("itemId",id);
+        try{
+            const response = await authapi.post(UPLOAD_ITEM_DISPLAY_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
+            if(response && response.data && response.data.imageKey){
+                setDisplayPicture(response.data.imageKey);
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+	}
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user"));
@@ -117,8 +138,11 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         <Modal.Body>
             <Form>
                 <div className="col-md-12">
-                    <img className="profile_picture"></img>
-                    <div><FontAwesomeIcon icon={faCamera}/></div>
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="profile_picture"></img></div>
+                    <div>
+                        <label htmlFor="item-display-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                        <input onChange={itemDisplayPictureSelected} style={{display: "none"}} id="item-display-pic" type="file"></input>
+                    </div>
                 </div>
                 <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>

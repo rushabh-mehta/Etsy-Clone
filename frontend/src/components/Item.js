@@ -2,6 +2,9 @@ import React,{useState, useEffect} from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 import EditItem from './EditItem';
+import config from '../config/config';
+
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 
 const Item = ({index,items,setItems,currency,editRights}) => {
   
@@ -22,10 +25,10 @@ const Item = ({index,items,setItems,currency,editRights}) => {
             
             {editRights && <EditItem currency={currency} id={items[index].id} items={items} setItems={setItems} index={index} displayPicture={displayPicture} setDisplayPicture={setDisplayPicture} name={name} setName={setName} category={category} setCategory={setCategory} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} salesCount={salesCount} setSalesCount={setSalesCount} description={description} setDescription={setDescription}/>}
             <div>
-                <div>
-                    <img className="profile_picture"></img>
+                
+                <div className="col-md-12">
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="profile_picture"></img></div>
                 </div>
-                <div>{displayPicture}</div>
                 <div>{name}</div>
                 <div>{category}</div>
                 <div>{currency.name+" "+price}</div>

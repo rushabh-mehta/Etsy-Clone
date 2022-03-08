@@ -70,7 +70,9 @@ router.post("/currency/update", auth, async (req, res) => {
     try{
         const updatedResult = await User.updateUserCurrency(data);
         if(updatedResult && updatedResult.userEdited){
-            const findResult = await User.getUserById(data);
+            const userData = {};
+            userData.id = data.userId;
+            const findResult = await User.getUserById(userData);
             response.success = true;
             response.user = findResult.user;
             response.status = "200";
@@ -96,7 +98,7 @@ router.get('/profile-picture/:key', (req, res) => {
   readStream.pipe(res);
 });
 
-router.post("/profile_picture/upload", auth, upload.single("image"),async (req, res) => {
+router.post("/profile-picture/upload", auth, upload.single("image"),async (req, res) => {
     const file = req.file;
     const response = {};
     try{
