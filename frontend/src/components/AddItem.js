@@ -10,7 +10,7 @@ const ADD_ITEM_API = "/api/item/add";
 const ADD_CATEGORY_API = "/api/category/add";
 
 
-const AddShopItem = ({setItems,items,id}) => {
+const AddShopItem = ({setItems,items,id,currency}) => {
     const navigate = useNavigate();
     const [categories,setCategories] = useState([]);
     const [gettingCategories,setGettingCategories] = useState([]);
@@ -134,7 +134,7 @@ const AddShopItem = ({setItems,items,id}) => {
                     <Form.Control value={name} onChange={(e)=>{setName(e.target.value)}} type="text" placeholder="Name" />
                 </Form.Group>
                 <Form.Group  className="mb-3">
-                    <Form.Label>Price</Form.Label>
+                    <Form.Label>Price {"("+currency.name+")"}</Form.Label>
                     <Form.Control value={price} onChange={(e)=>{setPrice(e.target.value)}} type="number" placeholder="Price" />
                 </Form.Group>
                 <Form.Group className="mb-3">
