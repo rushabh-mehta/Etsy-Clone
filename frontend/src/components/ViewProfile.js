@@ -16,9 +16,12 @@ const GET_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
 const GET_FAVORITE_ITEMS_API = 'api/favoriteitem/';
 const GET_FAVORITE_ITEMS_FILTER_API = 'api/favoriteitem/filter';
+const GET_USER_CURRENCY_API = "api/currency/";
 
 const ViewProfile = () => {
     const [searchQuery,setSearchQuery] = useState("");
+    const [currency,setCurrency] = useState({});
+
     const getUser = async ({id})=>{
         setViewProfileLoading(true);
         try{
@@ -114,6 +117,23 @@ const ViewProfile = () => {
         }
   }
 
+  const getUserCurrency = async ({currency})=>{
+        try{
+            const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+            if(response && response.data){
+                if(response.data.success){
+                    setCurrency(response.data.currency);
+                }else{
+                    console.log(response);
+                }
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+    }
+
     const [countries, setCountries] = useState([]);
     const [favoriteItems, setFavoriteItems] = useState([]);
     const [user, setUser] = useState("");
@@ -132,6 +152,7 @@ const ViewProfile = () => {
             getUser(user);
             getCountries();
             getFavoriteItems();
+            getUserCurrency(user);
         }
     },[]);
 
@@ -188,12 +209,12 @@ const ViewProfile = () => {
             </div>
             <div>
                 {favoriteItems && favoriteItems.map((eachFavoriteItem,index)=>{
-                    return <FavoriteItem index={index} favoriteItems={favoriteItems} setFavoriteItems={setFavoriteItems} key={eachFavoriteItem.favoriteItemId} item={eachFavoriteItem}/>
+                    return <FavoriteItem currency={currency} index={index} favoriteItems={favoriteItems} setFavoriteItems={setFavoriteItems} key={eachFavoriteItem.favoriteItemId} item={eachFavoriteItem}/>
                 })}
             </div>
         </div>}
         {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
-        <MainFooter/>
+        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )
 }
