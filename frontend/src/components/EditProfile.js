@@ -18,6 +18,8 @@ import LoadingIcons from 'react-loading-icons';
 const GET_USER_API = '/api/user/';
 const EDIT_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
+const GET_USER_CURRENCY_API = "api/currency/";
+
 
 const NAME_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -76,6 +78,8 @@ const EditProfile = () => {
     const [error, setError] = useState();
     
     const navigate = useNavigate();
+    const [currency,setCurrency] = useState({});
+
 
     useEffect(() => {
         setValidName(NAME_REGEX.test(name));
@@ -109,6 +113,7 @@ const EditProfile = () => {
         }else{
             getUser(user);
             getCountries();
+            getUserCurrency(user);
         }
     },[]);
 
@@ -263,6 +268,23 @@ const EditProfile = () => {
         }
     }
 
+    const getUserCurrency = async ({currency})=>{
+        try{
+            const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+            if(response && response.data){
+                if(response.data.success){
+                    setCurrency(response.data.currency);
+                }else{
+                    console.log(response);
+                }
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+    }
+
   return (
     <div>
         <MainNavbar />
@@ -387,7 +409,7 @@ const EditProfile = () => {
             </div>
         }
         {editProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
-        <MainFooter />
+        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )
 }
