@@ -4,7 +4,7 @@ import MainFooter from './MainFooter';
 import {useEffect, useState} from 'react';
 import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faInfoCircle, faCamera } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl, Form, Dropdown, DropdownButton } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/viewprofile.css';
