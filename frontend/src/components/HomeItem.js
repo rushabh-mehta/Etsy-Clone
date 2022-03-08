@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
 const ADD_FAVORITE_ITEM_API = "api/favoriteitem/add";
 
-const HomeItem = ({item,items,setItems,index}) => {
+const HomeItem = ({item,items,setItems,index,currency}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -97,7 +97,7 @@ const HomeItem = ({item,items,setItems,index}) => {
                 <div>{item.displayPicture}</div>
                 <div>{item.name}</div>
                 <div>{item.category}</div>
-                <div>{item.price}</div>
+                <div>{currency.name+" "+item.price}</div>
                 <div>{item.quantity}</div>
                 <div>{item.salesCount}</div>
                 <div>{item.description}</div>

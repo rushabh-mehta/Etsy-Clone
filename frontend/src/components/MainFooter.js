@@ -7,9 +7,9 @@ import {useNavigate} from "react-router-dom";
 const GET_CURRENCIES_API = "/api/currency/";
 const UPDATE_USER_CURRENCY = "api/user/currency/update";
 
-const MainFooter = () => {
+
+const MainFooter = ({currency,setCurrency}) => {
   const navigate = useNavigate();
-  const [currency,setCurrency] = useState("");
   const [currencies,setCurrencies] = useState([]);
   const [gettingCurrencies,setGettingCurrencies] = useState(true);
   const [error, setError] = useState("");
@@ -33,15 +33,15 @@ const MainFooter = () => {
   }
 
   const changeUserCurrency = async ()=>{
-    if(currency){
+    if(currency && currency.id && currency.name){
       const user = JSON.parse(localStorage.getItem("user"));
       const data = {};
       data.userId = user.id;
-      data.currencyId = currency;
+      data.currencyId = currency.id;
       try{
             const response = await authapi.post(UPDATE_USER_CURRENCY,data);
             if(response && response.data && response.data.success){
-              user.currency = currency;
+              user.currency = currency.id;
               localStorage.setItem("user",JSON.stringify(user));
             }else{
                 setError("Some unexpected error occurred!");
@@ -51,6 +51,15 @@ const MainFooter = () => {
           setError("Some unexpected error occurred!");
       }
     }
+  }
+
+  const changeCurrency =  (e)=>{
+    const selectedCurrency = currencies.filter((eachCurrency)=>{
+      return eachCurrency.id == e.target.value;
+    })
+    const currencyObj = selectedCurrency[0];
+    console.log(currencyObj);
+    setCurrency(currencyObj);
   }
 
   useEffect(() => {
@@ -75,7 +84,7 @@ const MainFooter = () => {
           <MDBCol md="6">
             <Form.Group className="mb-3">
                 <Form.Label>Currency</Form.Label>
-                <Form.Select name="currency" id="currency" value={currency} onChange={(e)=>{setCurrency(e.target.value)}}>
+                <Form.Select name="currency" id="currency" value={currency.id} onChange={changeCurrency}>
                     <option value="">Select Currency</option>
                     {
                         currencies.map((eachCurrency,index)=>{

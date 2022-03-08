@@ -10,6 +10,7 @@ const GET_ITEM_API = "/api/item/";
 const ADD_CART_API = "api/cart/add/";
 const ADD_FAVORITE_ITEM_API = "api/favoriteitem/add";
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
+const GET_USER_CURRENCY_API = "api/currency/";
 
 const ItemOverview = () => {
     const [item,setItem] = useState({});
@@ -22,6 +23,7 @@ const ItemOverview = () => {
     const [addToCartSuccessMsg,setAddToCartSuccessMsg] = useState("");
     const [itemExistsMsg,setItemExistsMsg] = useState("");
     const [notEnoughStockMessage,setNotEnoughStockMessage] = useState("");
+    const [currency,setCurrency] = useState({});
 
     const getItem = async (itemId)=>{
         setItemLoading(true);
@@ -157,13 +159,31 @@ const ItemOverview = () => {
         }
     }
 
+    const getUserCurrency = async ({currency})=>{
+        try{
+            const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+            if(response && response.data){
+                if(response.data.success){
+                    setCurrency(response.data.currency);
+                }else{
+                    console.log(response);
+                }
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+    }
+
     useEffect(() => {
         const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
+        const user = JSON.parse(localStorage.getItem("user"));
         if(!token || !user){
             navigate("/login", {replace:true});
         }else{
             getItem(id);
+            getUserCurrency(user);
         }
     },[]);
 
@@ -180,7 +200,7 @@ const ItemOverview = () => {
                 <div>{item.itemDisplayPicture}</div>
                 <div>{item.itemName}</div>
                 <div>{item.itemCategory}</div>
-                <div>{item.itemPrice}</div>
+                <div>{currency.name+" "+item.itemPrice}</div>
                 <div>{item.itemQuantity}</div>
                 <div>{item.itemSalesCount}</div>
                 <div>{item.itemDescription}</div>

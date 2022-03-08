@@ -10,7 +10,9 @@ import { Form, Button } from 'react-bootstrap';
 
 
 const GET_OTHER_ITEMS_API = "api/item/other";
-const GET_OTHER_ITEMS_FILTER_API = "api/item/other/filter"
+const GET_OTHER_ITEMS_FILTER_API = "api/item/other/filter";
+const GET_USER_CURRENCY_API = "api/currency/";
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ const Home = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [sortBy,setSortBy] = useState("");
   const [inStock,setInStock] = useState(false);
+  const [currency,setCurrency] = useState({});
+
 
   const getOtherItems = async ()=>{
     setItemsLoading(true);
@@ -83,13 +87,31 @@ const Home = () => {
     }
   }
 
+  const getUserCurrency = async ({currency})=>{
+        try{
+            const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+            if(response && response.data){
+                if(response.data.success){
+                    setCurrency(response.data.currency);
+                }else{
+                    console.log(response);
+                }
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+    }
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    const user = JSON.parse(localStorage.getItem("user"));
     if(!token || !user){
         navigate("/login", {replace:true});
     }else{
       getOtherItems();
+      getUserCurrency(user);
     }
   },[]);
 
@@ -117,10 +139,10 @@ const Home = () => {
        <Button variant="primary" onClick={getOtherFilterItems}>Filter</Button>
       {
         !itemsLoading && items.map((eachItem,index)=>{
-          return <HomeItem key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
+          return <HomeItem currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
         })
       }
-      <MainFooter/>
+      <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )
 }
