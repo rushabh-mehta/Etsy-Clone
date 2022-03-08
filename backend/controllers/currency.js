@@ -7,7 +7,6 @@ const auth = require("../middleware/auth");
 const router = express.Router();
 
 router.get("/", auth, async (req, res) => {
-    console.log("here1");
     const response = {};
     const data = {};
     try{
@@ -26,7 +25,6 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.get("/:currencyId", auth, async (req, res) => {
-    console.log("here2");
     const response = {};
     const data = {};
     data.currencyId = req.params.currencyId;

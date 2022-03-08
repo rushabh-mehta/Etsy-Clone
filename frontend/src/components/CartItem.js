@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
+import config from '../config/config';
 
 const REMOVE_ITEM_CART_API = "/api/cart/delete";
 const UPDATE_ITEM_QUANTITY_CART_API = "/api/cart/item/quantity";
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 
 
 const CartItem = ({ item, cartItems, setCartItems,currency }) => {
@@ -70,8 +72,8 @@ const CartItem = ({ item, cartItems, setCartItems,currency }) => {
     return (
         <div>
             <div>
-                <div>
-                    <img className="profile_picture"></img>
+                <div className="col-md-12">
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="profile_picture"></img></div>
                 </div>
                 <div>{item.displayPicture}</div>
                 <div>{item.itemName}</div>

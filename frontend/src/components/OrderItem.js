@@ -1,5 +1,9 @@
 import React,{useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
+import config from '../config/config';
+
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
+
 
 const OrderItem = ({item, currency}) => {
     const navigate = useNavigate();
@@ -15,8 +19,8 @@ const OrderItem = ({item, currency}) => {
     return (
         <div>
             <div>
-                <div>
-                    <img className="profile_picture"></img>
+                <div className="col-md-12">
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.displayPicture} className="profile_picture"></img></div>
                 </div>
                 <div>{item.displayPicture}</div>
                 <div>{item.orderId}</div>

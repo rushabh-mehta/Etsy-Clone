@@ -94,8 +94,12 @@ router.post("/currency/update", auth, async (req, res) => {
 
 router.get('/profile-picture/:key', (req, res) => {
   const key = req.params.key;
-  const readStream = getFileStream(key);
-  readStream.pipe(res);
+  if(key!=="null" && key!=="undefined"){
+    const readStream = getFileStream(key);
+    readStream.pipe(res);
+  }else{
+      res.send("");
+  }
 });
 
 router.post("/profile-picture/upload", auth, upload.single("image"),async (req, res) => {

@@ -33,8 +33,12 @@ router.get("shop/:shopId", auth, async (req, res) => {
 
 router.get('/display-picture/:key', (req, res) => {
   const key = req.params.key;
-  const readStream = getFileStream(key);
-  readStream.pipe(res);
+  if(key!=="null" && key!=="undefined"){
+    const readStream = getFileStream(key);
+    readStream.pipe(res);
+  }else{
+      res.send("");
+  }
 });
 
 router.get("/:itemId/:userId", auth, async (req, res) => {
