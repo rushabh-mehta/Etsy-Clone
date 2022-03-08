@@ -53,24 +53,25 @@ const ItemOverview = () => {
     }
 
     const addToCart = async ()=>{
-        if(parseInt(item.orderQuantity)>item.itemQuantity){
+        if(parseInt(orderQuantity)>item.itemQuantity){
             setNotEnoughStockMessage("Insufficient quantity!");
             setTimeout(()=>{
                 setNotEnoughStockMessage("");
             },5000);
         }else{
+            console.log(item);
             const data = {};
             const user =  JSON.parse(localStorage.getItem("user"));
             data.userId = user.id;
             data.itemId = id;
-            data.orderQuantity = item.orderQuantity;
+            data.orderQuantity = orderQuantity;
             try{
                 const response = await authapi.post(ADD_CART_API,data);
                 if(response && response.data){
                     if(response.data.success){
                         if(response.data.addedItem){
                             const shop = response.data.addedItem;
-                            setOrderQuantity(0);
+                            setOrderQuantity(1);
                             setAddToCartSuccessMsg("Item added to cart successfully!");
                             setTimeout(()=>{
                                 setAddToCartSuccessMsg("");
@@ -86,7 +87,14 @@ const ItemOverview = () => {
                 }
             }catch(err){
                 if(err && err.response && err.response.data && err.response.data.error){
+                if(err.response.data.itemExists){
+                        setItemExistsMsg("Item already added to cart!");
+                        setTimeout(()=>{
+                            setItemExistsMsg("");
+                        },5000);
+                    }else{
                         console.log(err.response.data.error);
+                    }
                 }
             }
         }
@@ -116,9 +124,7 @@ const ItemOverview = () => {
             }
         }catch(err){
             if(err && err.response && err.response.data && err.response.data.error){
-                if(err.response.data.itemExists){
                     console.log(err.response.data.error);
-                }
             }
         }
     }
@@ -147,14 +153,7 @@ const ItemOverview = () => {
             }
         }catch(err){
             if(err && err.response && err.response.data && err.response.data.error){
-                if(err.response.data.itemExists){
-                    setItemExistsMsg("Item already added to cart!");
-                    setTimeout(()=>{
-                        setItemExistsMsg("");
-                    },5000);
-                }else{
-                    console.log(err.response.data.error);
-                }
+                console.log(err.response.data.error);
             }
         }
     }

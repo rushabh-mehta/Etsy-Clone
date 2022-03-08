@@ -7,7 +7,7 @@ const REMOVE_ITEM_CART_API = "/api/cart/delete";
 const UPDATE_ITEM_QUANTITY_CART_API = "/api/cart/item/quantity";
 
 
-const CartItem = ({ item, cartItems, setCartItems }) => {
+const CartItem = ({ item, cartItems, setCartItems,currency }) => {
     const navigate = useNavigate();
     const [orderQuantity, setOrderQuantity] = useState(item.orderQuantity);
     useEffect(() => {
@@ -76,7 +76,7 @@ const CartItem = ({ item, cartItems, setCartItems }) => {
                 <div>{item.displayPicture}</div>
                 <div>{item.itemName}</div>
                 <div>{item.itemCategory}</div>
-                <div>{item.itemPrice}</div>
+                <div>{currency.name+" "+item.itemPrice}</div>
                 <div>{item.itemQuantity}</div>
                 <div>{item.itemDescription}</div>
                 <Form.Group className="mb-3">
