@@ -11,12 +11,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/viewprofile.css';
 import FavoriteItem from './FavoriteItem.js';
 import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'react-bootstrap';
+import config from '../config/config';
+
 
 const GET_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
 const GET_FAVORITE_ITEMS_API = 'api/favoriteitem/';
 const GET_FAVORITE_ITEMS_FILTER_API = 'api/favoriteitem/filter';
 const GET_USER_CURRENCY_API = "api/currency/";
+const UPLOAD_PROFILE_PIC_API = "api/user/profile_picture/upload";
+const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
 
 const ViewProfile = () => {
     const [searchQuery,setSearchQuery] = useState("");
@@ -141,6 +145,7 @@ const ViewProfile = () => {
     const [viewProfileLoading, setViewProfileLoading] = useState(true);
     const [gettingCountries, setGettingCountries] = useState(true);
     const [gettingFavoriteItems, setGettingFavoriteItems] = useState(true);
+    const [profilePicture,setProfilePicture] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -153,8 +158,32 @@ const ViewProfile = () => {
             getCountries();
             getFavoriteItems();
             getUserCurrency(user);
+            setProfilePicture(user.profilePicture);
         }
     },[]);
+
+    const profilePictureSelected = async (event) => {
+        const userBrowserStorage = JSON.parse(localStorage.getItem("user"));
+        let formData = new FormData();
+        const image = event.target.files[0];
+        formData.append("image", image);
+        formData.append("userId",userBrowserStorage.id);
+        try{
+            const response = await authapi.post(UPLOAD_PROFILE_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
+            if(response && response.data && response.data.imageKey){
+                const userCopy = JSON.parse(JSON.stringify(user));
+                userCopy.profilePicture = response.data.imageKey;
+                userBrowserStorage.profilePicture = response.data.imageKey;
+                localStorage.setItem("user",JSON.stringify(userBrowserStorage));
+                setUser(userCopy);
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+	}
+
 
   return (
     <div>
@@ -164,8 +193,11 @@ const ViewProfile = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-2 col-sm-12">
-                        <div><img className="profile_picture"></img></div>
-                        <div><FontAwesomeIcon icon={faCamera}/></div>
+                        <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="profile_picture"></img></div>
+                        <div>
+                            <label htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                            <input onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
+                        </div>
                     </div>
                     <div className="viewprofile_username col-md-8 col-sm-12">
                         <div>{user && user.name}</div>

@@ -13,12 +13,16 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import '../styles/editprofile.css';
 import LoadingIcons from 'react-loading-icons';
+import config from '../config/config';
+
 
 
 const GET_USER_API = '/api/user/';
 const EDIT_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
 const GET_USER_CURRENCY_API = "api/currency/";
+const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
+const UPLOAD_PROFILE_PIC_API = "api/user/profile_picture/upload";
 
 
 const NAME_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
@@ -285,6 +289,28 @@ const EditProfile = () => {
         }
     }
 
+    const profilePictureSelected = async (event) => {
+        const userBrowserStorage = JSON.parse(localStorage.getItem("user"));
+        let formData = new FormData();
+        const image = event.target.files[0];
+        formData.append("image", image);
+        formData.append("userId",userBrowserStorage.id);
+        try{
+            const response = await authapi.post(UPLOAD_PROFILE_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
+            if(response && response.data && response.data.imageKey){
+                const userCopy = JSON.parse(JSON.stringify(user));
+                userCopy.profilePicture = response.data.imageKey;
+                userBrowserStorage.profilePicture = response.data.imageKey;
+                localStorage.setItem("user",JSON.stringify(userBrowserStorage));
+                setUser(userCopy);
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+	}
+
   return (
     <div>
         <MainNavbar />
@@ -294,8 +320,11 @@ const EditProfile = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">
-                            <img className="profile_picture"></img>
-                            <div><FontAwesomeIcon icon={faCamera}/></div>
+                            <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="profile_picture"></img></div>
+                            <div>
+                                <label htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                                <input onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
+                            </div>
                         </div>
                         <div className="col-md-12">
                         <label htmlFor="username" className="editprofile_item_label">Name</label>

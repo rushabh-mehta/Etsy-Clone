@@ -6,6 +6,11 @@ const auth = require("../middleware/auth");
 
 const router = express.Router();
 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+const { uploadFile, getFileStream } = require('../services/s3');
+
 router.get("/:id", auth, async (req, res) => {
     const id = req.params.id;
     const user = {id};
@@ -76,6 +81,32 @@ router.post("/currency/update", auth, async (req, res) => {
             response.status = "400";
             res.status(400).send(response);
         }
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
+});
+
+router.get('/profile-picture/:key', (req, res) => {
+  const key = req.params.key;
+  const readStream = getFileStream(key);
+  readStream.pipe(res);
+});
+
+router.post("/profile_picture/upload", auth, upload.single("image"),async (req, res) => {
+    const file = req.file;
+    const response = {};
+    try{
+        const result = await uploadFile(file);
+        result.userId = req.body.userId;
+        const userUpdate = await User.updateProfilePicture(result);
+        response.success = true;
+        response.status = "200";
+        response.imageKey = result.key;
+        res.status(200).send(response);
     }catch(e){
         console.log(e);
         response.success = false;
