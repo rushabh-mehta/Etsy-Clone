@@ -3,18 +3,38 @@ import CartItem from './CartItem';
 import {useNavigate} from "react-router-dom";
 import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
+import MainFooter from './MainFooter';
 
 
 const CART_ITEMS_API = "/api/cart/get/";
 const PLACE_ORDER_API = "/api/order/place/";
 const LOGIN_PAGE = "/login";
 const ORDERS_PAGE = "/orders";
+const GET_USER_CURRENCY_API = "api/currency/";
 
 
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems,setCartItems] = useState([]);
+  const [currency,setCurrency] = useState({});
+
+ const getUserCurrency = async ({currency})=>{
+      try{
+          const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+          if(response && response.data){
+              if(response.data.success){
+                  setCurrency(response.data.currency);
+              }else{
+                  console.log(response);
+              }
+          }else{
+              console.log(response);
+          }
+      }catch(err){
+          console.log(JSON.stringify(err));
+      }
+  }
 
   const getCartItems = async ()=>{
       const token = localStorage.getItem("token");
@@ -75,11 +95,12 @@ const Cart = () => {
 
   useEffect(() => {
       const token = localStorage.getItem("token");
-      const user = localStorage.getItem("user");
+      const user = JSON.parse(localStorage.getItem("user"));
       if(!token || !user){
           navigate("/login", {replace:true});
       }else{
           getCartItems();
+          getUserCurrency(user);
       }
   },[]);
 
@@ -89,6 +110,7 @@ const Cart = () => {
         return <CartItem key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
       })}
        <Button variant="primary" onClick={placeOrder}>Order</Button>
+       <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 
-const OrderItem = ({item}) => {
+const OrderItem = ({item, currency}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const OrderItem = ({item}) => {
                 <div>{item.displayPicture}</div>
                 <div>{item.orderId}</div>
                 <div>{item.name}</div>
-                <div>{item.price}</div>
+                <div>{currency.name+" "+item.price}</div>
                 <div>{item.orderQuantity}</div>
                 <div>{item.date}</div>
                 <div>{item.shopName}</div>

@@ -2,13 +2,18 @@ import React,{useState,useEffect} from 'react'
 import OrderItem from './OrderItem';
 import {useNavigate} from "react-router-dom";
 import authapi from '../services/authpost';
+import MainFooter from './MainFooter';
+
 
 const ORDER_ITEMS_API = "/api/order/get/";
 const LOGIN_PAGE = "/login";
+const GET_USER_CURRENCY_API = "api/currency/";
 
 const Orders = () => {
   const navigate = useNavigate();
   const [orderItems,setOrderItems] = useState();
+  const [currency,setCurrency] = useState({});
+
 
   const getOrderItems = async ()=>{
       const token = localStorage.getItem("token");
@@ -40,21 +45,40 @@ const Orders = () => {
       }
   }
 
+  const getUserCurrency = async ({currency})=>{
+      try{
+          const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+          if(response && response.data){
+              if(response.data.success){
+                  setCurrency(response.data.currency);
+              }else{
+                  console.log(response);
+              }
+          }else{
+              console.log(response);
+          }
+      }catch(err){
+          console.log(JSON.stringify(err));
+      }
+  }
+
   useEffect(() => {
       const token = localStorage.getItem("token");
-      const user = localStorage.getItem("user");
+      const user = JSON.parse(localStorage.getItem("user"));
       if(!token || !user){
           navigate("/login", {replace:true});
       }else{
           getOrderItems();
+          getUserCurrency(user);
       }
   },[]);
 
   return (
     <div>
       {orderItems && orderItems.length && orderItems.map((eachOrderItem)=>{
-        return <OrderItem key={eachOrderItem.id} item={eachOrderItem}/>
+        return <OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/>
       })}
+       <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )
 }
