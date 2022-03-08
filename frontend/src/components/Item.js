@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 import EditItem from './EditItem';
 
-const Item = ({index,items,setItems,currency}) => {
+const Item = ({index,items,setItems,currency,editRights}) => {
   
     const [editMode,setEditMode] = useState(false);
     const [displayPicture,setDisplayPicture] = useState(items[index].displayPicture);
@@ -20,7 +20,7 @@ const Item = ({index,items,setItems,currency}) => {
     return (
         <div>
             
-            <EditItem currency={currency} id={items[index].id} items={items} setItems={setItems} index={index} displayPicture={displayPicture} setDisplayPicture={setDisplayPicture} name={name} setName={setName} category={category} setCategory={setCategory} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} salesCount={salesCount} setSalesCount={setSalesCount} description={description} setDescription={setDescription}/>
+            {editRights && <EditItem currency={currency} id={items[index].id} items={items} setItems={setItems} index={index} displayPicture={displayPicture} setDisplayPicture={setDisplayPicture} name={name} setName={setName} category={category} setCategory={setCategory} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} salesCount={salesCount} setSalesCount={setSalesCount} description={description} setDescription={setDescription}/>}
             <div>
                 <div>
                     <img className="profile_picture"></img>

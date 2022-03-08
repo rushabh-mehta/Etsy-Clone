@@ -9,7 +9,7 @@ import authapi from '../services/authpost';
 const USER_SHOP_API = "api/shop/user/";
 const CART_PAGE = "/cart";
 const LOGIN_PAGE = "/login";
-const SHOP_HOME_PAGE = "/shop/home";
+const SHOP_HOME_PAGE = "/shop/home/";
 const SHOP_CREATE_PAGE = "/shop/create";
 
 const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
@@ -33,7 +33,7 @@ const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
                     if(response.data.success){
                         if(response.data.shopFound){
                             const shop = response.data.shop;
-                            navigate(SHOP_HOME_PAGE);
+                            navigate(SHOP_HOME_PAGE+user.shop);
                         }else{
                             navigate(SHOP_CREATE_PAGE);
                         }

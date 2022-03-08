@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { useLocation , useNavigate, useParams} from 'react-router-dom';
+import { useLocation , useNavigate, useParams, Link} from 'react-router-dom';
 import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
 import { faTimes, faHeart} from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,8 @@ const ADD_CART_API = "api/cart/add/";
 const ADD_FAVORITE_ITEM_API = "api/favoriteitem/add";
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
 const GET_USER_CURRENCY_API = "api/currency/";
+const SHOP_HOME_PAGE = "/shop/home/";
+
 
 const ItemOverview = () => {
     const [item,setItem] = useState({});
@@ -198,7 +200,8 @@ const ItemOverview = () => {
                 </div>
                 <div>{item.itemDisplayPicture}</div>
                 <div>{item.itemName}</div>
-                <div>{item.itemCategory}</div>
+                <Link to={SHOP_HOME_PAGE+item.shopId}>{item.shopName}</Link>
+                <div>{item.categoryName}</div>
                 <div>{currency.name+" "+item.itemPrice}</div>
                 <div>{item.itemQuantity}</div>
                 <div>{item.itemSalesCount}</div>
