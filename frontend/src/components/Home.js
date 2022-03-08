@@ -88,21 +88,21 @@ const Home = () => {
   }
 
   const getUserCurrency = async ({currency})=>{
-        try{
-            const response = await authapi.get(GET_USER_CURRENCY_API+currency);
-            if(response && response.data){
-                if(response.data.success){
-                    setCurrency(response.data.currency);
-                }else{
-                    console.log(response);
-                }
-            }else{
-                console.log(response);
-            }
-        }catch(err){
-            console.log(JSON.stringify(err));
-        }
-    }
+      try{
+          const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+          if(response && response.data){
+              if(response.data.success){
+                  setCurrency(response.data.currency);
+              }else{
+                  console.log(response);
+              }
+          }else{
+              console.log(response);
+          }
+      }catch(err){
+          console.log(JSON.stringify(err));
+      }
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token");

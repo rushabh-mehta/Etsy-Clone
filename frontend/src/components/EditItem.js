@@ -10,7 +10,7 @@ const EDIT_ITEM_API = "/api/item/edit";
 const ADD_CATEGORY_API = "/api/category/add";
 
 
-const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDisplayPicture,category,setCategory,description,setDescription,price,setPrice,quantity,setQuantity}) => {
+const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDisplayPicture,category,setCategory,description,setDescription,price,setPrice,quantity,setQuantity,currency}) => {
     const navigate = useNavigate();
     const [categories,setCategories] = useState([]);
     const [gettingCategories,setGettingCategories] = useState([]);
@@ -125,7 +125,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
                     <Form.Control onChange={(e)=>{setName(e.target.value)}} value={name} type="text" placeholder="Name" />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Price</Form.Label>
+                    <Form.Label>Price {"("+currency.name+")"}</Form.Label>
                     <Form.Control onChange={(e)=>{setPrice(e.target.value)}} value={price} type="number" placeholder="Price" />
                 </Form.Group>
                 <Form.Group  className="mb-3" >

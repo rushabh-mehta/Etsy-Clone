@@ -7,8 +7,12 @@ import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 import LoadingIcons from 'react-loading-icons';
 import AddShopItem from './AddItem';
 import Item from './Item';
+import MainFooter from './MainFooter';
+
 
 const GET_SHOP_API = "/api/shop/";
+const GET_USER_CURRENCY_API = "api/currency/";
+
 const ShopHome = () => {
   const [totalSales,setTotalSales] = useState(0);
   const [shop,setShop] = useState({});
@@ -16,6 +20,8 @@ const ShopHome = () => {
   const [error,setError] = useState({});
   const navigate = useNavigate();
   const [items,setItems] = useState([]);
+  const [currency,setCurrency] = useState({});
+
 
   const getShop = async ({id})=>{
     setShopDetailsLoading(true);
@@ -36,6 +42,23 @@ const ShopHome = () => {
     }
   }
 
+  const getUserCurrency = async ({currency})=>{
+      try{
+          const response = await authapi.get(GET_USER_CURRENCY_API+currency);
+          if(response && response.data){
+              if(response.data.success){
+                  setCurrency(response.data.currency);
+              }else{
+                  console.log(response);
+              }
+          }else{
+              console.log(response);
+          }
+      }catch(err){
+          console.log(JSON.stringify(err));
+      }
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user"));
@@ -43,6 +66,7 @@ const ShopHome = () => {
         navigate("/login", {replace:true});
     }else{
         getShop(user);
+        getUserCurrency(user);
     }
   },[]);
 
@@ -93,18 +117,19 @@ const ShopHome = () => {
                     </div>
                    <div>
                     {!shopDetailsLoading &&
-                        <AddShopItem setItems={setItems} items={items} id={shop.id}/>
+                        <AddShopItem currency={currency} setItems={setItems} items={items} id={shop.id}/>
                     }
                     </div>
                     <div>
                         {items && items.length && items.map((eachItem,index)=>{
-                            return <Item key={eachItem.id} index={index} setItems={setItems} items={items}/>
+                            return <Item currency={currency} key={eachItem.id} index={index} setItems={setItems} items={items}/>
                         })}
                     </div>
                 </div>
             </div>
         </div>}
         {shopDetailsLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
+        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )
 }
