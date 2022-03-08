@@ -295,6 +295,7 @@ const EditProfile = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <img className="profile_picture"></img>
+                            <div><FontAwesomeIcon icon={faCamera}/></div>
                         </div>
                         <div className="col-md-12">
                         <label htmlFor="username" className="editprofile_item_label">Name</label>
