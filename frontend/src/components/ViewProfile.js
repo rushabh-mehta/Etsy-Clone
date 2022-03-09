@@ -196,31 +196,31 @@ const ViewProfile = () => {
                         <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="profile_picture"></img></div>
                         <div>
                             <label htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
-                            <input onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
+                            <input data-testid="profile-pic" onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
                         </div>
                     </div>
                     <div className="viewprofile_username col-md-8 col-sm-12">
                         <div>{user && user.name}</div>
                         <div className="row">
-                            <div className="viewprofile_useremail col-md-12 col-sm-12">
+                            <div data-testid="user-email" className="viewprofile_useremail col-md-12 col-sm-12">
                                 {user && user.email}
                             </div>
-                            <div className="viewprofile_usergendercountry col-md-12 col-sm-12">
+                            <div data-testid="user-gender" className="viewprofile_usergendercountry col-md-12 col-sm-12">
                                 {user && user.gender}, {countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}
                             </div>
-                            <div className="viewprofile_userdob col-md-12 col-sm-12">
+                            <div data-testid="user-dob" className="viewprofile_userdob col-md-12 col-sm-12">
                                 {user && <p>Birthdate: {user.dob}</p>}
                             </div>
-                            <div className="viewprofile_userphone col-md-12 col-sm-12">
+                            <div data-testid="user-phone" className="viewprofile_userphone col-md-12 col-sm-12">
                                  {user && <p>Phone: {user.phone}</p>}
                             </div>
-                            <div className="viewprofile_useraddress col-md-12 col-sm-12">
+                            <div data-testid="user-address" className="viewprofile_useraddress col-md-12 col-sm-12">
                                 {user && user.address}
                             </div>
-                            <div className="viewprofile_usercity col-md-12 col-sm-12">
+                            <div data-testid="user-city" className="viewprofile_usercity col-md-12 col-sm-12">
                                 {user && user.city}
                             </div>
-                            <div className="viewprofile_userabout col-md-12 col-sm-12">
+                            <div data-testid="user-about" className="viewprofile_userabout col-md-12 col-sm-12">
                                 <p>{user && user.about}</p>
                             </div>
                         </div>

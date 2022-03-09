@@ -144,7 +144,7 @@ const Login = () => {
                         }    
                     </div>
                     <div className="login_item_container form-group">
-                        <button  className="btn btn-primary login_btn" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
+                        <button id="login-btn" className="btn btn-primary login_btn" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
                         {loggingIn && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
                         {errorMsg && <p className="error">{errorMsg}</p>}
                         <p><Link to={REGISTER_URL}>Dont have an account? Register here!</Link></p>
