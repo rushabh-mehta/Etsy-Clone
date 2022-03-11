@@ -10,10 +10,8 @@ const encrypt = require("../services/encrypt");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-    const {name,email,password} = req.body;
+    const {email,password} = req.body;
     const userObj = {email,password};
-    console.log(email);
-    console.log(password);
     const response = {};
     if(userObj.email && userObj.password){
         try{
