@@ -5,6 +5,8 @@ import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'rea
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle, faMagnifyingGlass, faCartShopping, faUser, faHeart, faShop} from "@fortawesome/free-solid-svg-icons";
 import authapi from '../services/authpost';
+import { connect } from "react-redux";
+import { removeUser } from "../redux/actions/actions.js";
 
 const USER_SHOP_API = "api/shop/user/";
 const CART_PAGE = "/cart";
@@ -12,10 +14,11 @@ const LOGIN_PAGE = "/login";
 const SHOP_HOME_PAGE = "/shop/home/";
 const SHOP_CREATE_PAGE = "/shop/create";
 
-const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
+const ConnectedMainNavBar = ({searchQuery, getOtherFilterItems, setSearchQuery,removeUser})=>{
     const navigate = useNavigate();
 
     const logout = ()=>{
+        removeUser();
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         navigate(LOGIN_PAGE,{replace:true});
@@ -91,4 +94,11 @@ const MainNavbar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
     )
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    removeUser: user => dispatch(removeUser())
+  };
+}
+
+const MainNavbar = connect(null,mapDispatchToProps)(ConnectedMainNavBar);
 export default MainNavbar

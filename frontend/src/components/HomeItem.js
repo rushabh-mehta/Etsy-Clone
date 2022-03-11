@@ -91,17 +91,17 @@ const HomeItem = ({item,items,setItems,index,currency}) => {
 
     return (
         <div>
-            <div onClick={()=>{viewItemOverview(item)}}>
+            {item && <div onClick={()=>{viewItemOverview(item)}}>
                 <div className="col-md-12">
                     <div><img src={GET_ITEM_DISPLAY_PIC_API+item.displayPicture} className="profile_picture"></img></div>
                 </div>
                 <div>{item.name}</div>
                 <div>{item.category}</div>
-                <div>{currency.name+" "+item.price}</div>
+                <div>{(currency && currency.name)+" "+item.price}</div>
                 <div>{item.quantity}</div>
                 <div>{item.salesCount}</div>
                 <div>{item.description}</div>
-            </div>
+            </div>}
             {!item.favorite && <div><FontAwesomeIcon onClick={addFavoriteItem} icon={faHeart}/></div>}
             {item.favorite && <div><FontAwesomeIcon onClick={removeFavoriteItem} icon={faTimes}/></div>}
         </div>

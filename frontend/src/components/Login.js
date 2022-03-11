@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/login.css';
 import LoadingIcons from 'react-loading-icons';
 import {Link, useNavigate, useLocation } from "react-router-dom";
+import { connect } from "react-redux";
+import { addUser } from "../redux/actions/actions.js";
 
 
 
@@ -17,7 +19,7 @@ const HOMEPAGE = "/";
 const REGISTER_URL = "/register";
 
 
-const Login = () => {
+const ConnectedLogin = ({user,addUser}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
@@ -75,8 +77,8 @@ const Login = () => {
                         const token = user.token;
                         localStorage.setItem("token",token);
                         delete user.token;
-                        console.log(user);
                         localStorage.setItem("user",JSON.stringify(user));
+                        addUser(user);
                         setLoggingIn(false);
                         setSuccess(true);
                         navigate(HOMEPAGE, {replace:true});
@@ -157,4 +159,16 @@ const Login = () => {
    
 }
 
-export default Login
+function mapDispatchToProps(dispatch) {
+  return {
+    addUser: user => dispatch(addUser(user))
+  };
+}
+
+
+const mapStateToProps = state => {
+  return { user: state.user };
+};
+
+const Login = connect(mapStateToProps,mapDispatchToProps)(ConnectedLogin);
+export default Login;

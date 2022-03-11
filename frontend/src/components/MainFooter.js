@@ -84,9 +84,9 @@ const MainFooter = ({currency,setCurrency}) => {
           <MDBCol md="6">
             <Form.Group className="mb-3">
                 <Form.Label>Currency</Form.Label>
-                <Form.Select name="currency" id="currency" value={currency.id} onChange={changeCurrency}>
+                <Form.Select name="currency" id="currency" value={currency && currency.id} onChange={changeCurrency}>
                     <option value="">Select Currency</option>
-                    {
+                    {currencies && currencies.length &&
                         currencies.map((eachCurrency,index)=>{
                             return <option key={index} value={eachCurrency.id}>{eachCurrency.name}</option>
                         })

@@ -138,7 +138,9 @@ const Home = () => {
       </Form.Group>
        <Button variant="primary" onClick={getOtherFilterItems}>Filter</Button>
       {
-        !itemsLoading && items.map((eachItem,index)=>{
+        !itemsLoading && items && items.length && items.map((eachItem,index)=>{
+          console.log(eachItem.id);
+          console.log(eachItem.name);
           return <HomeItem currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
         })
       }
