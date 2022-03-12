@@ -122,7 +122,6 @@ const Home = () => {
       <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems} setItems={setItems}/>
       <div className="home_body">
          <div className="filterbox">
-          <h5 className="filter-row filterheading">Filters</h5>
           <Form.Group>
             <div className="filter-row">
               <span className="filter-col">
@@ -140,8 +139,6 @@ const Home = () => {
                   <option value="salesCount">Sales Count</option>
                 </Form.Select>
               </span>
-            </div>
-            <div className="filter-row">
               <span className="filter-col">
                 <Form.Check size="sm" className="exclude-filter" value={inStock} onChange={(e)=>{setInStock(e.target.value)}} type="checkbox" label="Show in stock items only" />
               </span>
@@ -153,8 +150,6 @@ const Home = () => {
         </div>
         {
           !itemsLoading && items && items.length && items.map((eachItem,index)=>{
-            console.log(eachItem.id);
-            console.log(eachItem.name);
             return <HomeItem currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
           })
         }
