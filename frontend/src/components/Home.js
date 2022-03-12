@@ -133,10 +133,9 @@ const Home = () => {
           <option value="quantity">Quantity</option>
           <option value="salesCount">Sales Count</option>
         </Form.Select>
-
         <Form.Check value={inStock} onChange={(e)=>{setInStock(e.target.value)}} type="checkbox" label="Show in stock items only" />
-      </Form.Group>
        <Button variant="primary" onClick={getOtherFilterItems}>Filter</Button>
+      </Form.Group>
       {
         !itemsLoading && items && items.length && items.map((eachItem,index)=>{
           console.log(eachItem.id);

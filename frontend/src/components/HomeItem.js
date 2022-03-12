@@ -1,10 +1,13 @@
 import React,{useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import authapi from '../services/authpost';
-import { faTimes, faHeart} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartRegular} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import config from '../config/config';
-
+import {Card} from 'react-bootstrap';
+import '../styles/homeitem.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
@@ -27,7 +30,8 @@ const HomeItem = ({item,items,setItems,index,currency}) => {
         }
     }
 
-    const removeFavoriteItem = async ()=>{
+    const removeFavoriteItem = async (event) => {
+        event.stopPropagation();
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
         data.itemId = item.id;
@@ -60,7 +64,8 @@ const HomeItem = ({item,items,setItems,index,currency}) => {
         }
     }
 
-    const addFavoriteItem = async ()=>{
+    const addFavoriteItem = async (event)=>{
+        event.stopPropagation();
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
         data.itemId = item.id;
@@ -90,21 +95,25 @@ const HomeItem = ({item,items,setItems,index,currency}) => {
     }
 
     return (
-        <div>
-            {item && <div onClick={()=>{viewItemOverview(item)}}>
-                <div className="col-md-12">
-                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.displayPicture} className="profile_picture"></img></div>
-                </div>
-                <div>{item.name}</div>
-                <div>{item.category}</div>
-                <div>{(currency && currency.name)+" "+item.price}</div>
-                <div>{item.quantity}</div>
-                <div>{item.salesCount}</div>
-                <div>{item.description}</div>
-            </div>}
-            {!item.favorite && <div><FontAwesomeIcon onClick={addFavoriteItem} icon={faHeart}/></div>}
-            {item.favorite && <div><FontAwesomeIcon onClick={removeFavoriteItem} icon={faTimes}/></div>}
-        </div>
+        <>
+            {item && <Card className="homeitem_card" onClick={()=>{viewItemOverview(item)}}>
+                <Card.Img variant="top" className="homeitem_picture" src={GET_ITEM_DISPLAY_PIC_API+item.displayPicture} />
+                <Card.Body>
+                    <Card.Title>
+                        <div className="row">
+                            <div className="col-md-8"><span className="homeitem_name">{item.name}</span></div>
+                            {!item.favorite && <div className="col-md-4 homeitem-favorite-icon"><FontAwesomeIcon onClick={addFavoriteItem} icon={faHeartRegular}/></div>}
+                            {item.favorite && <div className="col-md-4 homeitem-favorite-icon"><FontAwesomeIcon onClick={removeFavoriteItem} icon={faHeartSolid} color="red"/></div>}
+                        </div>
+                    </Card.Title>
+                    <Card.Text>
+                        <div className="homeitem_price">{(currency && currency.name)+" "+item.price}</div>
+                        <div className="homeitem_description">{item.description}</div>
+                        <div className="homeitem_sales_count">{item.salesCount+" pieces sold till now!"}</div>
+                    </Card.Text>
+                </Card.Body>
+            </Card>}            
+        </>
     )
 }
 
