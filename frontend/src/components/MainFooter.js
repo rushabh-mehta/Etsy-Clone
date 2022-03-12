@@ -2,10 +2,13 @@ import React,{useState, useEffect} from "react";
 import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
 import {InputGroup, FormControl, Button, Modal, Form} from 'react-bootstrap';
 import authapi from '../services/authpost';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
+import '../styles/mainfooter.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const GET_CURRENCIES_API = "/api/currency/";
 const UPDATE_USER_CURRENCY = "api/user/currency/update";
+const GET_COUNTRY_API = '/api/country/';
 
 
 const MainFooter = ({currency,setCurrency}) => {
@@ -13,7 +16,29 @@ const MainFooter = ({currency,setCurrency}) => {
   const [currencies,setCurrencies] = useState([]);
   const [gettingCurrencies,setGettingCurrencies] = useState(true);
   const [error, setError] = useState("");
+  const [user,setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [countries,setCountries] = useState([]);
+  const [gettingCountries,setGettingCountries] = useState(true);
+
   
+  const getCountries = async () => {
+        setGettingCountries(true);
+        try{
+            const response = await authapi.get(GET_COUNTRY_API);
+            if(response && response.data && response.data.success && response.data.countries){
+                setCountries(response.data.countries);
+                setGettingCountries(false);
+            }else{
+                setError("Some unexpected error occurred!");
+                setGettingCountries(false);
+            }
+        }catch(e){
+            console.log(e);
+            setError("Some unexpected error occurred!");
+            setGettingCountries(false);
+        }
+    }
+
   const getCurrencies = async () => {
       setGettingCurrencies(true);
       try{
@@ -70,6 +95,7 @@ const MainFooter = ({currency,setCurrency}) => {
         }else{
             getCurrencies();
             setCurrency(user.currency);
+            getCountries();
         }
     },[]);
 
@@ -78,13 +104,16 @@ const MainFooter = ({currency,setCurrency}) => {
     },[currency]);
 
   return (
-    <MDBFooter color="pink" className="font-small pt-4 mt-4">
+    <MDBFooter  style={{backgroundColor: "#232347",color: "white"}} className="font-small pt-4 mt-4">
       <MDBContainer fluid className="text-center text-md-left">
         <MDBRow>
-          <MDBCol md="6">
+          <MDBCol md="4">
+            <div>{countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}</div>
+          </MDBCol>
+          <MDBCol md="4">
             <Form.Group className="mb-3">
-                <Form.Label>Currency</Form.Label>
-                <Form.Select name="currency" id="currency" value={currency && currency.id} onChange={changeCurrency}>
+                <Form.Label className="currency-drpdwn-label">Currency</Form.Label>
+                <Form.Select className="currency-drpdwn" size="sm" name="currency" id="currency" value={currency && currency.id} onChange={changeCurrency}>
                     <option value="">Select Currency</option>
                     {currencies && currencies.length &&
                         currencies.map((eachCurrency,index)=>{
@@ -94,12 +123,10 @@ const MainFooter = ({currency,setCurrency}) => {
                 </Form.Select>
             </Form.Group>
           </MDBCol>
-          <MDBCol md="6">
-            <div className="footer-copyright text-center py-3">
-              <MDBContainer fluid>
-                &copy; {new Date().getFullYear()} Copyright: <a href="/home"> Etsy </a>
+          <MDBCol md="4">
+              <MDBContainer>
+                &copy; {new Date().getFullYear()} Copyright: <Link className="link__white" to="/home"> Etsy </Link>
               </MDBContainer>
-            </div>
           </MDBCol>
         </MDBRow>
       </MDBContainer>

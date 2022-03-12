@@ -3,10 +3,14 @@ import 'bootstrap/dist/css/bootstrap.css';
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes, faInfoCircle, faMagnifyingGlass, faCartShopping, faUser, faHeart, faShop} from "@fortawesome/free-solid-svg-icons";
+import { faUser, faHeart} from "@fortawesome/free-regular-svg-icons";
+import { faCartShopping, faMagnifyingGlass, faShop} from "@fortawesome/free-solid-svg-icons";
+
 import authapi from '../services/authpost';
 import { connect } from "react-redux";
 import { removeUser } from "../redux/actions/actions.js";
+import '../styles/mainnavbar.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const USER_SHOP_API = "api/shop/user/";
 const CART_PAGE = "/cart";
@@ -66,27 +70,25 @@ const ConnectedMainNavBar = ({searchQuery, getOtherFilterItems, setSearchQuery,r
     return(
         <Navbar bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="/home">Etsy</Navbar.Brand>
+                <Navbar.Brand className="mainnavbar-title" href="/home">Etsy</Navbar.Brand>
                 <InputGroup>
                     <FormControl
-                    placeholder="Search.."
+                    placeholder="Search for anything" className="mainnavbar-search-1"
                     value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}}
                     />
-                    <InputGroup.Text onClick={getOtherFilterItems} id="basic-addon2"><FontAwesomeIcon icon={faMagnifyingGlass}/></InputGroup.Text>
+                    <InputGroup.Text className="mainnavbar-search-2" onClick={getOtherFilterItems} id="basic-addon2"><FontAwesomeIcon color="black" icon={faMagnifyingGlass}/></InputGroup.Text>
                 </InputGroup>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <NavDropdown title={<FontAwesomeIcon icon={faUser}/>} id="basic-nav-dropdown">
+                    <NavDropdown title={<FontAwesomeIcon color="black" icon={faUser}/>} id="basic-nav-dropdown">
                     <NavDropdown.Item href="/view-profile">Profile</NavDropdown.Item>
-                    <NavDropdown.Divider />
                     <NavDropdown.Item href="/orders">My Orders</NavDropdown.Item>
-                    <NavDropdown.Divider />
                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="/view-profile"><FontAwesomeIcon icon={faHeart}/></Nav.Link>
-                    <Nav.Link onClick={goToShop}><FontAwesomeIcon icon={faShop}/></Nav.Link>
-                    <Nav.Link onClick={goToCart}><FontAwesomeIcon icon={faCartShopping}/></Nav.Link>
+                    <Nav.Link href="/view-profile"><FontAwesomeIcon color="black" icon={faHeart}/></Nav.Link>
+                    <Nav.Link onClick={goToShop}><FontAwesomeIcon color="black" icon={faShop}/></Nav.Link>
+                    <Nav.Link onClick={goToCart}><FontAwesomeIcon color="black" icon={faCartShopping}/></Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Container>

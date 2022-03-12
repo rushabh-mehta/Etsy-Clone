@@ -24,6 +24,7 @@
 
 .homeitem_sales_count {
   font-size: 18px;
+  text-decoration: underline;
 }
 .homeitem-favorite-icon {
   cursor: pointer;
