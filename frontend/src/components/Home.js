@@ -7,7 +7,8 @@ import MainFooter from './MainFooter';
 import authapi from '../services/authpost';
 import HomeItem from './HomeItem';
 import { Form, Button } from 'react-bootstrap';
-
+import '../styles/home.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const GET_OTHER_ITEMS_API = "api/item/other";
 const GET_OTHER_ITEMS_FILTER_API = "api/item/other/filter";
@@ -119,30 +120,45 @@ const Home = () => {
   return (
     <div>
       <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems} setItems={setItems}/>
-      <Form.Group className="mb-3">
-        <Form.Label htmlFor="minprice">Min Price</Form.Label>
-        <Form.Control value={minPrice} onChange={(e)=>{setMinPrice(e.target.value)}}  type="number" id="minprice" />
-
-        <Form.Label htmlFor="maxprice">Max Price</Form.Label>
-        <Form.Control value={maxPrice} onChange={(e)=>{setMaxPrice(e.target.value)}} type="number" id="maxprice" />
-
-        <Form.Label>Sort By: </Form.Label>
-        <Form.Select value={sortBy} onChange={(e)=>{setSortBy(e.target.value)}}>
-          <option value="">Select option</option>
-          <option value="price">Price</option>
-          <option value="quantity">Quantity</option>
-          <option value="salesCount">Sales Count</option>
-        </Form.Select>
-        <Form.Check value={inStock} onChange={(e)=>{setInStock(e.target.value)}} type="checkbox" label="Show in stock items only" />
-       <Button variant="primary" onClick={getOtherFilterItems}>Filter</Button>
-      </Form.Group>
-      {
-        !itemsLoading && items && items.length && items.map((eachItem,index)=>{
-          console.log(eachItem.id);
-          console.log(eachItem.name);
-          return <HomeItem currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
-        })
-      }
+      <div className="home_body">
+         <div className="filterbox">
+          <h5 className="filter-row filterheading">Filters</h5>
+          <Form.Group>
+            <div className="filter-row">
+              <span className="filter-col">
+                <Form.Label size="sm" className="price-label" htmlFor="minprice">Price</Form.Label>
+                <Form.Control size="sm" className="price-filter" value={minPrice} onChange={(e)=>{setMinPrice(e.target.value)}}  type="number" id="minprice" placeholder="Low"/>
+                <Form.Label size="sm" className="price-label" htmlFor="maxprice">To</Form.Label>
+                <Form.Control size="sm" className="price-filter" value={maxPrice} onChange={(e)=>{setMaxPrice(e.target.value)}} type="number" id="maxprice" placeholder="High"/>
+              </span>
+              <span className="filter-col">
+                <Form.Label size="sm">Sort By: </Form.Label>
+                <Form.Select size="sm" className="sort-filter" value={sortBy} onChange={(e)=>{setSortBy(e.target.value)}}>
+                  <option value="">Relevancy</option>
+                  <option value="price">Price</option>
+                  <option value="quantity">Quantity</option>
+                  <option value="salesCount">Sales Count</option>
+                </Form.Select>
+              </span>
+            </div>
+            <div className="filter-row">
+              <span className="filter-col">
+                <Form.Check size="sm" className="exclude-filter" value={inStock} onChange={(e)=>{setInStock(e.target.value)}} type="checkbox" label="Show in stock items only" />
+              </span>
+              <span className="filter-col">
+                <Button size="sm" variant="primary" onClick={getOtherFilterItems}>Filter</Button>
+              </span>
+            </div>
+          </Form.Group>
+        </div>
+        {
+          !itemsLoading && items && items.length && items.map((eachItem,index)=>{
+            console.log(eachItem.id);
+            console.log(eachItem.name);
+            return <HomeItem currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
+          })
+        }
+      </div>
       <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )
