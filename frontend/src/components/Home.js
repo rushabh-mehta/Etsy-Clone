@@ -146,7 +146,7 @@ const Home = () => {
                 <Form.Check size="sm" className="exclude-filter" value={inStock} onChange={(e)=>{setInStock(e.target.value)}} type="checkbox" label="Show in stock items only" />
               </span>
               <span className="filter-col">
-                <Button size="sm" variant="primary" onClick={getOtherFilterItems}>Filter</Button>
+                <Button size="sm" className="filter-button" onClick={getOtherFilterItems}>Filter</Button>
               </span>
             </div>
           </Form.Group>

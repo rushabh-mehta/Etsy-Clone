@@ -30,7 +30,6 @@
 }
 
 .filterbox {
-  border: 1px solid lightgrey;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -42,4 +41,11 @@
 .home_body {
   margin: auto;
   width: 90%;
+}
+
+.filter-button {
+  background: white;
+  color: black;
+  border-radius: 20px;
+  border: 1px solid black;
 }
