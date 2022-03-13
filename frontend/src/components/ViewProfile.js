@@ -7,11 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import LoadingIcons from 'react-loading-icons';
 import authapi from '../services/authpost';
-import 'bootstrap/dist/css/bootstrap.css';
-import '../styles/viewprofile.css';
 import FavoriteItem from './FavoriteItem.js';
 import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'react-bootstrap';
 import config from '../config/config';
+import 'bootstrap/dist/css/bootstrap.css';
+import '../styles/viewprofile.css';
 
 
 const GET_USER_API = '/api/user/';
@@ -188,64 +188,70 @@ const ViewProfile = () => {
   return (
     <div>
         <MainNavbar />
-        {!gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
-            <div><span className="view_profile_header">View Profile</span></div>
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-2 col-sm-12">
-                        <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="profile_picture"></img></div>
-                        <div>
-                            <label htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
-                            <input data-testid="profile-pic" onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
-                        </div>
-                    </div>
-                    <div className="viewprofile_username col-md-8 col-sm-12">
-                        <div>{user && user.name}</div>
-                        <div className="row">
-                            <div data-testid="user-email" className="viewprofile_useremail col-md-12 col-sm-12">
-                                {user && user.email}
-                            </div>
-                            <div data-testid="user-gender" className="viewprofile_usergendercountry col-md-12 col-sm-12">
-                                {user && user.gender}, {countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}
-                            </div>
-                            <div data-testid="user-dob" className="viewprofile_userdob col-md-12 col-sm-12">
-                                {user && <p>Birthdate: {user.dob}</p>}
-                            </div>
-                            <div data-testid="user-phone" className="viewprofile_userphone col-md-12 col-sm-12">
-                                 {user && <p>Phone: {user.phone}</p>}
-                            </div>
-                            <div data-testid="user-address" className="viewprofile_useraddress col-md-12 col-sm-12">
-                                {user && user.address}
-                            </div>
-                            <div data-testid="user-city" className="viewprofile_usercity col-md-12 col-sm-12">
-                                {user && user.city}
-                            </div>
-                            <div data-testid="user-about" className="viewprofile_userabout col-md-12 col-sm-12">
-                                <p>{user && user.about}</p>
+         <div className="view_profile_home_body">
+            {!gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
+                    <div className="row">
+                        <div className="col-md-2 col-sm-12">
+                            <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="view_profile_picture"></img></div>
+                            <div>
+                                <label className="viewprofile-editimg"htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                                <input data-testid="profile-pic" onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
                             </div>
                         </div>
+                        <div className="viewprofile_username col-md-8 col-sm-12">
+                            <div>
+                                <span>{user && user.name}</span>
+                                <span className="viewprofile_editicon_container">
+                                    <Link to="/edit-profile">
+                                        <FontAwesomeIcon className="viewprofile_edit_icon viewprofile_edit-profile-icon" icon={faPen}/>
+                                    </Link>
+                                </span>
+                            </div>
+                            <div className="row">
+                                <div data-testid="user-email" className="viewprofile_useremail col-md-6 col-sm-12">
+                                    {user && user.email}
+                                </div>
+                                <div data-testid="user-gender" className="viewprofile_usergendercountry col-md-12 col-sm-12">
+                                    {user && user.gender}{countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name ? countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && ", "+countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name:""}
+                                </div>
+                                <div data-testid="user-dob" className="viewprofile_userdob col-md-12 col-sm-12">
+                                    {user && <span>{user.dob}</span>}
+                                </div>
+                                <div data-testid="user-phone" className="viewprofile_userphone col-md-12 col-sm-12">
+                                    {user && <span>{user.phone}</span>}
+                                </div>
+                                <div data-testid="user-address" className="viewprofile_useraddress col-md-12 col-sm-12">
+                                    {user && user.address}
+                                </div>
+                                <div data-testid="user-city" className="viewprofile_usercity col-md-12 col-sm-12">
+                                    {user && user.city}
+                                </div>
+                                <div data-testid="user-about" className="viewprofile_userabout col-md-12 col-sm-12">
+                                    <span>{user && user.about}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-md-2 col-sm-12">
-                        <Link to="/edit-profile"><FontAwesomeIcon className="edit_icon" icon={faPen}/></Link>
-                    </div>
+                <div className="favitems-container">
+                    <span className="favitems-header"><h4>Favorite Items</h4></span>
+                    <span className="favitems-search-container">
+                        <InputGroup>
+                            <FormControl className="favitems-search-bar-1"
+                            placeholder="Search your favorites"
+                            value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}}
+                            />
+                            <InputGroup.Text className="favitems-search-bar-2" onClick={getFilteredFavoriteItems} id="basic-addon2"><FontAwesomeIcon icon={faMagnifyingGlass}/></InputGroup.Text>
+                        </InputGroup>
+                    </span>
                 </div>
-            </div>
-            <div>
-                <InputGroup>
-                    <FormControl
-                    placeholder="Search.."
-                    value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}}
-                    />
-                    <InputGroup.Text onClick={getFilteredFavoriteItems} id="basic-addon2"><FontAwesomeIcon icon={faMagnifyingGlass}/></InputGroup.Text>
-                </InputGroup>
-            </div>
-            <div>
-                {favoriteItems && favoriteItems.map((eachFavoriteItem,index)=>{
-                    return <FavoriteItem currency={currency} index={index} favoriteItems={favoriteItems} setFavoriteItems={setFavoriteItems} key={eachFavoriteItem.favoriteItemId} item={eachFavoriteItem}/>
-                })}
-            </div>
-        </div>}
-        {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
+                <div>
+                    {favoriteItems && favoriteItems.map((eachFavoriteItem,index)=>{
+                        return <FavoriteItem currency={currency} index={index} favoriteItems={favoriteItems} setFavoriteItems={setFavoriteItems} key={eachFavoriteItem.favoriteItemId} item={eachFavoriteItem}/>
+                    })}
+                </div>
+            </div>}
+            {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
+         </div>
         <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )

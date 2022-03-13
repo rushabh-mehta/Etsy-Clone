@@ -6,14 +6,14 @@ import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle, faCamera } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl, Form, Dropdown, DropdownButton } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.css';
-import '../styles/viewprofile.css';
 import authapi from '../services/authpost';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import '../styles/editprofile.css';
 import LoadingIcons from 'react-loading-icons';
 import config from '../config/config';
+import '../styles/editprofile.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 
@@ -315,125 +315,147 @@ const EditProfile = () => {
     <div>
         <MainNavbar />
         {!editProfileLoading && !gettingCountries && 
-            <div>
-                <div><span className="edit_profile_header">Edit Profile</span></div>
+            <div className="edit_profile_home_body">
                 <div className="container">
+                    <h3 className="edit_profile_header">Your Public Profile</h3>
+                    <div className="edit_profile_subheader">Everything on this page can be seen by anyone</div>
+                    <button className="btn editprofile_viewprofile-btn" onClick={()=>{navigate("/view-profile")}}>View Profile</button>
+                </div>
+                <div className="edit-profile-form-container container">
                     <div className="row">
-                        <div className="col-md-12">
-                            <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="profile_picture"></img></div>
+                        <div className="border-btm col-md-12">
+                            <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="view_profile_picture"></img></div>
                             <div>
-                                <label htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
-                                <input onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
+                                <label className="viewprofile-editimg"htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                                <input data-testid="profile-pic" onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
                             </div>
                         </div>
-                        <div className="col-md-12">
+                        <div className="border-btm col-md-12">
                         <label htmlFor="username" className="editprofile_item_label">Name</label>
-                                {validName && <FontAwesomeIcon icon={faCheck}/> }
-                                {(!validName && name) && <FontAwesomeIcon icon={faTimes} />}
-                                <input value={name} className="form-control editprofile_item_input" id="username" name="username" type="text" onChange={(e)=>{setName(e.target.value)}} onFocus={() => setNameFocus(true)} 
-                                onBlur={() => setNameFocus(false)}>
-                                </input>
-                                {nameFocus && !validName && 
-                                    <small className="form-text text-muted editprofile_item_text_container">
-                                        <FontAwesomeIcon icon={faInfoCircle} />
-                                        <span className="editprofile_item_text">Invalid Name</span>
-                                    </small>
-                                }
+                        <input value={name} className="form-control editprofile_item_input" id="username" name="username" type="text" onChange={(e)=>{setName(e.target.value)}} onFocus={() => setNameFocus(true)} 
+                        onBlur={() => setNameFocus(false)}>
+                        </input>
+                        {validName && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                        {(!validName && name) && <FontAwesomeIcon color="red" icon={faTimes} />}
+                        <div className="editprofile_input_error">
+                            {nameFocus && !validName && 
+                                <small className="form-text text-muted editprofile_item_text_container">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span className="editprofile_item_text">Invalid Name</span>
+                                </small>
+                            }
+                        </div>        
                         </div>
-                        <div className="col-md-12">
+                        <div className="border-btm col-md-12">
                         <label htmlFor="useremail" className="editprofile_item_label">Email</label>
-                                {validEmail && <FontAwesomeIcon icon={faCheck}/> }
-                                {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
                                 <input value={email} className="form-control editprofile_item_input" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
                                 onBlur={() => setEmailFocus(false)}>
                                 </input>
+                                {validEmail && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                                {(!validEmail && email) && <FontAwesomeIcon color="red" icon={faTimes} />}
+                            <div className="editprofile_input_error">
                                 {emailFocus && !validEmail && 
                                     <small className="form-text text-muted editprofile_item_text_container">
                                         <FontAwesomeIcon icon={faInfoCircle} />
                                         <span className="editprofile_item_text">Invalid Email</span>
                                     </small>
                                 }
+                            </div>
                         </div> 
-                        <div className="col-md-12">
+                        <div className="border-btm col-md-12">
                             <div>Gender</div>
                             <Form.Check type="radio" name="gender" id="gender" label="Male" checked={gender === 'Male'} value="Male" onClick={() => setGender('Male')} onChange={() => {}}/>
                             <Form.Check type="radio" name="gender" id="gender" label="Female" checked={gender === 'Female'} value="Female" onClick={() => setGender('Female')} onChange={() => {}} />
                         </div>
-                        <div className="col-md-12">
-                            <div>Date of Birth</div>
-                            <DatePicker selected={dob} onChange={(date) => {setDob(date)}} />
+                        <div className="border-btm col-md-12">
+                            <label htmlFor="userdob" className="editprofile_item_label">Date of Birth</label>
+                            <span className="editprofile_dob_container">
+                                <DatePicker id="userdob" name="userdob" className="editprofile_dob" selected={dob} onChange={(date) => {setDob(date)}} />
+                            </span>
                         </div>
-                        <div className="col-md-12">
+                        <div className="border-btm col-md-12">
                             <label htmlFor="userphone" className="editprofile_item_label">Phone</label>
-                                {validPhone && <FontAwesomeIcon icon={faCheck}/> }
-                                {(!validPhone && phone) && <FontAwesomeIcon icon={faTimes} />}
                                 <input value={phone} className="form-control editprofile_item_input" id="userphone" name="userphone" type="text" onChange={(e)=>{setPhone(e.target.value)}} onFocus={() => setPhoneFocus(true)} 
                                 onBlur={() => setPhoneFocus(false)}>
                                 </input>
-                                {phoneFocus && !validPhone && 
-                                    <small className="form-text text-muted editprofile_item_text_container">
-                                        <FontAwesomeIcon icon={faInfoCircle} />
-                                        <span className="editprofile_item_text">Invalid Phone</span>
-                                    </small>
-                                }
+                                {validPhone && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                                {(!validPhone && phone) && <FontAwesomeIcon color="red" icon={faTimes} />}
+                                <div className="editprofile_input_error">
+                                    {phoneFocus && !validPhone && 
+                                        <small className="form-text text-muted editprofile_item_text_container">
+                                            <FontAwesomeIcon icon={faInfoCircle} />
+                                            <span className="editprofile_item_text">Invalid Phone</span>
+                                        </small>
+                                    }
+                                </div>
                         </div>
-                        <div className="col-md-12">
+                        <div className="border-btm col-md-12">
                                 <label htmlFor="useraddress" className="editprofile_item_label">Address</label>
-                                {validAddress && <FontAwesomeIcon icon={faCheck}/> }
-                                {(!validAddress && address) && <FontAwesomeIcon icon={faTimes} />}
                                 <input value={address} className="form-control editprofile_item_input" id="useraddress" name="useraddress" type="text" onChange={(e)=>{setAddress(e.target.value)}} onFocus={() => setAddressFocus(true)} 
                                 onBlur={() => setAddressFocus(false)}>
                                 </input>
-                                {addressFocus && !validAddress && 
-                                    <small className="form-text text-muted editprofile_item_text_container">
-                                        <FontAwesomeIcon icon={faInfoCircle} />
-                                        <span className="editprofile_item_text">Invalid Address</span>
-                                    </small>
-                                }
+                                {validAddress && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                                {(!validAddress && address) && <FontAwesomeIcon color="red" icon={faTimes} />}
+                                <div className="editprofile_input_error">
+                                    {addressFocus && !validAddress && 
+                                        <small className="form-text text-muted editprofile_item_text_container">
+                                            <FontAwesomeIcon icon={faInfoCircle} />
+                                            <span className="editprofile_item_text">Invalid Address</span>
+                                        </small>
+                                    }
+                                </div>
                         </div>
-                        <div className="col-md-12">
+                        <div className="border-btm col-md-12">
                             <label htmlFor="usercity" className="editprofile_item_label">City</label>
-                                {validCity && <FontAwesomeIcon icon={faCheck}/> }
-                                {(!validCity && city) && <FontAwesomeIcon icon={faTimes} />}
                                 <input value={city} className="form-control editprofile_item_input" id="usercity" name="usercity" type="text" onChange={(e)=>{setCity(e.target.value)}} onFocus={() => setCityFocus(true)} 
                                 onBlur={() => setCityFocus(false)}>
                                 </input>
-                                {cityFocus && !validCity && 
+                                {validCity && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                                {(!validCity && city) && <FontAwesomeIcon color="red" icon={faTimes} />}
+                                <div className="editprofile_input_error">
+                                    {cityFocus && !validCity && 
+                                        <small className="form-text text-muted editprofile_item_text_container">
+                                            <FontAwesomeIcon icon={faInfoCircle} />
+                                            <span className="editprofile_item_text">Invalid City</span>
+                                        </small>
+                                    }
+                                </div>
+                        </div>
+                        <div className="border-btm col-md-12">
+                            <label htmlFor="usercountry" className="editprofile_item_label">Country</label>
+                            <span className="editprofile-country">
+                                <Form.Select name="usercountry" id="usercountry" value={country} onChange={(e)=>{setCountry(e.target.value)}}>
+                                    <option value="">Select Country</option>
+                                    {
+                                        countries.map((eachCountry,index)=>{
+                                            return <option key={index} value={eachCountry.id}>{eachCountry.name}</option>
+                                        })
+                                    }
+                                </Form.Select>
+                            </span>
+                        </div>
+                        <div className="col-md-12">
+                                <Form.Label className="editprofile_item_label margn-tp">About</Form.Label>
+                                {validAbout && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                                {(!validAbout && about) && <FontAwesomeIcon color="red" icon={faTimes} />}
+                                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                                    <Form.Control value={about} as="textarea" rows={3} onChange={(e)=>{setAbout(e.target.value)}} />
+                                </Form.Group>
+                            <div>
+                                {about && !validAbout && 
                                     <small className="form-text text-muted editprofile_item_text_container">
                                         <FontAwesomeIcon icon={faInfoCircle} />
-                                        <span className="editprofile_item_text">Invalid City</span>
+                                        <span className="editprofile_item_text">Invalid About</span>
                                     </small>
                                 }
+                            </div>
                         </div>
-                        <div className="col-md-12">
-                            <label htmlFor="usercountry" className="editprofile_item_label">Country</label>
-                            <Form.Select name="usercountry" id="usercountry" value={country} onChange={(e)=>{setCountry(e.target.value)}}>
-                                <option value="">Select Country</option>
-                                {
-                                countries.map((eachCountry,index)=>{
-                                        return <option key={index} value={eachCountry.id}>{eachCountry.name}</option>
-                                    })
-                                }
-                                </Form.Select>
-                        </div>
-                        <div className="col-md-12">
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                                <Form.Label>About</Form.Label>
-                                {validAbout && <FontAwesomeIcon icon={faCheck}/> }
-                                {(!validAbout && about) && <FontAwesomeIcon icon={faTimes} />}
-                                <Form.Control value={about} as="textarea" rows={3} onChange={(e)=>{setAbout(e.target.value)}} />
-                            </Form.Group>
-                            {about && !validAbout && 
-                                <small className="form-text text-muted editprofile_item_text_container">
-                                    <FontAwesomeIcon icon={faInfoCircle} />
-                                    <span className="editprofile_item_text">Invalid About</span>
-                                </small>
-                            }
-                        </div>
-                        <div className="col-md-12">
-                            <button className="btn btn-primary" onClick={()=>{editProfile(user)}} disabled={editingProfile || !validName || !validEmail || !validPhone || !validAddress || !validCity || !validAbout}>Save</button>
-                            <button className="btn btn-danger" onClick={()=>{navigate("/view-profile")}} disabled={editingProfile}>Cancel</button>
-                        </div>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="col-md-12">
+                        <button className="btn editprofile_save-btn" onClick={()=>{editProfile(user)}} disabled={editingProfile || !validName || !validEmail || !validPhone || !validAddress || !validCity || !validAbout}>Save</button>
+                        <button className="btn editprofile_cancel-btn" onClick={()=>{navigate("/view-profile")}} disabled={editingProfile}>Cancel</button>
                     </div>
                 </div>
             </div>
