@@ -26,6 +26,7 @@ const Home = () => {
   const [sortBy,setSortBy] = useState("");
   const [inStock,setInStock] = useState(false);
   const [currency,setCurrency] = useState({});
+  const [gettingCurrency, setGettingCurrency] = useState(true);
 
 
   const getOtherItems = async ()=>{
@@ -89,19 +90,24 @@ const Home = () => {
   }
 
   const getUserCurrency = async ({currency})=>{
+    setGettingCurrency(true);
       try{
           const response = await authapi.get(GET_USER_CURRENCY_API+currency);
           if(response && response.data){
               if(response.data.success){
-                  setCurrency(response.data.currency);
+                setCurrency(response.data.currency);
+                setGettingCurrency(false);
               }else{
-                  console.log(response);
+                console.log(response);
+                setGettingCurrency(false);
               }
           }else{
               console.log(response);
+              setGettingCurrency(false);
           }
       }catch(err){
-          console.log(JSON.stringify(err));
+        console.log(JSON.stringify(err));
+        setGettingCurrency(false);
       }
   }
 
@@ -149,12 +155,12 @@ const Home = () => {
           </Form.Group>
         </div>
         {
-          !itemsLoading && items && items.length && items.map((eachItem,index)=>{
+          !gettingCurrency && !itemsLoading && items && items.length && items.map((eachItem,index)=>{
             return <HomeItem currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
           })
         }
       </div>
-      <MainFooter currency={currency} setCurrency={setCurrency}/>
+      {!gettingCurrency && !itemsLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
     </div>
   )
 }

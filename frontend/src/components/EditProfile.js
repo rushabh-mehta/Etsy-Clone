@@ -461,7 +461,7 @@ const EditProfile = () => {
             </div>
         }
         {editProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
-        <MainFooter currency={currency} setCurrency={setCurrency}/>
+        {!editProfileLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
     </div>
   )
 }

@@ -94,7 +94,6 @@ const MainFooter = ({currency,setCurrency}) => {
             navigate("/login", {replace:true});
         }else{
             getCurrencies();
-            setCurrency(user.currency);
             getCountries();
         }
     },[]);

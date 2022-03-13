@@ -23,9 +23,7 @@ const UPLOAD_PROFILE_PIC_API = "api/user/profile-picture/upload";
 const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
 
 const ViewProfile = () => {
-    const [searchQuery,setSearchQuery] = useState("");
-    const [currency,setCurrency] = useState({});
-
+    
     const getUser = async ({id})=>{
         setViewProfileLoading(true);
         try{
@@ -122,19 +120,24 @@ const ViewProfile = () => {
   }
 
   const getUserCurrency = async ({currency})=>{
+        setGettingCurrency(true);
         try{
             const response = await authapi.get(GET_USER_CURRENCY_API+currency);
             if(response && response.data){
                 if(response.data.success){
                     setCurrency(response.data.currency);
+                    setGettingCurrency(false);
                 }else{
                     console.log(response);
+                    setGettingCurrency(false);
                 }
             }else{
                 console.log(response);
+                setGettingCurrency(false);
             }
         }catch(err){
             console.log(JSON.stringify(err));
+            setGettingCurrency(false);
         }
     }
 
@@ -146,6 +149,9 @@ const ViewProfile = () => {
     const [gettingCountries, setGettingCountries] = useState(true);
     const [gettingFavoriteItems, setGettingFavoriteItems] = useState(true);
     const [profilePicture,setProfilePicture] = useState("");
+    const [searchQuery,setSearchQuery] = useState("");
+    const [currency,setCurrency] = useState({});
+    const [gettingCurrency, setGettingCurrency] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -189,7 +195,7 @@ const ViewProfile = () => {
     <div>
         <MainNavbar />
          <div className="view_profile_home_body">
-            {!gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
+            {!gettingCurrency && !gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
                     <div className="row">
                         <div className="col-md-2 col-sm-12">
                             <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="view_profile_picture"></img></div>
@@ -252,7 +258,7 @@ const ViewProfile = () => {
             </div>}
             {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
          </div>
-        <MainFooter currency={currency} setCurrency={setCurrency}/>
+        {!gettingCurrency && !gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
     </div>
   )
 }
