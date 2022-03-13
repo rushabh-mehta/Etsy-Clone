@@ -22,6 +22,7 @@ const CreateShop = () => {
   },[shopName]);
 
   const checkShopNameAvailable = async ()=>{
+    if(shopName){
       const reqBody = {};
       reqBody.shopName = shopName;
       try{
@@ -42,31 +43,34 @@ const CreateShop = () => {
           console.log(err.response.data.error);
         }
       }
-  }
-
-  const createShop = async()=>{
-    setCreatingShop(true);
-    const user = JSON.parse(localStorage.getItem("user"));
-    const reqBody = {};
-    reqBody.user = user.id;
-    reqBody.shopName = shopName;
-    try{
-      const response = await authapi.post(SHOP_CREATE_API,reqBody);
-      if(response && response.data && response.data.success){
-        setCreatingShop(false);
-        navigate(SHOP_HOME_PAGE);
-      }else{
-         console.log("Some unexpected error!");
-         setCreatingShop(false);
-      }
-    }catch(err){
-      if(err && err.response && err.response.data && err.response.data.error){
-          setErrorMsg(err.response.data.error);
-      }
-      setCreatingShop(false);
     }
   }
-
+    
+  const createShop = async()=>{
+    if(shopName){
+      setCreatingShop(true);
+      const user = JSON.parse(localStorage.getItem("user"));
+      const reqBody = {};
+      reqBody.user = user.id;
+      reqBody.shopName = shopName;
+      try{
+        const response = await authapi.post(SHOP_CREATE_API,reqBody);
+        if(response && response.data && response.data.success){
+          setCreatingShop(false);
+          navigate(SHOP_HOME_PAGE);
+        }else{
+          console.log("Some unexpected error!");
+          setCreatingShop(false);
+        }
+      }catch(err){
+        if(err && err.response && err.response.data && err.response.data.error){
+          setErrorMsg(err.response.data.error);
+        }
+        setCreatingShop(false);
+      }
+    }
+  }
+    
   return (
     <div>
       <Navbar bg="light" expand="lg">
