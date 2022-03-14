@@ -156,7 +156,7 @@ const Home = () => {
         </div>
         {
           !gettingCurrency && !itemsLoading && items && items.length && items.map((eachItem,index)=>{
-            return <HomeItem currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
+            return <HomeItem searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems} setItems={setItems} gettingCurrency={gettingCurrency} itemsLoading={itemsLoading} currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
           })
         }
       </div>

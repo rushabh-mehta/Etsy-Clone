@@ -102,7 +102,7 @@ const HomeItem = ({item,items,setItems,index,currency}) => {
                     <Card.Title>
                         <div className="row">
                             <div className="col-md-8"><span className="homeitem_name">{item.name}</span></div>
-                            {!item.favorite && <div className="col-md-4 homeitem-favorite-icon"><FontAwesomeIcon onClick={addFavoriteItem} icon={faHeartRegular}/></div>}
+                            {!item.favorite && <div className="col-md-4 homeitem-favorite-icon"><FontAwesomeIcon onClick={addFavoriteItem} icon={faHeartRegular} color="red"/></div>}
                             {item.favorite && <div className="col-md-4 homeitem-favorite-icon"><FontAwesomeIcon onClick={removeFavoriteItem} icon={faHeartSolid} color="red"/></div>}
                         </div>
                     </Card.Title>

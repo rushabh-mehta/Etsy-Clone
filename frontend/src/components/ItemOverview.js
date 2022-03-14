@@ -2,9 +2,14 @@ import React,{useState, useEffect} from 'react';
 import { useLocation , useNavigate, useParams, Link} from 'react-router-dom';
 import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
-import { faTimes, faHeart} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartRegular} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import config from '../config/config';
+import MainNavbar from './MainNavbar';
+import MainFooter from './MainFooter';
+import '../styles/itemoverview.css';
+
 
 
 const GET_ITEM_API = "/api/item/";
@@ -16,7 +21,7 @@ const SHOP_HOME_PAGE = "/shop/home/";
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 
 
-const ItemOverview = () => {
+const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,gettingCurrency,itemsLoading}) => {
     const [item,setItem] = useState({});
     const navigate = useNavigate();
     const [itemLoading,setItemLoading] = useState(true);
@@ -196,28 +201,36 @@ const ItemOverview = () => {
 
     return (
         <div>
-            <div>
-                <div className="col-md-12">
-                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="profile_picture"></img></div>
+            <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems} setItems={setItems}/>
+            <div className="container">
+                <div className="row">
+                    <div className="mrgn-tp col-md-5">
+                        <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="itemoverview_display_picture"></img></div>
+                    </div>
+                    <div className="mrgn-tp col-md-4">
+                        <div>
+                            <span className="overview-name">{item.itemName}</span>
+                            {item.favorite && <span><FontAwesomeIcon onClick={removeFavoriteItem} color="red" icon={faHeartSolid}/></span>}
+                            {!item.favorite && <span><FontAwesomeIcon onClick={addFavoriteItem} color="red" icon={faHeartRegular}/></span>}
+                        </div>
+                        <Link className="overview-shop" to={SHOP_HOME_PAGE+item.shopId}>{item.shopName}</Link>
+                        <div>{item.categoryName}</div>
+                        <div>{currency.name+" "+item.itemPrice}</div>
+                        <div>{item.itemDescription}</div>
+                        <div className="homeitem_sales_count">{(item.itemQuantity-item.itemSalesCount)+" pieces available!"}</div>
+                        <div className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
+                    <Form.Group className="mb-3 mrgn-tp">
+                        <Form.Label className="add-cart-quantity" htmlFor="quantity">Quantity</Form.Label>
+                        <Form.Control className="add-cart-quantity" value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
+                    </Form.Group>
+                    <Button className="addtocart-btn" onClick={addToCart}>Add to Cart</Button>
+                    {addToCartSuccessMsg && <div>{addToCartSuccessMsg}</div>}
+                    {itemExistsMsg && <div>{itemExistsMsg}</div>}
+                    {notEnoughStockMessage && <div>{notEnoughStockMessage}</div>}
+                    </div>
                 </div>
-                <div>{item.itemName}</div>
-                <Link to={SHOP_HOME_PAGE+item.shopId}>{item.shopName}</Link>
-                <div>{item.categoryName}</div>
-                <div>{currency.name+" "+item.itemPrice}</div>
-                <div>{item.itemQuantity}</div>
-                <div>{item.itemSalesCount}</div>
-                <div>{item.itemDescription}</div>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="quantity">Quantity</Form.Label>
-                    <Form.Control value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
-                </Form.Group>
-                {!item.favorite && <div><FontAwesomeIcon onClick={addFavoriteItem} icon={faHeart}/></div>}
-                {item.favorite && <div><FontAwesomeIcon onClick={removeFavoriteItem} icon={faTimes}/></div>}
-                <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
-                {addToCartSuccessMsg && <div>{addToCartSuccessMsg}</div>}
-                {itemExistsMsg && <div>{itemExistsMsg}</div>}
-                {notEnoughStockMessage && <div>{notEnoughStockMessage}</div>}
             </div>
+            {!gettingCurrency && !itemsLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
         </div>  
     )
 }
