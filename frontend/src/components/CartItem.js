@@ -93,6 +93,7 @@ const CartItem = ({ item, cartItems, setCartItems,currency }) => {
                     <Button className="cartitem_remove-btn" onClick={removeItem}>
                         Delete
                     </Button>
+                        <span className="cartitem-cost">{"Cost: "+currency.name+" "+item.itemPrice*orderQuantity}</span>
                     </div>
                 </div>
             </div>

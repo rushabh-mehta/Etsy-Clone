@@ -20,6 +20,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cartItems,setCartItems] = useState([]);
   const [currency,setCurrency] = useState({});
+    const [cartCost,setCartCost] = useState(0);
 
  const getUserCurrency = async ({currency})=>{
       try{
@@ -112,11 +113,12 @@ const Cart = () => {
       <div className="container cart-heading">
         <h1>Your Cart</h1>
       </div>
-      {cartItems && cartItems.length && cartItems.map((eachCartItem)=>{
+      {cartItems && cartItems.length && cartItems.map((eachCartItem)=>{  
         return <CartItem currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
       })}
        <div className="container">
             <Button className="cart_order-btn" onClick={placeOrder}>Place Order</Button>
+            <span className="cart-cost">{"Total Cost: "+currency.name+" "}</span>
        </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>

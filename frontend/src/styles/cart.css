@@ -16,3 +16,9 @@
   margin-bottom: 30px;
   font-weight: 200;
 }
+
+.cart-cost {
+  margin-left: 20px;
+  text-decoration: underline;
+  font-style: italic;
+}
