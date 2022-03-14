@@ -22,7 +22,8 @@ const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
              navigate("/item/overview/"+itemId);
         }
     }
-    const removeFavoriteItem = async ()=>{
+    const removeFavoriteItem = async (event)=>{
+        event.stopPropagation();
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
         data.itemId = item.itemId;
