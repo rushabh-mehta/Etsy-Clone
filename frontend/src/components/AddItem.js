@@ -1,16 +1,19 @@
 import React,{useState, useEffect} from 'react';
-import {InputGroup, FormControl, Button, Modal, Form} from 'react-bootstrap';
+import {InputGroup, Collapse, Button, Modal, Form} from 'react-bootstrap';
 import authapi from '../services/authpost';
 import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 import '../styles/addshopitem.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import config from '../config/config';
 
 
 const GET_CATEGORIES_API = "/api/category/";
 const ADD_ITEM_API = "/api/item/add";
 const ADD_CATEGORY_API = "/api/category/add";
+const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
+const UPLOAD_PROFILE_PIC_API = "api/item/dsiplay-picture/upload";
 
 
 const AddShopItem = ({setItems,items,id,currency}) => {
@@ -27,6 +30,7 @@ const AddShopItem = ({setItems,items,id,currency}) => {
     const [price,setPrice] = useState(0);
     const [quantity,setQuantity] = useState(0);
     const [newCategory,setNewCategory] = useState("");
+    const [categoryOpen, setCategoryOpen] = useState(false);
 
     const getCategories = async ({id}) => {
         setGettingCategories(true);
@@ -106,6 +110,24 @@ const AddShopItem = ({setItems,items,id,currency}) => {
         setShow(true)
     };
 
+    const profilePictureSelected = async (event) => {
+        const userBrowserStorage = JSON.parse(localStorage.getItem("user"));
+        let formData = new FormData();
+        const image = event.target.files[0];
+        formData.append("image", image);
+        formData.append("userId",userBrowserStorage.id);
+        try{
+            const response = await authapi.post(UPLOAD_PROFILE_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
+            if(response && response.data && response.data.imageKey){
+                setDisplayPicture(response.data.imageKey);
+            }else{
+                console.log(response);
+            }
+        }catch(err){
+            console.log(JSON.stringify(err));
+        }
+	}
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user"));
@@ -129,8 +151,11 @@ const AddShopItem = ({setItems,items,id,currency}) => {
         <Modal.Body>
             <Form>
                 <div className="col-md-12">
-                    <img className="profile_picture"></img>
-                    <div><FontAwesomeIcon icon={faCamera}/></div>
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="view_profile_picture"></img></div>
+                    <div>
+                        <label className="viewprofile-editimg"htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                        <input data-testid="profile-pic" onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
+                    </div>
                 </div>
                 <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
@@ -154,11 +179,15 @@ const AddShopItem = ({setItems,items,id,currency}) => {
                             })
                         }
                     </Form.Select>
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>New Category</Form.Label>
-                    <Form.Control value={newCategory} onChange={(e)=>{setNewCategory(e.target.value)}} type="text" placeholder="Add a new category" />
-                    <Button variant="primary" onClick={addCategory}>Add Category</Button>
+                    <span className="additem-category-collapse" onClick={() => setCategoryOpen(!categoryOpen)} aria-controls="example-collapse-text" aria-expanded={categoryOpen}>
+                        Add a new category
+                    </span>
+                    <Collapse in={categoryOpen}>
+                        <Form.Group size="sm" className="mb-3">
+                            <Form.Control size="sm" value={newCategory} onChange={(e)=>{setNewCategory(e.target.value)}} type="text" placeholder="Enter category name" />
+                            <Button className="add-category-btn" size="sm" variant="secondary" onClick={addCategory}>Add</Button>
+                        </Form.Group>
+                    </Collapse>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
@@ -167,11 +196,11 @@ const AddShopItem = ({setItems,items,id,currency}) => {
             </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={addItem}>
+            <Button className="addshop-confirm_save-btn" onClick={addItem}>
             Add
+          </Button>
+          <Button  className="addshop-cancel_save-btn" onClick={handleClose}>
+            Close
           </Button>
         </Modal.Footer>
       </Modal>
