@@ -1,0 +1,11 @@
+.add-shopitem-btn {
+  background: white;
+  color: black;
+  border-radius: 20px;
+  border: 1px solid black;
+}
+
+.add-shopitem-btn:hover {
+  background: black;
+  color: white;
+}

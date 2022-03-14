@@ -1,8 +1,12 @@
 import React,{useState, useEffect} from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faCamera} from "@fortawesome/free-solid-svg-icons";
 import EditItem from './EditItem';
 import config from '../config/config';
+import {useNavigate} from "react-router-dom";
+import {Card} from 'react-bootstrap';
+import '../styles/shopitem.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 
@@ -16,28 +20,34 @@ const Item = ({index,items,setItems,currency,editRights}) => {
     const [quantity,setQuantity] = useState(items[index].quantity);
     const [salesCount,setSalesCount] = useState(items[index].salesCount);
     const [description,setDescription] = useState(items[index].description);
+    const navigate = useNavigate();
     
-    const setMode = ()=>{
-        setEditMode(true);
+
+    const viewItemOverview = ()=>{
+        if(items[index]?.id) {
+             navigate("/item/overview/"+items[index].id);
+        }
     }
+
     return (
-        <div>
-            
-            {editRights && <EditItem currency={currency} id={items[index].id} items={items} setItems={setItems} index={index} displayPicture={displayPicture} setDisplayPicture={setDisplayPicture} name={name} setName={setName} category={category} setCategory={setCategory} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} salesCount={salesCount} setSalesCount={setSalesCount} description={description} setDescription={setDescription}/>}
-            <div>
-                
-                <div className="col-md-12">
-                    <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="profile_picture"></img></div>
-                </div>
-                <div>{name}</div>
-                <div>{category}</div>
-                <div>{currency.name+" "+price}</div>
-                <div>{quantity}</div>
-                <div>{salesCount}</div>
-                <div>{description}</div>
-            </div>
-        </div>
-        
+        <>
+            <Card className="shopitem_card">
+                <Card.Img variant="top" className="shopitem_picture" src={GET_ITEM_DISPLAY_PIC_API+displayPicture} />
+                <Card.Body>
+                    <Card.Title>
+                        <div className="row">
+                            <div className="col-md-8"><span className="shopitem_name">{name}</span></div>
+                            {editRights && <EditItem currency={currency} id={items[index].id} items={items} setItems={setItems} index={index} displayPicture={displayPicture} setDisplayPicture={setDisplayPicture} name={name} setName={setName} category={category} setCategory={setCategory} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} salesCount={salesCount} setSalesCount={setSalesCount} description={description} setDescription={setDescription}/>}
+                        </div>
+                    </Card.Title>
+                    <Card.Text>
+                        <div className="shopitem_price">{(currency && currency.name)+" "+price}</div>
+                        <div className="shopitem_description">{description}</div>
+                        <div className="shopitem_sales_count">{salesCount+" pieces sold till now!"}</div>
+                    </Card.Text>
+                </Card.Body>
+            </Card>            
+        </>
     )
 }
 

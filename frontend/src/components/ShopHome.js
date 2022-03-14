@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import {InputGroup, FormControl, Button} from 'react-bootstrap';
+import {Navbar, Container} from 'react-bootstrap';
 import authapi from '../services/authpost';
 import {Link, useNavigate, useLocation, useParams} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,8 @@ import AddShopItem from './AddItem';
 import Item from './Item';
 import MainFooter from './MainFooter';
 import config from '../config/config';
-
+import '../styles/shophome.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const GET_SHOP_API = "/api/shop/home/";
 const GET_USER_CURRENCY_API = "api/currency/";
@@ -111,31 +112,38 @@ const ShopHome = () => {
 
   return (
     <div>
+       <Navbar bg="light" expand="lg">
+          <Container>
+              <Navbar.Brand className="shopcreate-mainnavbar-title" href="/home">Etsy</Navbar.Brand>
+          </Container>
+      </Navbar>
       {!shopDetailsLoading && <div>
-            <div><span className="view_profile_header">Shop Home</span></div>
             <div className="container">
                 <div className="row">
-                    <div className="col-md-2 col-sm-12">
-                        <div><img src={GET_SHOP_PIC_API+shop.displayPicture} className="profile_picture"></img></div>
-                        { editRights && <div>
-                            <label htmlFor="shop-display-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                    <div className="mrgn-tp col-md-2 col-sm-12">
+                        <div className="shop-image"><img src={GET_SHOP_PIC_API+shop.displayPicture} className="view_profile_picture"></img></div>
+                        {editRights && <div>
+                            <label className="viewprofile-editimg" htmlFor="shop-display-pic"><FontAwesomeIcon icon={faCamera}/></label>
                             <input onChange={shopPictureSelected} style={{display: "none"}} id="shop-display-pic" type="file"></input>
                         </div>}
                     </div>
-                    <div className="viewprofile_username col-md-4 col-sm-12">
-                        <div>{shop && shop.name}</div>
+                    <div className="mrgn-tp viewprofile_username col-md-4 col-sm-12">
+                        <div className="shop-name">{shop && shop.name}</div>
                         <div className="row">
                             <div className="viewprofile_userdob col-md-12 col-sm-12">
                                 Test Details
                             </div>
                         </div>
                     </div>
-                    <div className="viewprofile_username col-md-4 col-sm-12">
+                    <div className="mrgn-tp viewprofile_username col-md-4 col-sm-12">
                         <div className="row">
-                            <div className="col-md-2 col-sm-12">
-                                <div><img src={GET_PROFILE_PIC_API+shop.profilePicture} className="profile_picture"></img></div>
+                            <div className="shopowner-heading col-md-12 col-sm-12">
+                                SHOP OWNER
                             </div>
-                            <div className="viewprofile_useremail col-md-12 col-sm-12">
+                            <div className="mrgn-tp col-md-2 col-sm-12">
+                                <div><img src={GET_PROFILE_PIC_API+shop.profilePicture} className="view_profile_picture"></img></div>
+                            </div>
+                            <div className="mrgn-tp viewprofile_useremail col-md-12 col-sm-12">
                                 {shop && shop.ownerName}
                             </div>
                             <div className="viewprofile_useremail col-md-12 col-sm-12">
@@ -145,7 +153,7 @@ const ShopHome = () => {
                                 {shop && shop.ownerPhone}
                             </div>
                             <div className="viewprofile_useremail col-md-12 col-sm-12">
-                                {"Total Sales: "+totalSales}
+                                {"Total Sales: "+(currency && currency.name+" ")+totalSales}
                             </div>
                         </div>
                     </div>

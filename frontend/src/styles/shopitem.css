@@ -1,33 +1,32 @@
-.homeitem_picture {
+.shopitem_picture {
   width: 14rem;
   height: 13rem;
 }
 
-.homeitem_card {
+.shopitem_card {
   width: 14rem;
   display: inline-block;
   margin: 10px 3px;
   cursor: pointer;
-  max-height: 382px;
 }
 
-.homeitem_name {
+.shopitem_name {
   font-size: 26px;
 }
 
-.homeitem_price {
+.shopitem_price {
   font-size: 30px;
 }
 
-.homeitem_description {
+.shopitem_description {
   font-size: 20px;
 }
 
-.homeitem_sales_count {
+.shopitem_sales_count {
   font-size: 18px;
   text-decoration: underline;
 }
-.homeitem-favorite-icon {
+.shopitem-favorite-icon {
   cursor: pointer;
   z-index: 9999;
 }

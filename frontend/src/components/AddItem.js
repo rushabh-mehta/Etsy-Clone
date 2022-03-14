@@ -4,6 +4,9 @@ import authapi from '../services/authpost';
 import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
+import '../styles/addshopitem.css';
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 const GET_CATEGORIES_API = "/api/category/";
 const ADD_ITEM_API = "/api/item/add";
@@ -115,7 +118,7 @@ const AddShopItem = ({setItems,items,id,currency}) => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button className="add-shopitem-btn" onClick={handleShow}>
         Add Item
       </Button>
 
