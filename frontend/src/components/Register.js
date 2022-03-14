@@ -112,8 +112,10 @@ const ConnectedRegister = ({user,addUser}) => {
     
     
     const handleUserRegistrationSubmit = (e)=>{
-        e.preventDefault();
-        registerUser();
+        if(validName && validEmail && validPassword && validMatchPassword && !registering){
+            e.preventDefault();
+            registerUser();
+        }
     }
 
     return (
@@ -185,7 +187,7 @@ const ConnectedRegister = ({user,addUser}) => {
                             }    
                         </div>
                         <div className="register_item_container form-group">
-                            <button  className="btn btn-dark register_btn" type="submit" disabled={!validName || !validEmail || !validPassword || !validMatchPassword || registering}>Register</button>
+                            <button  className="btn btn-dark register_btn" type="submit">Register</button>
                             {registering && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
                             {errorMsg && <p className="error">{errorMsg}</p>}
                             <p><Link to={LOGIN_URL}>Already Have an account? Login here!</Link></p>

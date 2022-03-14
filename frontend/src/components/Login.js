@@ -104,8 +104,10 @@ const ConnectedLogin = ({user,addUser}) => {
     
     
     const handleUserLoginSubmit = (e)=>{
-        e.preventDefault();
-        loginUser();
+        if(validEmail && validPassword && !loggingIn){
+            e.preventDefault();
+            loginUser();
+        }
     }
     
     return (
@@ -147,7 +149,7 @@ const ConnectedLogin = ({user,addUser}) => {
                         }    
                     </div>
                     <div className="login_item_container form-group">
-                        <button id="login-btn" className="btn btn-dark login_btn" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
+                        <button id="login-btn" className="btn btn-dark login_btn" type="submit">Login</button>
                         {loggingIn && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
                         {errorMsg && <p className="error">{errorMsg}</p>}
                         <p><Link to={REGISTER_URL}>Dont have an account? Register here!</Link></p>
