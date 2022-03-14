@@ -117,8 +117,8 @@ const ConnectedLogin = ({user,addUser}) => {
                         <h1 className="login__header">Log In</h1>
                     <div className="login_item_container form-group">
                         <label htmlFor="useremail" className="login_item_label">Email</label>
-                        {validEmail && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
+                        {validEmail && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                        {(!validEmail && email) && <FontAwesomeIcon color="red" icon={faTimes} />}
                         <input ref={emailRef} className="form-control login_item_input" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
                         onBlur={() => setEmailFocus(false)}>
                         </input>
@@ -131,8 +131,8 @@ const ConnectedLogin = ({user,addUser}) => {
                     </div>
                     <div className="login_item_container form-group">
                         <label className="login_item_label" htmlFor="userpassword">Password</label>
-                        {validPassword && <FontAwesomeIcon icon={faCheck}/> }
-                        {(!validPassword && password) && <FontAwesomeIcon icon={faTimes} />}
+                        {validPassword && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                        {(!validPassword && password) && <FontAwesomeIcon color="red" icon={faTimes} />}
                         <input className="form-control login_item_input" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
                         onBlur={() => setPasswordFocus(false)}>
                         </input>
@@ -147,7 +147,7 @@ const ConnectedLogin = ({user,addUser}) => {
                         }    
                     </div>
                     <div className="login_item_container form-group">
-                        <button id="login-btn" className="btn btn-primary login_btn" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
+                        <button id="login-btn" className="btn btn-dark login_btn" type="submit" disabled={!validEmail || !validPassword|| loggingIn}>Login</button>
                         {loggingIn && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
                         {errorMsg && <p className="error">{errorMsg}</p>}
                         <p><Link to={REGISTER_URL}>Dont have an account? Register here!</Link></p>

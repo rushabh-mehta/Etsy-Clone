@@ -125,8 +125,8 @@ const ConnectedRegister = ({user,addUser}) => {
                         <h1 className="register__header">Register</h1>
                         <div className="register_item_container form-group">
                             <label className="register_item_label" htmlFor="username">Name</label>
-                            {validName && <FontAwesomeIcon icon={faCheck}/> }
-                            {(!validName && name) && <FontAwesomeIcon icon={faTimes} />}
+                            {validName && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                            {(!validName && name) && <FontAwesomeIcon color="red" icon={faTimes} />}
                             <input ref={nameRef} className="form-control register_item_input" id="username" name="username" type="text" onChange={(e)=>{setName(e.target.value)}} onFocus={() => setUserFocus(true)} 
                             onBlur={() => setUserFocus(false)}>
                             </input>
@@ -141,8 +141,8 @@ const ConnectedRegister = ({user,addUser}) => {
                         </div>
                         <div className="register_item_container form-group">
                             <label className="register_item_label" htmlFor="useremail">Email</label>
-                            {validEmail && <FontAwesomeIcon icon={faCheck}/> }
-                            {(!validEmail && email) && <FontAwesomeIcon icon={faTimes} />}
+                            {validEmail && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                            {(!validEmail && email) && <FontAwesomeIcon color="red" icon={faTimes} />}
                             <input className="form-control register_item_input" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
                             onBlur={() => setEmailFocus(false)}>
                             </input>
@@ -155,8 +155,8 @@ const ConnectedRegister = ({user,addUser}) => {
                         </div>
                         <div className="register_item_container form-group">
                             <label className="register_item_label" htmlFor="userpassword">Password</label>
-                            {validPassword && <FontAwesomeIcon icon={faCheck}/> }
-                            {(!validPassword && password) && <FontAwesomeIcon icon={faTimes} />}
+                            {validPassword && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                            {(!validPassword && password) && <FontAwesomeIcon color="red" icon={faTimes} />}
                             <input className="form-control register_item_input" id="userpassword" name="userpassword" type="password" onChange={(e)=>{setPassword(e.target.value)}} onFocus={() => setPasswordFocus(true)} 
                             onBlur={() => setPasswordFocus(false)}>
                             </input>
@@ -172,8 +172,8 @@ const ConnectedRegister = ({user,addUser}) => {
                         </div>
                         <div className="register_item_container form-group">
                             <label className="register_item_label" htmlFor="usermatchpassword">Confirm Password</label>
-                            {validMatchPassword && <FontAwesomeIcon icon={faCheck}/> }
-                            {(!validMatchPassword && matchPassword) && <FontAwesomeIcon icon={faTimes} />}
+                            {validMatchPassword && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                            {(!validMatchPassword && matchPassword) && <FontAwesomeIcon color="red" icon={faTimes} />}
                             <input className="form-control register_item_input" id="usermatchpassword" name="usermatchpassword" type="password" onChange={(e)=>{setMatchPassword(e.target.value)}} onFocus={() => setMatchPasswordFocus(true)} 
                             onBlur={() => setMatchPasswordFocus(false)}>
                             </input>
@@ -185,7 +185,7 @@ const ConnectedRegister = ({user,addUser}) => {
                             }    
                         </div>
                         <div className="register_item_container form-group">
-                            <button  className="btn btn-primary register_btn" type="submit" disabled={!validName || !validEmail || !validPassword || !validMatchPassword || registering}>Register</button>
+                            <button  className="btn btn-dark register_btn" type="submit" disabled={!validName || !validEmail || !validPassword || !validMatchPassword || registering}>Register</button>
                             {registering && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
                             {errorMsg && <p className="error">{errorMsg}</p>}
                             <p><Link to={LOGIN_URL}>Already Have an account? Login here!</Link></p>
