@@ -99,7 +99,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
-                        {(item.itemQuantity-item.itemSalesCount)<orderQuantity && <div class="mrgn-tp addcart-error">Out of Stock!</div>}
+                        {(item.itemQuantity-item.itemSalesCount)<orderQuantity && <div className="mrgn-tp addcart-error">Out of Stock!</div>}
                     </Form.Group>
                     <Button className="cartitem_remove-btn" onClick={removeItem}>
                         Delete

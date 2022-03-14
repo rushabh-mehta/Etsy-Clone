@@ -25,6 +25,7 @@ const Cart = () => {
     const [invalidOrder, setInvalidOrder] = useState([]);
     const [canPlaceOrder, setCanPlaceOrder] = useState(true);
     const [orderPlaceErrorMsg, setOrderPlaceErrorMsg] = useState("");
+    const [totalOrderCost,setTotalOrderCost] = useState(0);
  const getUserCurrency = async ({currency})=>{
       try{
           const response = await authapi.get(GET_USER_CURRENCY_API+currency);
@@ -54,6 +55,7 @@ const Cart = () => {
                   if(response.data.success){
                       if(response.data.items){
                           setCartItems(response.data.items);
+                          console.log(response.data.items);
                           let invalidOrderCopy = [];
                           response.data.items.forEach((item)=>{
                                 invalidOrderCopy.push(false);
@@ -130,6 +132,15 @@ const Cart = () => {
       }
   },[invalidOrder]);
 
+  useEffect(() => {
+        let totalCost = 0;
+        cartItems.forEach((eachCartItem)=>{
+            console.log(eachCartItem);
+            totalCost+=parseInt(eachCartItem.orderQuantity)*parseFloat(eachCartItem.itemPrice);
+        });
+        setTotalOrderCost(totalCost);
+  },[cartItems]);
+
   return (
     <div>
       <MainNavbar/>
@@ -141,7 +152,7 @@ const Cart = () => {
       })}
        <div className="container">
             <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder}>Place Order</Button>
-            <span className="cart-cost">{"Total Cost: "+(currency && currency.name)+" "}</span>
+            <span className="cart-cost">{"Total Cost: "+(currency && currency.name)+" "+totalOrderCost}</span>
             {orderPlaceErrorMsg && <div className="addcart-error">{orderPlaceErrorMsg}</div>}
        </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
