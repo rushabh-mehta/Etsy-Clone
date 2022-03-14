@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from "react";
 import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
 import {InputGroup, FormControl, Button, Modal, Form} from 'react-bootstrap';
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import {useNavigate, Link} from "react-router-dom";
 import '../styles/mainfooter.css';
 import 'bootstrap/dist/css/bootstrap.css';

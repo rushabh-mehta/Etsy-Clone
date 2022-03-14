@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react';
 import {InputGroup, Collapse, Button, Modal, Form} from 'react-bootstrap';
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";

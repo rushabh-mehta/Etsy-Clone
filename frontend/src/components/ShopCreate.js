@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react';
 import {InputGroup, FormControl, Button, Navbar, Container} from 'react-bootstrap';
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import {useNavigate} from "react-router-dom";
 import '../styles/shopcreate.css';
 import 'bootstrap/dist/css/bootstrap.css';

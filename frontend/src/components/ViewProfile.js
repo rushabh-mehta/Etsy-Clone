@@ -6,7 +6,7 @@ import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import LoadingIcons from 'react-loading-icons';
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import FavoriteItem from './FavoriteItem.js';
 import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'react-bootstrap';
 import config from '../config/config';

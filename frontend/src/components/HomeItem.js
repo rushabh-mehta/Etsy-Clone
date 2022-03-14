@@ -1,6 +1,6 @@
 import React,{useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import { faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

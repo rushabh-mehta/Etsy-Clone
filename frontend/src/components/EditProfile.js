@@ -6,7 +6,7 @@ import {useNavigate, Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle, faCamera } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl, Form, Dropdown, DropdownButton } from 'react-bootstrap';
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import '../styles/editprofile.css';

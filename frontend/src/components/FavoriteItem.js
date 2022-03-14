@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
 import EditItem from './EditItem';
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import config from '../config/config';
 import {Card} from 'react-bootstrap';
 import {useNavigate} from "react-router-dom";

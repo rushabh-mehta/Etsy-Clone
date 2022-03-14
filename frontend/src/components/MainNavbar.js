@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faHeart} from "@fortawesome/free-regular-svg-icons";
 import { faCartShopping, faMagnifyingGlass, faShop} from "@fortawesome/free-solid-svg-icons";
 
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import { connect } from "react-redux";
 import { removeUser } from "../redux/actions/actions.js";
 import '../styles/mainnavbar.css';

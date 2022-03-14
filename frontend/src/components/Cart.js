@@ -1,7 +1,8 @@
 import React,{useState, useEffect} from 'react';
 import CartItem from './CartItem';
 import {useNavigate} from "react-router-dom";
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
+
 import { Form, Button } from 'react-bootstrap';
 import MainFooter from './MainFooter';
 import MainNavbar from './MainNavbar';

@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import OrderItem from './OrderItem';
 import {useNavigate} from "react-router-dom";
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import MainFooter from './MainFooter';
 import MainNavbar from './MainNavbar';
 import '../styles/orders.css';

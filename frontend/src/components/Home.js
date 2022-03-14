@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import MainNavbar from './MainNavbar';
 import MainFooter from './MainFooter';
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import HomeItem from './HomeItem';
 import { Form, Button } from 'react-bootstrap';
 import '../styles/home.css';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import authapi from '../services/authpost';
+import {axiosInstance as authapi} from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
 import config from '../config/config';
 import '../styles/cartitem.css';
