@@ -109,6 +109,7 @@ const HomeItem = ({item,items,setItems,index,currency}) => {
                     <Card.Text>
                         <div className="homeitem_price">{(currency && currency.name)+" "+item.price}</div>
                         <div className="homeitem_description">{item.description}</div>
+                        <div className="homeitem_sales_count">{item.quantity-item.salesCount+" pieces available!"}</div>
                         <div className="homeitem_sales_count">{item.salesCount+" pieces sold till now!"}</div>
                     </Card.Text>
                 </Card.Body>

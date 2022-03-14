@@ -153,10 +153,10 @@ class Item{
                 sqlQuery+=` ORDER BY price`;
             }
             if(sortBy==="quantity"){
-                sqlQuery+=` ORDER BY quantity`;
+                sqlQuery+=` ORDER BY quantity DESC`;
             }
             if(sortBy==="salesCount"){
-                sqlQuery+=` ORDER BY salesCount`;
+                sqlQuery+=` ORDER BY salesCount DESC`;
             }
             con.query(sqlQuery, (error, results) => {
                 if (error) {
