@@ -121,6 +121,7 @@ const ConnectedRegister = ({user,addUser}) => {
             <form action="" onSubmit={handleUserRegistrationSubmit}>
                 <div className="container">
                     <div className="register_container col-md-3 col-sm-12">
+                        <div className="mainnavbar-title">Etsy</div>
                         <h1 className="register__header">Register</h1>
                         <div className="register_item_container form-group">
                             <label className="register_item_label" htmlFor="username">Name</label>

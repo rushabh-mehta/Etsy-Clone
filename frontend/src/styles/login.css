@@ -1,6 +1,6 @@
 .login_item_container {
   margin-top: 10px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .login_item_label {
@@ -11,6 +11,9 @@
   display: flex;
   margin: auto;
   flex-direction: column;
+  width: 500px;
+  margin-top: 100px;
+  border-radius: 5px;
 }
 
 .login__header {
@@ -19,19 +22,18 @@
 
 .error {
   color: red;
-  font-size: 0.6rem;
+  font-size: 0.1rem;
   margin-top: 5px;
 }
 
 .login_item_input {
-  height: 32px;
+  height: 48px;
   font-size: 0.75rem;
   padding: 0.5rem 0.25rem;
 }
 
 .login_btn {
-  max-height: 32px;
-  font-size: 0.75rem;
+  font-size: 1.1rem;
   padding: 0.1rem 0.25rem;
 }
 

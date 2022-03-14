@@ -111,8 +111,9 @@ const ConnectedLogin = ({user,addUser}) => {
     return (
         <section>
             <form action="" onSubmit={handleUserLoginSubmit}>
-                <div className="container">
-                    <div className="login_container col-md-3 col-sm-12">
+                <div className="container login_container">
+                    <div className="mainnavbar-title">Etsy</div>
+                    <div className="col-md-12 col-sm-12">
                         <h1 className="login__header">Log In</h1>
                     <div className="login_item_container form-group">
                         <label htmlFor="useremail" className="login_item_label">Email</label>
