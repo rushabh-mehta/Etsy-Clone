@@ -4,6 +4,8 @@ import {useNavigate} from "react-router-dom";
 import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
 import MainFooter from './MainFooter';
+import MainNavbar from './MainNavbar';
+import '../styles/cart.css';
 
 
 const CART_ITEMS_API = "/api/cart/get/";
@@ -106,10 +108,16 @@ const Cart = () => {
 
   return (
     <div>
+      <MainNavbar/>
+      <div className="container cart-heading">
+        <h1>Your Cart</h1>
+      </div>
       {cartItems && cartItems.length && cartItems.map((eachCartItem)=>{
         return <CartItem currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
       })}
-       <Button variant="primary" onClick={placeOrder}>Order</Button>
+       <div className="container">
+            <Button className="cart_order-btn" onClick={placeOrder}>Place Order</Button>
+       </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import authapi from '../services/authpost';
 import { Form, Button } from 'react-bootstrap';
 import config from '../config/config';
+import '../styles/cartitem.css';
 
 const REMOVE_ITEM_CART_API = "/api/cart/delete";
 const UPDATE_ITEM_QUANTITY_CART_API = "/api/cart/item/quantity";
@@ -71,23 +72,29 @@ const CartItem = ({ item, cartItems, setCartItems,currency }) => {
     }
     return (
         <div>
-            <div>
-                <div className="col-md-12">
-                    <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="profile_picture"></img></div>
+            <div className="container cartitem-container">
+                <div className="row">
+                    <div className="col-md-5">
+                        <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="cartitem_display_picture"></img></div>
+                    </div>
+                    <div className="mrgn-tp col-md-4">
+                        <div>
+                            <span className="overview-name">{item.itemName}</span>
+                        </div>
+                        <div>{item.itemCategory}</div>
+                        <div>{currency.name+" "+item.itemPrice}</div>
+                        <div>{item.itemDescription}</div>
+                        <div className="homeitem_sales_count">{(item.itemQuantity-item.itemSalesCount)+" pieces available!"}</div>
+                        <div className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="quantity">Quantity</Form.Label>
+                        <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
+                    </Form.Group>
+                    <Button className="cartitem_remove-btn" onClick={removeItem}>
+                        Delete
+                    </Button>
+                    </div>
                 </div>
-                <div>{item.displayPicture}</div>
-                <div>{item.itemName}</div>
-                <div>{item.itemCategory}</div>
-                <div>{currency.name+" "+item.itemPrice}</div>
-                <div>{item.itemQuantity}</div>
-                <div>{item.itemDescription}</div>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="quantity">Quantity</Form.Label>
-                    <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
-                </Form.Group>
-                <Button variant="danger" onClick={removeItem}>
-                    Delete
-                </Button>
             </div>
         </div>
     )
