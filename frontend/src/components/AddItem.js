@@ -13,7 +13,7 @@ const GET_CATEGORIES_API = "/api/category/";
 const ADD_ITEM_API = "/api/item/add";
 const ADD_CATEGORY_API = "/api/category/add";
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
-const UPLOAD_PROFILE_PIC_API = "api/item/dsiplay-picture/upload";
+const UPLOAD_ITEM_DISPLAY_PIC_API = "api/item/dsiplay-picture/upload";
 
 
 const AddShopItem = ({setItems,items,id,currency}) => {
@@ -110,14 +110,13 @@ const AddShopItem = ({setItems,items,id,currency}) => {
         setShow(true)
     };
 
-    const profilePictureSelected = async (event) => {
-        const userBrowserStorage = JSON.parse(localStorage.getItem("user"));
+    const itemDisplayPictureSelected = async (event) => {
         let formData = new FormData();
         const image = event.target.files[0];
         formData.append("image", image);
-        formData.append("userId",userBrowserStorage.id);
+        formData.append("itemId",id);
         try{
-            const response = await authapi.post(UPLOAD_PROFILE_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
+            const response = await authapi.post(UPLOAD_ITEM_DISPLAY_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
             if(response && response.data && response.data.imageKey){
                 setDisplayPicture(response.data.imageKey);
             }else{
@@ -154,7 +153,7 @@ const AddShopItem = ({setItems,items,id,currency}) => {
                     <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="view_profile_picture"></img></div>
                     <div>
                         <label className="viewprofile-editimg"htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
-                        <input data-testid="profile-pic" onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
+                        <input data-testid="profile-pic" onChange={itemDisplayPictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
                     </div>
                 </div>
                 <Form.Group className="mb-3">

@@ -1,10 +1,12 @@
 import React,{useState, useEffect} from 'react';
-import {InputGroup, FormControl, Button, Modal, Form} from 'react-bootstrap';
+import {InputGroup, Collapse, Button, Modal, Form} from 'react-bootstrap';
 import authapi from '../services/authpost';
 import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 import config from '../config/config';
+import '../styles/editshopitem.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const GET_CATEGORIES_API = "/api/category/";
 const EDIT_ITEM_API = "/api/item/edit";
@@ -12,7 +14,6 @@ const ADD_CATEGORY_API = "/api/category/add";
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 const UPLOAD_ITEM_DISPLAY_PIC_API = "api/item/display-picture/upload";
 
-//
 
 const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDisplayPicture,category,setCategory,description,setDescription,price,setPrice,quantity,setQuantity,currency}) => {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
     const [show, setShow] = useState(false);
     const [editingItem, setEditingItem] = useState(false);
     const [newCategory,setNewCategory] = useState("");
+    const [categoryOpen, setCategoryOpen] = useState(false);
 
     
     const getCategories = async ({id}) => {
@@ -138,10 +140,10 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         <Modal.Body>
             <Form>
                 <div className="col-md-12">
-                    <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="profile_picture"></img></div>
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="view_profile_picture"></img></div>
                     <div>
-                        <label htmlFor="item-display-pic"><FontAwesomeIcon icon={faCamera}/></label>
-                        <input onChange={itemDisplayPictureSelected} style={{display: "none"}} id="item-display-pic" type="file"></input>
+                        <label className="viewprofile-editimg"htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
+                        <input data-testid="profile-pic" onChange={itemDisplayPictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
                     </div>
                 </div>
                 <Form.Group className="mb-3">
@@ -166,11 +168,15 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
                             })
                         }
                     </Form.Select>
-                </Form.Group>
-                 <Form.Group className="mb-3">
-                    <Form.Label>New Category</Form.Label>
-                    <Form.Control value={newCategory} onChange={(e)=>{setNewCategory(e.target.value)}} type="text" placeholder="Add a new category" />
-                    <Button variant="primary" onClick={addCategory}>Add Category</Button>
+                    <span className="additem-category-collapse" onClick={() => setCategoryOpen(!categoryOpen)} aria-controls="example-collapse-text" aria-expanded={categoryOpen}>
+                        Add a new category
+                    </span>
+                    <Collapse in={categoryOpen}>
+                        <Form.Group size="sm" className="mb-3">
+                            <Form.Control size="sm" value={newCategory} onChange={(e)=>{setNewCategory(e.target.value)}} type="text" placeholder="Enter category name" />
+                            <Button className="add-category-btn" size="sm" variant="secondary" onClick={addCategory}>Add</Button>
+                        </Form.Group>
+                    </Collapse>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
