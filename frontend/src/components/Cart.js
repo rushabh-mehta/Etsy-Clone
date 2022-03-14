@@ -18,12 +18,13 @@ const GET_USER_CURRENCY_API = "api/currency/";
 
 
 const Cart = () => {
-  const navigate = useNavigate();
-  const [cartItems,setCartItems] = useState([]);
-  const [currency,setCurrency] = useState({});
+    const navigate = useNavigate();
+    const [cartItems,setCartItems] = useState([]);
+    const [currency,setCurrency] = useState({});
     const [cartCost,setCartCost] = useState(0);
     const [invalidOrder, setInvalidOrder] = useState([]);
     const [canPlaceOrder, setCanPlaceOrder] = useState(true);
+    const [orderPlaceErrorMsg, setOrderPlaceErrorMsg] = useState("");
  const getUserCurrency = async ({currency})=>{
       try{
           const response = await authapi.get(GET_USER_CURRENCY_API+currency);
@@ -76,12 +77,15 @@ const Cart = () => {
   }
 
   const placeOrder = async ()=>{
+      setOrderPlaceErrorMsg("");
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
       const data = {};
       data.userId = user.id;
       if(!token || !user){
           navigate(LOGIN_PAGE, {replace:true});
+      }else if(!user.address || !user.country || !user.city){
+        setOrderPlaceErrorMsg("Please specify complete address details in your profile section before placing order!");
       }else{
           try{
               const response = await authapi.post(PLACE_ORDER_API,data);
@@ -137,7 +141,8 @@ const Cart = () => {
       })}
        <div className="container">
             <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder}>Place Order</Button>
-            <span className="cart-cost">{"Total Cost: "+currency.name+" "}</span>
+            <span className="cart-cost">{"Total Cost: "+(currency && currency.name)+" "}</span>
+            {orderPlaceErrorMsg && <div className="addcart-error">{orderPlaceErrorMsg}</div>}
        </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>

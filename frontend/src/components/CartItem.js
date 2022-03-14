@@ -92,7 +92,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                             <span className="overview-name">{item.itemName}</span>
                         </div>
                         <div>{item.itemCategory}</div>
-                        <div>{currency.name+" "+item.itemPrice}</div>
+                        <div>{(currency && currency.name)+" "+item.itemPrice}</div>
                         <div>{item.itemDescription}</div>
                         <div className="homeitem_sales_count">{(item.itemQuantity-item.itemSalesCount)+" pieces available!"}</div>
                         <div className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
@@ -104,7 +104,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                     <Button className="cartitem_remove-btn" onClick={removeItem}>
                         Delete
                     </Button>
-                        <span className="cartitem-cost">{"Cost: "+currency.name+" "+item.itemPrice*orderQuantity}</span>
+                        <span className="cartitem-cost">{"Cost: "+(currency && currency.name)+" "+item.itemPrice*orderQuantity}</span>
                     </div>
                 </div>
             </div>
