@@ -15,7 +15,7 @@ class Order{
 
     static getOrderItems = async ({userId})=>{
         return new Promise((resolve, reject) => {
-            const getUserOrdersSqlQuery = `select * from ${tableName} WHERE userId='${userId}'`;
+            const getUserOrdersSqlQuery = `select * from ${tableName} WHERE userId='${userId}' `;
             con.query(getUserOrdersSqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
@@ -33,7 +33,7 @@ class Order{
                         }
                     });
                     orderIdsQuery+=")";
-                    const sqlQuery = `select * from ${orderItemTableName} where orderId IN ${orderIdsQuery}`;
+                    const sqlQuery = `select * from ${orderItemTableName} where orderId IN ${orderIdsQuery} ORDER BY date DESC,orderId DESC`;
                     con.query(sqlQuery, (error, results) => {
                         if (error) {
                             console.log(error);

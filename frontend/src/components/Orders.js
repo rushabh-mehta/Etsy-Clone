@@ -3,6 +3,8 @@ import OrderItem from './OrderItem';
 import {useNavigate} from "react-router-dom";
 import authapi from '../services/authpost';
 import MainFooter from './MainFooter';
+import MainNavbar from './MainNavbar';
+import '../styles/orders.css';
 
 
 const ORDER_ITEMS_API = "/api/order/get/";
@@ -75,6 +77,10 @@ const Orders = () => {
 
   return (
     <div>
+      <MainNavbar/>
+      <div className="container cart-heading">
+        <h1>Your Orders</h1>
+      </div>
       {orderItems && orderItems.length && orderItems.map((eachOrderItem)=>{
         return <OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/>
       })}
