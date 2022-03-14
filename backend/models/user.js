@@ -5,11 +5,11 @@ const tableName = "user";
 
 class User{
 
-    static addUser = async ({id,name, email, password})=>{
+    static addUser = async ({id,name, email, password, country, currency, profilePicture})=>{
         try{
             return new Promise((resolve, reject)=>{
                 try{
-                    const sqlQuery = `INSERT INTO ${tableName} (id,name,email,password) VALUES ("${id}","${name}","${email}","${password}")`;
+                    const sqlQuery = `INSERT INTO ${tableName} (id,name,email,password,country,currency,profilePicture) VALUES ("${id}","${name}","${email}","${password}","${country}","${currency}","${profilePicture}")`;
                     con.query(sqlQuery,(error, results)=>{
                         if(error){
                             console.log(error);

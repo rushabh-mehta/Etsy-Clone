@@ -27,8 +27,10 @@ router.post("/", async (req, res) => {
             const encryptedPassword = await encrypt.cryptPassword(password);
             userRegObj.password = encryptedPassword;
             userRegObj.id = uuidv4();
+            userRegObj.country = 1;
+            userRegObj.currency = 1;
+            userRegObj.profilePicture = '3d07ffec355de8f5d8a483d2085b4a4e';
             const result = await User.addUser(userRegObj);
-            
             delete userRegObj.password;
             // Create token
             const token = jwt.sign(
