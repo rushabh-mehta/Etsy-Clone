@@ -19,11 +19,11 @@ function App() {
         <Route exact path="register" element={<Register/>} />
         <Route exact path="login" element={<Login/>} />
         <Route exact path="home" element={<Home/>}/>
+        <Route exact path="/" element={<Home/>}/>
         <Route exact path="view-profile" element={<ViewProfile/>}/>
         <Route exact path="edit-profile" element={<EditProfile/>}/>
         <Route exact path="shop/create" element={<ShopCreate/>}/>
         <Route exact path="shop/home/:shopId" element={<ShopHome/>}/>
-        <Route exact path="/" element={<Home/>}/>
         <Route exact path="item/overview/:id" element={<ItemOverview/>}/>
         <Route exact path="cart" element={<Cart/>}/>
         <Route exact path="orders" element={<Orders/>}/>

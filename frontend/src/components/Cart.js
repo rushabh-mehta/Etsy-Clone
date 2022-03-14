@@ -22,7 +22,8 @@ const Cart = () => {
   const [cartItems,setCartItems] = useState([]);
   const [currency,setCurrency] = useState({});
     const [cartCost,setCartCost] = useState(0);
-
+    const [invalidOrder, setInvalidOrder] = useState([]);
+    const [canPlaceOrder, setCanPlaceOrder] = useState(true);
  const getUserCurrency = async ({currency})=>{
       try{
           const response = await authapi.get(GET_USER_CURRENCY_API+currency);
@@ -51,8 +52,12 @@ const Cart = () => {
               if(response && response.data){
                   if(response.data.success){
                       if(response.data.items){
-                          console.log(response.data.items);
                           setCartItems(response.data.items);
+                          let invalidOrderCopy = [];
+                          response.data.items.forEach((item)=>{
+                                invalidOrderCopy.push(false);
+                          })
+                          setInvalidOrder(invalidOrderCopy);
                       }else{
                           setCartItems([]);
                       }
@@ -108,17 +113,30 @@ const Cart = () => {
       }
   },[]);
 
+  useEffect(() => {
+        let flag = false;
+        invalidOrder.forEach((eachOrderInvalid)=>{
+            if(eachOrderInvalid){
+                setCanPlaceOrder(false);
+                flag=true;
+            }
+      })
+      if(!flag){
+          setCanPlaceOrder(true);
+      }
+  },[invalidOrder]);
+
   return (
     <div>
       <MainNavbar/>
       <div className="container cart-heading">
         <h1>Your Cart</h1>
       </div>
-      {cartItems && cartItems.length && cartItems.map((eachCartItem)=>{  
-        return <CartItem currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
+      {cartItems && cartItems.length && cartItems.map((eachCartItem,index)=>{  
+        return <CartItem index={index} invalidOrder={invalidOrder} setInvalidOrder={setInvalidOrder} currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
       })}
        <div className="container">
-            <Button className="cart_order-btn" onClick={placeOrder}>Place Order</Button>
+            <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder}>Place Order</Button>
             <span className="cart-cost">{"Total Cost: "+currency.name+" "}</span>
        </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>

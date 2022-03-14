@@ -10,7 +10,7 @@ const UPDATE_ITEM_QUANTITY_CART_API = "/api/cart/item/quantity";
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 
 
-const CartItem = ({ item, cartItems, setCartItems,currency }) => {
+const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCartItems,currency }) => {
     const navigate = useNavigate();
     const [orderQuantity, setOrderQuantity] = useState(item.orderQuantity);
     useEffect(() => {
@@ -23,26 +23,36 @@ const CartItem = ({ item, cartItems, setCartItems,currency }) => {
 
     useEffect(async () => {
         if (orderQuantity) {
-            item.orderQuantity = orderQuantity;
-            try {
-                const user = JSON.parse(localStorage.getItem("user"));
-                const data = {};
-                console.log(item);
-                data.cartId = item.cartId;
-                data.userId = user.id;
-                data.itemId = item.itemId;
-                data.orderQuantity = orderQuantity;
-                const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API, data);
-                if (response && response.data && response.data.success) {
-                    let filteredCartItems = cartItems.filter((eachCartItem) => {
-                        return eachCartItem.cartId != item.cartId;
-                    });
-                    setCartItems([...filteredCartItems, item]);
-                } else {
-                    console.log("Error updating quantity");
-                }
-            } catch (e) {
+            if((item.itemQuantity-item.itemSalesCount)<orderQuantity){
+                let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
+                invalidOrderCopy[index] = true;
+                setInvalidOrder(invalidOrderCopy);
+            }else{
+                let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
+                invalidOrderCopy[index] = false;
+                setInvalidOrder(invalidOrderCopy);
+                item.orderQuantity = orderQuantity;
+                try {
+                    const user = JSON.parse(localStorage.getItem("user"));
+                    const data = {};
+                    data.cartId = item.cartId;
+                    data.userId = user.id;
+                    data.itemId = item.itemId;
+                    data.orderQuantity = orderQuantity;
+                    const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API, data);
+                    if (response && response.data && response.data.success) {
+                        cartItems.forEach((eachCartItem) => {
+                            if(eachCartItem.cartId == item.cartId){
+                                eachCartItem.orderQuantity = item.orderQuantity;  
+                            }
+                        });
+                        setCartItems([...cartItems]);
+                    } else {
+                        console.log("Error updating quantity");
+                    }
+                } catch (e) {
 
+                }
             }
         }
     }, [orderQuantity]);
@@ -89,6 +99,7 @@ const CartItem = ({ item, cartItems, setCartItems,currency }) => {
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
+                        {(item.itemQuantity-item.itemSalesCount)<orderQuantity && <div class="mrgn-tp addcart-error">Out of Stock!</div>}
                     </Form.Group>
                     <Button className="cartitem_remove-btn" onClick={removeItem}>
                         Delete
