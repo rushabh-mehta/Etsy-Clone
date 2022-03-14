@@ -20,7 +20,7 @@ const REMOVE_FAVORITE_ITEM_API = "api/favoriteitem/remove";
 const GET_USER_CURRENCY_API = "api/currency/";
 const SHOP_HOME_PAGE = "/shop/home/";
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
-
+const HOME_PAGE = "/";
 
 const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,gettingCurrency,itemsLoading}) => {
     const [item,setItem] = useState({});
@@ -85,7 +85,10 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
                             setAddToCartSuccessMsg("Item added to cart successfully!");
                             setTimeout(()=>{
                                 setAddToCartSuccessMsg("");
-                            },5000);
+                            },1500);
+                            setTimeout(()=>{
+                                navigate(HOME_PAGE);
+                            },1500);
                         }else{
                         console.log(response);
                         }
@@ -225,9 +228,9 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
                         <Form.Control className="add-cart-quantity" value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
                     </Form.Group>
                     <Button className="addtocart-btn" onClick={addToCart}>Add to Cart</Button>
-                    {addToCartSuccessMsg && <div>{addToCartSuccessMsg}</div>}
-                    {itemExistsMsg && <div>{itemExistsMsg}</div>}
-                    {notEnoughStockMessage && <div>{notEnoughStockMessage}</div>}
+                    {addToCartSuccessMsg && <div className="addcart-success">{addToCartSuccessMsg}</div>}
+                    {itemExistsMsg && <div className="addcart-error">{itemExistsMsg}</div>}
+                    {notEnoughStockMessage && <div className="addcart-error">{notEnoughStockMessage}</div>}
                     </div>
                 </div>
             </div>

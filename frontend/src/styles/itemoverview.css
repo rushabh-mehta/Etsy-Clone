@@ -28,3 +28,13 @@
 .overview-shop {
   color: grey;
 }
+
+.addcart-error {
+  margin-top: 5px;
+  color: red;
+}
+
+.addcart-success {
+  margin-top: 5px;
+  color: green;
+}
