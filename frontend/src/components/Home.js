@@ -132,13 +132,13 @@ const Home = () => {
             <div className="filter-row">
               <span className="filter-col">
                 <Form.Label size="sm" className="price-label" htmlFor="minprice">Price</Form.Label>
-                <Form.Control size="sm" className="price-filter" value={minPrice} onChange={(e)=>{setMinPrice(e.target.value)}}  type="number" id="minprice" placeholder="Low"/>
+                <Form.Control size="sm" className="price-filter" value={minPrice} onChange={(e)=>{setMinPrice(e.target.value)}}  type="number" id="minprice" name="minprice" placeholder="Low"/>
                 <Form.Label size="sm" className="price-label" htmlFor="maxprice">To</Form.Label>
                 <Form.Control size="sm" className="price-filter" value={maxPrice} onChange={(e)=>{setMaxPrice(e.target.value)}} type="number" id="maxprice" placeholder="High"/>
               </span>
               <span className="filter-col">
-                <Form.Label size="sm">Sort By: </Form.Label>
-                <Form.Select size="sm" className="sort-filter" value={sortBy} onChange={(e)=>{setSortBy(e.target.value)}}>
+                <Form.Label htmlFor="sort-homeitem" size="sm">Sort By: </Form.Label>
+                <Form.Select size="sm" className="sort-filter" value={sortBy} onChange={(e)=>{setSortBy(e.target.value)}} id="sort-homeitem" name="sort-homeitem">
                   <option value="">Relevancy</option>
                   <option value="price">Price</option>
                   <option value="quantity">Quantity</option>

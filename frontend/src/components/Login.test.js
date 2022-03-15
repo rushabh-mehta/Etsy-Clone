@@ -4,6 +4,8 @@ import Login from "../components/Login";
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
+import { Provider } from "react-redux";
+import store from "../redux/store.js";
 
 const server = setupServer(
   rest.post('http://localhost:3000/api/login/', (req, res, ctx) => {
@@ -28,7 +30,9 @@ test("testing login page", async () => {
   render(
     <React.StrictMode>
       <BrowserRouter>
-          <Login />
+       <Provider store={store}>
+         <Login />
+       </Provider>
       </BrowserRouter>
     </React.StrictMode>
   );

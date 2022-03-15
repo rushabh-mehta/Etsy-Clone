@@ -218,11 +218,11 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
                             {!item.favorite && <span><FontAwesomeIcon onClick={addFavoriteItem} color="red" icon={faHeartRegular}/></span>}
                         </div>
                         <Link className="overview-shop" to={SHOP_HOME_PAGE+item.shopId}>{item.shopName}</Link>
-                        <div>{item.categoryName}</div>
-                        <div>{currency.name+" "+item.itemPrice}</div>
-                        <div>{item.itemDescription}</div>
-                        <div className="homeitem_sales_count">{(item.itemQuantity-item.itemSalesCount)+" pieces available!"}</div>
-                        <div className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
+                        <div data-testid="itemoverview-name">{item.categoryName}</div>
+                        <div data-testid="itemoverview-price">{currency.name+" "+item.itemPrice}</div>
+                        <div data-testid="itemoverview-description">{item.itemDescription}</div>
+                        <div data-testid="itemoverview-quantity" className="homeitem_sales_count">{(item.itemQuantity-item.itemSalesCount)+" pieces available!"}</div>
+                        <div data-testid="itemoverview-salescount" className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
                     <Form.Group className="mb-3 mrgn-tp">
                         <Form.Label className="add-cart-quantity" htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control className="add-cart-quantity" value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
