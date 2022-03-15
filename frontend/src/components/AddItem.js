@@ -13,7 +13,7 @@ const GET_CATEGORIES_API = "/api/category/";
 const ADD_ITEM_API = "/api/item/add";
 const ADD_CATEGORY_API = "/api/category/add";
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
-const UPLOAD_ITEM_DISPLAY_PIC_API = "api/item/dsiplay-picture/upload";
+const UPLOAD_ITEM_DISPLAY_PIC_API = "api/item/display-picture/upload";
 
 
 const AddShopItem = ({setItems,items,id,currency}) => {
