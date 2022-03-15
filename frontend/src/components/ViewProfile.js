@@ -198,7 +198,7 @@ const ViewProfile = () => {
             {!gettingCurrency && !gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
                     <div className="row">
                         <div className="col-md-2 col-sm-12">
-                            <div><img src={GET_PROFILE_PIC_API+user.profilePicture} className="view_profile_picture"></img></div>
+                            <div><img src={(user && user.profilePicture) ? (GET_PROFILE_PIC_API+user.profilePicture) : ""} className="view_profile_picture"></img></div>
                             <div>
                                 <label className="viewprofile-editimg"htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
                                 <input data-testid="profile-pic" onChange={profilePictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>
