@@ -8,7 +8,7 @@ class Shop{
 
     static getUserShop = async ({userId})=>{
         return new Promise((resolve, reject) => {
-            const sqlQuery = `select name,owner,displayPicture from ${tableName} where owner='${userId}'`;
+            const sqlQuery = `select id,name,owner,displayPicture from ${tableName} where owner='${userId}'`;
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);

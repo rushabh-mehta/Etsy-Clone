@@ -40,7 +40,7 @@ const ConnectedMainNavBar = ({searchQuery, getOtherFilterItems, setSearchQuery,r
                     if(response.data.success){
                         if(response.data.shopFound){
                             const shop = response.data.shop;
-                            navigate(SHOP_HOME_PAGE+user.shop);
+                            navigate(SHOP_HOME_PAGE+shop.id);
                         }else{
                             navigate(SHOP_CREATE_PAGE);
                         }

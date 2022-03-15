@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 const SHOP_NAME_AVAIL_API = "api/shop/name";
 const SHOP_CREATE_API = "api/shop/create";
-const SHOP_HOME_PAGE = "/shop/home";
+const SHOP_HOME_PAGE = "/shop/home/";
 
 const CreateShop = () => {
   const navigate = useNavigate();
@@ -56,8 +56,9 @@ const CreateShop = () => {
       try{
         const response = await authapi.post(SHOP_CREATE_API,reqBody);
         if(response && response.data && response.data.success){
+          let shopId = response.data.shop.insertId;
           setCreatingShop(false);
-          navigate(SHOP_HOME_PAGE);
+          navigate(SHOP_HOME_PAGE+shopId);
         }else{
           console.log("Some unexpected error!");
           setCreatingShop(false);
@@ -78,8 +79,8 @@ const CreateShop = () => {
               <Navbar.Brand className="shopcreate-mainnavbar-title" href="/home">Etsy</Navbar.Brand>
           </Container>
       </Navbar>
-      <div class="create-shop-title">Name your Shop</div>
-      <div class="create-shop-subtitle">Choose a memorable name that reflects your style</div>
+      <div className="create-shop-title">Name your Shop</div>
+      <div className="create-shop-subtitle">Choose a memorable name that reflects your style</div>
         <div className="shop-create-name">
           <InputGroup className="mb-3">
             <FormControl

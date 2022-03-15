@@ -15,6 +15,7 @@ const { uploadFile, getFileStream } = require('../services/s3');
 
 
 router.get("/user/:id", auth, async (req, res) => {
+    console.log("==========here");
     const response = {};
     const data = {};
     data.userId = req.params.id;
@@ -129,6 +130,7 @@ router.get("/:userId", auth, async (req, res) => {
 });
 
 router.post("/home/", auth, async (req, res) => {
+    console.log("==========here2");
     const response = {};
     const data = req.body;
     try{
