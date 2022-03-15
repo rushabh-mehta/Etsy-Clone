@@ -81,9 +81,14 @@ const Orders = () => {
       <div className="container cart-heading">
         <h1>Your Orders</h1>
       </div>
-      {orderItems && orderItems.length && orderItems.map((eachOrderItem)=>{
-        return <OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/>
-      })}
+        <div className="order-items">
+            {orderItems && orderItems.map((eachOrderItem)=>{
+                return <OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/>
+                })}
+            {!orderItems || !orderItems.length && 
+                <div className="container"> No past orders!</div>
+            }
+        </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )

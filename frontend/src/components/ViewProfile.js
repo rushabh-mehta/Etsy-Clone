@@ -218,7 +218,7 @@ const ViewProfile = () => {
                                     {user && user.email}
                                 </div>
                                 <div data-testid="user-gender" className="viewprofile_usergendercountry col-md-12 col-sm-12">
-                                    {user && user.gender}{countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name ? countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && ", "+countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name:""}
+                                    {user && user.gender && user.gender+", "}{countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name ? countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name:""}
                                 </div>
                                 <div data-testid="user-dob" className="viewprofile_userdob col-md-12 col-sm-12">
                                     {user && <span>{user.dob}</span>}
@@ -250,10 +250,13 @@ const ViewProfile = () => {
                         </InputGroup>
                     </span>
                 </div>
-                <div>
+                <div className="viewprofile-favorite-items">
                     {favoriteItems && favoriteItems.map((eachFavoriteItem,index)=>{
                         return <FavoriteItem currency={currency} index={index} favoriteItems={favoriteItems} setFavoriteItems={setFavoriteItems} key={eachFavoriteItem.favoriteItemId} item={eachFavoriteItem}/>
                     })}
+                    {!favoriteItems || !favoriteItems.length &&
+                        <div className="cart-heading">No favorite items added!</div>
+                    }
                 </div>
             </div>}
             {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}

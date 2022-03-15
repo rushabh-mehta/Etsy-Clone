@@ -22,3 +22,7 @@
   text-decoration: underline;
   font-style: italic;
 }
+
+.cart-items-container {
+  min-height: 100vh;
+}

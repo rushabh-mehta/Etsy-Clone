@@ -147,14 +147,19 @@ const Cart = () => {
       <div className="container cart-heading">
         <h1>Your Cart</h1>
       </div>
-      {cartItems && cartItems.length && cartItems.map((eachCartItem,index)=>{  
-        return <CartItem index={index} invalidOrder={invalidOrder} setInvalidOrder={setInvalidOrder} currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
-      })}
-       <div className="container">
-            <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder}>Place Order</Button>
+      <div className="cart-items-container">
+        {cartItems && cartItems.map((eachCartItem,index)=>{  
+            return <CartItem index={index} invalidOrder={invalidOrder} setInvalidOrder={setInvalidOrder} currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
+            })}
+        {!cartItems || !cartItems.length &&
+            <div className="container cart-heading ">Cart Empty!</div>
+        }
+        <div className="container">
+            <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder || !cartItems || !cartItems.length}>Place Order</Button>
             <span className="cart-cost">{"Total Cost: "+(currency && currency.name)+" "+totalOrderCost}</span>
             {orderPlaceErrorMsg && <div className="addcart-error">{orderPlaceErrorMsg}</div>}
-       </div>
+        </div>
+        </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
   )

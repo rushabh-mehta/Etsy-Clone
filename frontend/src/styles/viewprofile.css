@@ -102,3 +102,7 @@
 .favitems-container {
   margin-top: 50px;
 }
+
+.viewprofile-favorite-items {
+  min-height: 100vh;
+}

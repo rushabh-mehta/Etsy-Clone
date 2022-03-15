@@ -154,11 +154,17 @@ const Home = () => {
             </div>
           </Form.Group>
         </div>
+        <div className="home-items-container">
         {
-          !gettingCurrency && !itemsLoading && items && items.length && items.map((eachItem,index)=>{
+          !gettingCurrency && !itemsLoading && items && items.map((eachItem,index)=>{
             return <HomeItem searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems} setItems={setItems} gettingCurrency={gettingCurrency} itemsLoading={itemsLoading} currency={currency} key={eachItem.id} setItems={setItems} items={items} index={index} item={eachItem} />
           })
         }
+        {
+          !gettingCurrency && !itemsLoading && (!items || !items.length) &&
+          <div className="cart-heading">No items to show!</div>
+        }
+        </div>
       </div>
       {!gettingCurrency && !itemsLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
     </div>

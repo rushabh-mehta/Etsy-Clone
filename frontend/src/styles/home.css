@@ -54,3 +54,7 @@
   background: black;
   color: white;
 }
+
+.home-items-container {
+  min-height: 100vh;
+}

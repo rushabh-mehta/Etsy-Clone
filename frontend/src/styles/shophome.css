@@ -21,3 +21,7 @@
 .shop-name {
   margin-top: 30px;
 }
+
+.shop-items-container {
+  min-height: 100vh;
+}

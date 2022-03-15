@@ -162,10 +162,13 @@ const ShopHome = () => {
                         <AddShopItem currency={currency} setItems={setItems} items={items} id={shop.id}/>
                     }
                     </div>
-                    <div>
-                        {items && items.length && items.map((eachItem,index)=>{
+                <div className="shop-items-container">
+                        {items && items.map((eachItem,index)=>{
                             return <Item editRights={editRights} currency={currency} key={eachItem.id} index={index} setItems={setItems} items={items}/>
                         })}
+                        {!items || !items.length &&
+                            <div className="mrgn-tp cart-heading">No items added to shop!</div>
+                        }
                     </div>
                 </div>
             </div>
