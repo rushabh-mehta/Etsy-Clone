@@ -86,9 +86,6 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
                             setTimeout(()=>{
                                 setAddToCartSuccessMsg("");
                             },1500);
-                            setTimeout(()=>{
-                                navigate(HOME_PAGE);
-                            },1500);
                         }else{
                         console.log(response);
                         }

@@ -27,6 +27,8 @@ const Cart = ({searchQuery,setSearchQuery}) => {
     const [canPlaceOrder, setCanPlaceOrder] = useState(true);
     const [orderPlaceErrorMsg, setOrderPlaceErrorMsg] = useState("");
     const [totalOrderCost,setTotalOrderCost] = useState(0);
+    const [orderPlaceSuccessMsg,setOrderPlaceSuccessMsg] = useState("");
+
  const getUserCurrency = async ({currency})=>{
       try{
           const response = await authapi.get(GET_USER_CURRENCY_API+currency);
@@ -81,6 +83,7 @@ const Cart = ({searchQuery,setSearchQuery}) => {
 
   const placeOrder = async ()=>{
       setOrderPlaceErrorMsg("");
+      setOrderPlaceSuccessMsg("");
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
       const data = {};
@@ -94,7 +97,11 @@ const Cart = ({searchQuery,setSearchQuery}) => {
               const response = await authapi.post(PLACE_ORDER_API,data);
               if(response && response.data){
                   if(response.data.success){
-                    navigate(ORDERS_PAGE, {replace:true});
+                    setOrderPlaceSuccessMsg("Order placed successfully!");  
+                    setTimeout(()=>{
+                        setOrderPlaceSuccessMsg("");
+                        navigate(ORDERS_PAGE, {replace:true});
+                    },2500);
                   }else{
                     console.log("Error placing order");
                   }
@@ -163,6 +170,7 @@ const Cart = ({searchQuery,setSearchQuery}) => {
             <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder || !cartItems || !cartItems.length}>Place Order</Button>
             <span className="cart-cost">{"Total Cost: "+(currency && currency.name)+" "+totalOrderCost}</span>
             {orderPlaceErrorMsg && <div className="addcart-error">{orderPlaceErrorMsg}</div>}
+            {orderPlaceSuccessMsg && <div className="addcart-success">{orderPlaceSuccessMsg}</div>}
         </div>
         </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
