@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 const GET_OTHER_ITEMS_API = "api/item/other";
 const GET_OTHER_ITEMS_FILTER_API = "api/item/other/filter";
 const GET_USER_CURRENCY_API = "api/currency/";
+const GET_USER_SHOP_API = "/api/shop/user/";
 
 
 const Home = ({searchQuery,setSearchQuery}) => {
@@ -26,7 +27,8 @@ const Home = ({searchQuery,setSearchQuery}) => {
   const [inStock,setInStock] = useState(false);
   const [currency,setCurrency] = useState({});
   const [gettingCurrency, setGettingCurrency] = useState(true);
-
+  const [shop,setShop] = useState({});
+  const [shopLoading,setShopLoading] = useState(true);
 
   const getOtherItems = async ()=>{
     setItemsLoading(true);
@@ -62,8 +64,9 @@ const Home = ({searchQuery,setSearchQuery}) => {
     filterData.minPrice = minPrice;
     filterData.maxPrice = maxPrice;
     filterData.inStock = inStock;
+    console.log(inStock);
     filterData.sortBy=sortBy;
-    filterData.shop = user.shop;
+    filterData.shop = shop.id;
     filterData.userId = user.id;
     try{
       const response = await authapi.post(GET_OTHER_ITEMS_FILTER_API,filterData);
@@ -110,6 +113,25 @@ const Home = ({searchQuery,setSearchQuery}) => {
       }
   }
 
+  const getUserShop = async ()=>{
+    setShopLoading(true);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user.id; 
+    try{
+        const response = await authapi.get(GET_USER_SHOP_API+userId);
+        if(response && response.data && response.data.success && response.data.shopFound){
+            setShop(response.data.shop);
+            setShopLoading(false);
+        }else{
+            console.log("Some unexpected error occurred");
+            setShopLoading(false);    
+        }
+    }catch(e){
+        console.log(e);
+        setShopLoading(false);
+    }
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user"));
@@ -117,6 +139,7 @@ const Home = ({searchQuery,setSearchQuery}) => {
         navigate("/login", {replace:true});
     }else{
       getUserCurrency(user);
+      getUserShop();
       if(searchQuery && searchQuery.length){
         getOtherFilterItems();
       }else{
@@ -149,7 +172,7 @@ const Home = ({searchQuery,setSearchQuery}) => {
                 </Form.Select>
               </span>
               <span className="filter-col">
-                <Form.Check size="sm" className="exclude-filter" value={inStock} onChange={(e)=>{setInStock(e.target.value)}} type="checkbox" label="Show in stock items only" />
+                <Form.Check size="sm" className="exclude-filter" value={inStock} onChange={(e)=>{console.log(inStock);setInStock(e.target.checked)}} type="checkbox" label="Show in stock items only" />
               </span>
               <span className="filter-col">
                 <Button size="sm" className="filter-button" onClick={getOtherFilterItems}>Filter</Button>

@@ -146,6 +146,7 @@ class Item{
             if(maxPrice){
                 sqlQuery+=` AND price<=${maxPrice}`; 
             }
+            console.log(typeof inStock);
             if(inStock){
                 sqlQuery+=` AND quantity>salesCount`;
             }
@@ -158,6 +159,7 @@ class Item{
             if(sortBy==="salesCount"){
                 sqlQuery+=` ORDER BY salesCount DESC`;
             }
+            console.log("======="+sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);

@@ -96,38 +96,6 @@ router.post("/create", auth, async (req, res) => {
     }
 });
 
-router.get("/:userId", auth, async (req, res) => {
-    const response = {};
-    const data = {};
-    data.userId = req.params.userId;
-    try{
-        const result = await Shop.getShopByUser(data);
-        const itemData = {};
-        itemData.shopId = result.shop.id;
-        const itemResult = await Item.getShopItems(itemData);
-        if(result && result.shopFound && result.shop){
-            response.shop = result.shop;
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            console.log(itemResult);
-            response.shopItems = itemResult;
-            return res.status(200).send(response);
-        }else{
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
-        }
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
-});
-
 router.post("/home/", async (req, res) => {
     const response = {};
     const data = req.body;
