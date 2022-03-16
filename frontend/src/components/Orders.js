@@ -10,8 +10,9 @@ import '../styles/orders.css';
 const ORDER_ITEMS_API = "/api/order/get/";
 const LOGIN_PAGE = "/login";
 const GET_USER_CURRENCY_API = "api/currency/";
+const HOME_PAGE = "/";
 
-const Orders = () => {
+const Orders = ({searchQuery,setSearchQuery}) => {
   const navigate = useNavigate();
   const [orderItems,setOrderItems] = useState();
   const [currency,setCurrency] = useState({});
@@ -63,7 +64,9 @@ const Orders = () => {
           console.log(JSON.stringify(err));
       }
   }
-
+    const getOtherFilterItems = ()=>{
+        navigate(HOME_PAGE);
+    }
   useEffect(() => {
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
@@ -77,7 +80,7 @@ const Orders = () => {
 
   return (
     <div>
-      <MainNavbar/>
+      <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
       <div className="container cart-heading">
         <h1>Your Orders</h1>
       </div>

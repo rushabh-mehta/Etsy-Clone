@@ -1,5 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import {useState} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
@@ -14,19 +15,20 @@ import Orders from './components/Orders';
 
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState('');
   return (
     <Routes>
         <Route exact path="register" element={<Register/>} />
         <Route exact path="login" element={<Login/>} />
-        <Route exact path="home" element={<Home/>}/>
-        <Route exact path="/" element={<Home/>}/>
-        <Route exact path="view-profile" element={<ViewProfile/>}/>
-        <Route exact path="edit-profile" element={<EditProfile/>}/>
+        <Route exact path="home" element={<Home searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>}/>
+        <Route exact path="/" element={<Home searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>}/>
+        <Route exact path="view-profile" element={<ViewProfile searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>}/>
+        <Route exact path="edit-profile" element={<EditProfile searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>}/>
         <Route exact path="shop/create" element={<ShopCreate/>}/>
         <Route exact path="shop/home/:shopId" element={<ShopHome/>}/>
         <Route exact path="item/overview/:id" element={<ItemOverview/>}/>
-        <Route exact path="cart" element={<Cart/>}/>
-        <Route exact path="orders" element={<Orders/>}/>
+        <Route exact path="cart" element={<Cart searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>}/>
+        <Route exact path="orders" element={<Orders searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>}/>
     </Routes>
   );
 }

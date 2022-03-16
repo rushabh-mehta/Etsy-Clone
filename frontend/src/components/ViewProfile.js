@@ -21,8 +21,9 @@ const GET_FAVORITE_ITEMS_FILTER_API = 'api/favoriteitem/filter';
 const GET_USER_CURRENCY_API = "api/currency/";
 const UPLOAD_PROFILE_PIC_API = "api/user/profile-picture/upload";
 const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
+const HOME_PAGE = "/";
 
-const ViewProfile = () => {
+const ViewProfile = ({searchQuery,setSearchQuery}) => {
     
     const getUser = async ({id})=>{
         setViewProfileLoading(true);
@@ -94,7 +95,7 @@ const ViewProfile = () => {
         setGettingFavoriteItems(true);
         const user = JSON.parse(localStorage.getItem("user"));
         const filterData = {};
-        filterData.searchQuery = searchQuery;
+        filterData.searchQuery = searchQueryFav;
         filterData.userId = user.id;
         try{
         const response = await authapi.post(GET_FAVORITE_ITEMS_FILTER_API,filterData);
@@ -149,9 +150,9 @@ const ViewProfile = () => {
     const [gettingCountries, setGettingCountries] = useState(true);
     const [gettingFavoriteItems, setGettingFavoriteItems] = useState(true);
     const [profilePicture,setProfilePicture] = useState("");
-    const [searchQuery,setSearchQuery] = useState("");
     const [currency,setCurrency] = useState({});
     const [gettingCurrency, setGettingCurrency] = useState(true);
+    const [searchQueryFav, setSearchQueryFav] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -190,10 +191,13 @@ const ViewProfile = () => {
         }
 	}
 
+    const getOtherFilterItems = ()=>{
+        navigate(HOME_PAGE);
+    }
 
   return (
     <div>
-        <MainNavbar />
+        <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
          <div className="view_profile_home_body">
             {!gettingCurrency && !gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
                     <div className="row">
@@ -244,7 +248,7 @@ const ViewProfile = () => {
                         <InputGroup>
                             <FormControl className="favitems-search-bar-1"
                             placeholder="Search your favorites"
-                            value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}}
+                            value={searchQueryFav} onChange={(e)=>{setSearchQueryFav(e.target.value)}}
                             />
                             <InputGroup.Text className="favitems-search-bar-2" onClick={getFilteredFavoriteItems} id="basic-addon2"><FontAwesomeIcon icon={faMagnifyingGlass}/></InputGroup.Text>
                         </InputGroup>

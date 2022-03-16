@@ -15,12 +15,11 @@ const GET_OTHER_ITEMS_FILTER_API = "api/item/other/filter";
 const GET_USER_CURRENCY_API = "api/currency/";
 
 
-const Home = () => {
+const Home = ({searchQuery,setSearchQuery}) => {
   const navigate = useNavigate();
   const [itemsLoading, setItemsLoading] = useState(false);
   const [items, setItems] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sortBy,setSortBy] = useState("");
@@ -117,8 +116,12 @@ const Home = () => {
     if(!token || !user){
         navigate("/login", {replace:true});
     }else{
-      getOtherItems();
       getUserCurrency(user);
+      if(searchQuery && searchQuery.length){
+        getOtherFilterItems();
+      }else{
+        getOtherItems();
+      }
     }
   },[]);
 

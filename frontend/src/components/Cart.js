@@ -14,10 +14,11 @@ const PLACE_ORDER_API = "/api/order/place/";
 const LOGIN_PAGE = "/login";
 const ORDERS_PAGE = "/orders";
 const GET_USER_CURRENCY_API = "api/currency/";
+const HOME_PAGE = "/";
 
 
 
-const Cart = () => {
+const Cart = ({searchQuery,setSearchQuery}) => {
     const navigate = useNavigate();
     const [cartItems,setCartItems] = useState([]);
     const [currency,setCurrency] = useState({});
@@ -108,6 +109,10 @@ const Cart = () => {
       }
   }
 
+    const getOtherFilterItems = ()=>{
+        navigate(HOME_PAGE);
+    }
+
   useEffect(() => {
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
@@ -143,7 +148,7 @@ const Cart = () => {
 
   return (
     <div>
-      <MainNavbar/>
+      <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
       <div className="container cart-heading">
         <h1>Your Cart</h1>
       </div>
