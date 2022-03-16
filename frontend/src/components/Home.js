@@ -64,7 +64,6 @@ const Home = ({searchQuery,setSearchQuery}) => {
     filterData.minPrice = minPrice;
     filterData.maxPrice = maxPrice;
     filterData.inStock = inStock;
-    console.log(inStock);
     filterData.sortBy=sortBy;
     filterData.shop = shop.id;
     filterData.userId = user.id;
@@ -172,7 +171,7 @@ const Home = ({searchQuery,setSearchQuery}) => {
                 </Form.Select>
               </span>
               <span className="filter-col">
-                <Form.Check size="sm" className="exclude-filter" value={inStock} onChange={(e)=>{console.log(inStock);setInStock(e.target.checked)}} type="checkbox" label="Show in stock items only" />
+                <Form.Check size="sm" className="exclude-filter" value={inStock} onChange={(e)=>{setInStock(e.target.checked)}} type="checkbox" label="Show in stock items only" />
               </span>
               <span className="filter-col">
                 <Button size="sm" className="filter-button" onClick={getOtherFilterItems}>Filter</Button>
