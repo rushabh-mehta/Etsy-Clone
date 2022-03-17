@@ -72,6 +72,7 @@ const Home = ({searchQuery,setSearchQuery}) => {
       if(response && response.data){
           if(response.data.success){
               const items = response.data.items;
+              console.log(items);
               setItems(items);
               setItemsLoading(false);
           }else{

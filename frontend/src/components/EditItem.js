@@ -185,10 +185,10 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
             </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button className="addshop-confirm_save-btn" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={editItem}>
+          <Button className="addshop-cancel_save-btn" onClick={editItem}>
             Save
           </Button>
         </Modal.Footer>
