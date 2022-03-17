@@ -148,6 +148,21 @@ const Home = ({searchQuery,setSearchQuery}) => {
     }
   },[]);
 
+  useEffect(() => {
+    if(maxPrice>100000){
+      setMaxPrice(100000);
+    }else if(maxPrice<0){
+      setMaxPrice(0);
+    }
+  },[maxPrice]);
+
+  useEffect(() => {
+    if(minPrice>100000){
+      setMinPrice(100000);
+    }else if(minPrice<0){
+      setMinPrice(0);
+    }
+  },[minPrice]);
 
   return (
     <div>

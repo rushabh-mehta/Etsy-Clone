@@ -195,10 +195,16 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
 
     useEffect(() => {
         setErrorMsg("");
+        if(orderQuantity>1000){
+            setOrderQuantity(item.itemQuantity-item.itemSalesCount);
+        }
+        if(orderQuantity<-1000){
+            setOrderQuantity(1);
+        }
         if(orderQuantity<=0){
-            setErrorMsg("Invalid order quantity");
+            setErrorMsg("Invalid order quantity!");
         }else if(orderQuantity>(item.itemQuantity-item.itemSalesCount)){
-            setErrorMsg("Invalid order quantity");
+            setErrorMsg("Invalid order quantity!");
         }else{
             setItem({...item,orderQuantity});
         }

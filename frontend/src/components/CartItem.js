@@ -22,37 +22,40 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
     });
 
     useEffect(async () => {
-        if (orderQuantity) {
-            if(((item.itemQuantity-item.itemSalesCount)<orderQuantity) || orderQuantity<=0){
-                let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
-                invalidOrderCopy[index] = true;
-                setInvalidOrder(invalidOrderCopy);
-            }else{
-                let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
-                invalidOrderCopy[index] = false;
-                setInvalidOrder(invalidOrderCopy);
-                item.orderQuantity = orderQuantity;
-                try {
-                    const user = JSON.parse(localStorage.getItem("user"));
-                    const data = {};
-                    data.cartId = item.cartId;
-                    data.userId = user.id;
-                    data.itemId = item.itemId;
-                    data.orderQuantity = orderQuantity;
-                    const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API, data);
-                    if (response && response.data && response.data.success) {
-                        cartItems.forEach((eachCartItem) => {
-                            if(eachCartItem.cartId == item.cartId){
-                                eachCartItem.orderQuantity = item.orderQuantity;  
-                            }
-                        });
-                        setCartItems([...cartItems]);
-                    } else {
-                        console.log("Error updating quantity");
-                    }
-                } catch (e) {
-
+        if(orderQuantity>1000){
+            setOrderQuantity(item.orderQuantity);
+        }else if(orderQuantity<-1000){
+            setOrderQuantity(1);
+        }
+        else if(((item.itemQuantity-item.itemSalesCount)<orderQuantity) || orderQuantity<=0){
+            let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
+            invalidOrderCopy[index] = true;
+            setInvalidOrder(invalidOrderCopy);
+        }else{
+            let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
+            invalidOrderCopy[index] = false;
+            setInvalidOrder(invalidOrderCopy);
+            item.orderQuantity = orderQuantity;
+            try {
+                const user = JSON.parse(localStorage.getItem("user"));
+                const data = {};
+                data.cartId = item.cartId;
+                data.userId = user.id;
+                data.itemId = item.itemId;
+                data.orderQuantity = orderQuantity;
+                const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API, data);
+                if (response && response.data && response.data.success) {
+                    cartItems.forEach((eachCartItem) => {
+                        if(eachCartItem.cartId == item.cartId){
+                            eachCartItem.orderQuantity = item.orderQuantity;  
+                        }
+                    });
+                    setCartItems([...cartItems]);
+                } else {
+                    console.log("Error updating quantity");
                 }
+            } catch (e) {
+
             }
         }
     }, [orderQuantity]);
