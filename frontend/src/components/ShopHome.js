@@ -129,11 +129,6 @@ const ShopHome = () => {
                     </div>
                     <div className="mrgn-tp viewprofile_username col-md-4 col-sm-12">
                         <div className="shop-name">{shop && shop.name}</div>
-                        <div className="row">
-                            <div className="viewprofile_userdob col-md-12 col-sm-12">
-                                Test Details
-                            </div>
-                        </div>
                     </div>
                     <div className="mrgn-tp viewprofile_username col-md-4 col-sm-12">
                         <div className="row">
