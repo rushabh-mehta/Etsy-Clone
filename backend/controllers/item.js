@@ -102,6 +102,7 @@ router.post("/edit", auth, async (req, res) => {
 router.post("/other", auth, async (req, res) => {
     const response = {};
     const data = req.body;
+    console.log(data);
     try{
         const itemsResult = await Item.getOtherItems(data);
         response.items = itemsResult;

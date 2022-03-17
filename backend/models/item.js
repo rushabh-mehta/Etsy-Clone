@@ -111,7 +111,12 @@ class Item{
                 const itemIds = results.map((eachResult)=>{
                     return eachResult.id;
                 });
-                const favitemsSqlQuery = `select * from ${favoriteItemTableName} WHERE user='${id}' AND ${favoriteItemTableName}.item IN (${itemIds})`;
+                let favitemsSqlQuery = '';
+                if(itemIds.length > 0){
+                    favitemsSqlQuery = `select * from ${favoriteItemTableName} WHERE user='${id}' AND ${favoriteItemTableName}.item IN (${itemIds})`;
+                }else{
+                    favitemsSqlQuery = `select * from ${favoriteItemTableName} WHERE user='${id}'`;
+                }
                 con.query(favitemsSqlQuery,(error, favItems)=>{
                     if(error){
                         console.log(error);

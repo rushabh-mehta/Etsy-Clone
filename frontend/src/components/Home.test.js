@@ -34,6 +34,4 @@ test("testing home page", async () => {
   expect(maxPriceInput).toBeInTheDocument();
   expect(filterButton).toBeInTheDocument();
 
-
-
 });
