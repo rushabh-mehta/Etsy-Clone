@@ -112,8 +112,8 @@ const ConnectedRegister = ({user,addUser}) => {
     
     
     const handleUserRegistrationSubmit = (e)=>{
+        e.preventDefault();
         if(validName && validEmail && validPassword && validMatchPassword && !registering){
-            e.preventDefault();
             registerUser();
         }
     }

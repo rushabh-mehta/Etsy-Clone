@@ -28,9 +28,9 @@ const HOME_PAGE = "/";
 const NAME_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const PHONE_REGEX = /^[0-9]{10}$/;
-const ADDRESS_REGEX = /[A-z0-9-_ ,]{3,100}$/;
-const CITY_REGEX = /[A-z][A-z-_ ,]{3,10}$/;
-const ABOUT_REGEX = /[A-z][A-z0-9-_ ,]{3,100}$/;
+const ADDRESS_REGEX = /^[A-z0-9-_ ,]{3,100}$/;
+const CITY_REGEX = /^[A-z][A-z-_ ,]{3,10}$/;
+const ABOUT_REGEX = /^[A-z][A-z0-9-_ ,]{3,100}$/;
 
 const EditProfile = ({searchQuery,setSearchQuery}) => {
     const [user, setUser] = useState({});
@@ -108,6 +108,21 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
     useEffect(() => {
         setValidAbout(ABOUT_REGEX.test(about));
     }, [about])
+
+    function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+    }
+
+    useEffect(() => {
+        if(dob){
+            let d = new Date(dob);
+            console.log(d);
+            console.log(isValidDate(d));
+            setValidDob(isValidDate(d));
+        }else{
+            setValidDob(false);
+        }
+    }, [dob])
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -374,8 +389,18 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
                         <div className="border-btm col-md-12">
                             <label htmlFor="userdob" className="editprofile_item_label">Date of Birth</label>
                             <span className="editprofile_dob_container">
-                                <DatePicker id="userdob" name="userdob" className="editprofile_dob" selected={dob} onChange={(date) => {setDob(date)}} />
+                                <DatePicker id="userdob" name="userdob" className="editprofile_dob" selected={dob} onChange={(date) => {setDob(date)}} onFocus={() => setDobFocus(true)} onBlur={() => setDobFocus(false)}/>
                             </span>
+                            {validDob && <FontAwesomeIcon color="green" icon={faCheck}/> }
+                            {(!validDob) && <FontAwesomeIcon color="red" icon={faTimes} />}
+                            <div className="editprofile_input_error">
+                                {dobFocus && !validDob && 
+                                    <small className="form-text text-muted editprofile_item_text_container">
+                                        <FontAwesomeIcon icon={faInfoCircle} />
+                                        <span className="editprofile_item_text">Invalid Date of Birth</span>
+                                    </small>
+                                }
+                            </div>
                         </div>
                         <div className="border-btm col-md-12">
                             <label htmlFor="userphone" className="editprofile_item_label">Phone</label>
@@ -458,7 +483,7 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
                 </div>
                 <div className="container">
                     <div className="col-md-12">
-                        <button className="btn editprofile_save-btn" onClick={()=>{editProfile(user)}} disabled={editingProfile || !validName || !validEmail || !validPhone || !validAddress || !validCity || !validAbout}>Save</button>
+                        <button className="btn editprofile_save-btn" onClick={()=>{editProfile(user)}} disabled={editingProfile || !validName || !validEmail || !validPhone || !validAddress || !validCity || !validAbout || !validDob}>Save</button>
                         <button className="btn editprofile_cancel-btn" onClick={()=>{navigate("/view-profile")}} disabled={editingProfile}>Cancel</button>
                     </div>
                 </div>

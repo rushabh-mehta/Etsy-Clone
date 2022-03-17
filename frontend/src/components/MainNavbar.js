@@ -72,8 +72,7 @@ const ConnectedMainNavBar = ({searchQuery, getOtherFilterItems, setSearchQuery,r
             <Container>
                 <Navbar.Brand className="mainnavbar-title" href="/home">Etsy</Navbar.Brand>
                 <InputGroup>
-                    <FormControl
-                    placeholder="Search for anything" className="mainnavbar-search-1"
+                    <FormControl  maxLength="100" placeholder="Search for anything" className="mainnavbar-search-1"
                     value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}}
                     />
                     <InputGroup.Text className="mainnavbar-search-2" onClick={getOtherFilterItems} id="basic-addon2"><FontAwesomeIcon color="black" icon={faMagnifyingGlass}/></InputGroup.Text>

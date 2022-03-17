@@ -23,7 +23,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
 
     useEffect(async () => {
         if (orderQuantity) {
-            if((item.itemQuantity-item.itemSalesCount)<orderQuantity){
+            if(((item.itemQuantity-item.itemSalesCount)<orderQuantity) || orderQuantity<=0){
                 let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
                 invalidOrderCopy[index] = true;
                 setInvalidOrder(invalidOrderCopy);
@@ -100,11 +100,12 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                         <Form.Label htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
                         {(item.itemQuantity-item.itemSalesCount)<orderQuantity && <div className="mrgn-tp addcart-error">Out of Stock!</div>}
+                        {orderQuantity<=0 && <div className="mrgn-tp addcart-error">Invalid order quantity!</div>}
                     </Form.Group>
                     <Button className="cartitem_remove-btn" onClick={removeItem}>
                         Delete
                     </Button>
-                        <span className="cartitem-cost">{"Cost: "+(currency && currency.name)+" "+item.itemPrice*orderQuantity}</span>
+                        <span className="cartitem-cost">{"Cost: "+(currency && currency.name)+" "+((item.itemPrice*orderQuantity)>0 ? (item.itemPrice*orderQuantity):0)}</span>
                     </div>
                 </div>
             </div>

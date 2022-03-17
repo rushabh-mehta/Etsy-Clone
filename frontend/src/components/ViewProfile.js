@@ -246,7 +246,7 @@ const ViewProfile = ({searchQuery,setSearchQuery}) => {
                     <span className="favitems-header"><h4>Favorite Items</h4></span>
                     <span className="favitems-search-container">
                         <InputGroup>
-                            <FormControl className="favitems-search-bar-1"
+                            <FormControl maxLength="100" className="favitems-search-bar-1"
                             placeholder="Search your favorites"
                             value={searchQueryFav} onChange={(e)=>{setSearchQueryFav(e.target.value)}}
                             />

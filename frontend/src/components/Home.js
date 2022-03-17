@@ -158,9 +158,9 @@ const Home = ({searchQuery,setSearchQuery}) => {
             <div className="filter-row">
               <span className="filter-col">
                 <Form.Label size="sm" className="price-label" htmlFor="minprice">Price</Form.Label>
-                <Form.Control size="sm" className="price-filter" value={minPrice} onChange={(e)=>{setMinPrice(e.target.value)}}  type="number" id="minprice" name="minprice" placeholder="Low"/>
+                <Form.Control size="sm" min={0} max={10} className="price-filter" value={minPrice} onChange={(e)=>{setMinPrice(e.target.value)}}  type="number" id="minprice" name="minprice" placeholder="Low"/>
                 <Form.Label size="sm" className="price-label" htmlFor="maxprice">To</Form.Label>
-                <Form.Control size="sm" className="price-filter" value={maxPrice} onChange={(e)=>{setMaxPrice(e.target.value)}} type="number" id="maxprice" placeholder="High"/>
+                <Form.Control size="sm" min={0} max={10} className="price-filter" value={maxPrice} onChange={(e)=>{setMaxPrice(e.target.value)}} type="number" id="maxprice" placeholder="High"/>
               </span>
               <span className="filter-col">
                 <Form.Label htmlFor="sort-homeitem" size="sm">Sort By: </Form.Label>

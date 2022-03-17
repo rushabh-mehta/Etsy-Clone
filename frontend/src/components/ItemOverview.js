@@ -63,11 +63,8 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
     }
 
     const addToCart = async ()=>{
-        if(parseInt(orderQuantity)>item.itemQuantity){
-            setNotEnoughStockMessage("Insufficient quantity!");
-            setTimeout(()=>{
-                setNotEnoughStockMessage("");
-            },5000);
+        if(errorMsg){
+            
         }else{
             console.log(item);
             const data = {};
@@ -197,13 +194,20 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
     },[]);
 
     useEffect(() => {
-        setItem({...item,orderQuantity});
+        setErrorMsg("");
+        if(orderQuantity<=0){
+            setErrorMsg("Invalid order quantity");
+        }else if(orderQuantity>(item.itemQuantity-item.itemSalesCount)){
+            setErrorMsg("Invalid order quantity");
+        }else{
+            setItem({...item,orderQuantity});
+        }
     },[orderQuantity]);
 
     return (
         <div>
             <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems} setItems={setItems}/>
-            <div className="container">
+            <div className="container itemoverview-container">
                 <div className="row">
                     <div className="mrgn-tp col-md-5">
                         <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="itemoverview_display_picture"></img></div>
@@ -224,10 +228,10 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
                         <Form.Label className="add-cart-quantity" htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control className="add-cart-quantity" value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
                     </Form.Group>
+                    {errorMsg && <div className="addcart-error">{errorMsg}</div>}
                     <Button className="addtocart-btn" onClick={addToCart}>Add to Cart</Button>
                     {addToCartSuccessMsg && <div className="addcart-success">{addToCartSuccessMsg}</div>}
                     {itemExistsMsg && <div className="addcart-error">{itemExistsMsg}</div>}
-                    {notEnoughStockMessage && <div className="addcart-error">{notEnoughStockMessage}</div>}
                     </div>
                 </div>
             </div>
