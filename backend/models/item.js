@@ -108,8 +108,14 @@ class Item{
                     console.log(error);
                     return reject(error);
                 }else{
-                    const shop = results[0].id;
-                    const sqlQuery = `select * from ${tableName} WHERE shop!='${shop}'`;
+                    let shop;
+                    let sqlQuery;
+                    if(results && results[0] && results[0].id){
+                        shop = results[0].id;
+                        sqlQuery = `select * from ${tableName} WHERE shop!='${shop}'`;
+                    }else{
+                        sqlQuery = `select * from ${tableName}`;
+                    }
                     con.query(sqlQuery, (error, results) => {
                         if (error) {
                             console.log(error);

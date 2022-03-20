@@ -22,7 +22,7 @@ const EDIT_USER_API = '/api/user/';
 const GET_COUNTRY_API = '/api/country/';
 const GET_USER_CURRENCY_API = "api/currency/";
 const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
-const UPLOAD_PROFILE_PIC_API = "api/user/profile_picture/upload";
+const UPLOAD_PROFILE_PIC_API = "api/user/profile-picture/upload";
 const HOME_PAGE = "/";
 
 const NAME_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
@@ -317,6 +317,7 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
                 userCopy.profilePicture = response.data.imageKey;
                 userBrowserStorage.profilePicture = response.data.imageKey;
                 localStorage.setItem("user",JSON.stringify(userBrowserStorage));
+                setProfilePicture(userCopy.profilePicture);
                 setUser(userCopy);
             }else{
                 console.log(response);

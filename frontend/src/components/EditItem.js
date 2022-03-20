@@ -24,8 +24,10 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
     const [editingItem, setEditingItem] = useState(false);
     const [newCategory,setNewCategory] = useState("");
     const [categoryOpen, setCategoryOpen] = useState(false);
+    const [invalidPrice,setInvalidPrice] = useState("");
+    const [invalidQuantity,setInvalidQuantity] = useState(""); 
 
-    
+
     const getCategories = async ({id}) => {
         setGettingCategories(true);
         try{
@@ -46,7 +48,9 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
 
     
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+            setShow(false)
+    };
 
     const handleShow = () => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -130,6 +134,22 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         }
     },[]);
 
+    useEffect(() => {
+        if(price<=0){
+            setInvalidPrice("Invalid price");
+        }else{
+            setInvalidPrice("");
+        }
+    },[price]);
+
+    useEffect(() => {
+        if(quantity<=0){
+            setInvalidQuantity("Invalid quantity");
+        }else{
+            setInvalidQuantity("");
+        }
+    },[quantity]);
+
   return (
     <>
       <FontAwesomeIcon className="edit_icon" icon={faPen} onClick={handleShow}/>
@@ -153,10 +173,12 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
                 <Form.Group className="mb-3">
                     <Form.Label>Price {"("+currency.name+")"}</Form.Label>
                     <Form.Control onChange={(e)=>{setPrice(e.target.value)}} value={price} type="number" placeholder="Price" />
+                    {invalidPrice && <div class="error">{invalidPrice}</div>}
                 </Form.Group>
                 <Form.Group  className="mb-3" >
                     <Form.Label>Quantity</Form.Label>
                     <Form.Control onChange={(e)=>{setQuantity(e.target.value)}} value={quantity} type="number" placeholder="Quantity" />
+                    {invalidQuantity && <div class="error">{invalidQuantity}</div>}
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
@@ -185,10 +207,10 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
             </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button className="addshop-confirm_save-btn" onClick={handleClose}>
+          <Button className="addshop-cancel_save-btn" onClick={handleClose}>
             Close
           </Button>
-          <Button className="addshop-cancel_save-btn" onClick={editItem}>
+          <Button className="addshop-confirm_save-btn" onClick={editItem} disabled={invalidPrice || invalidQuantity}>
             Save
           </Button>
         </Modal.Footer>

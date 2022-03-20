@@ -27,10 +27,12 @@ const AddShopItem = ({setItems,items,id,currency}) => {
     const [displayPicture,setDisplayPicture] = useState("");
     const [category,setCategory] = useState("");
     const [description,setDescription] = useState("");
-    const [price,setPrice] = useState(0);
-    const [quantity,setQuantity] = useState(0);
+    const [price,setPrice] = useState(1);
+    const [quantity,setQuantity] = useState(1);
     const [newCategory,setNewCategory] = useState("");
     const [categoryOpen, setCategoryOpen] = useState(false);
+    const [invalidPrice,setInvalidPrice] = useState("");
+    const [invalidQuantity,setInvalidQuantity] = useState(""); 
 
     const getCategories = async ({id}) => {
         setGettingCategories(true);
@@ -68,6 +70,11 @@ const AddShopItem = ({setItems,items,id,currency}) => {
                 item.id = response.data.item.insertId;
                 setItems([...items,item]);
                 setAddingItem(false);
+                setName("");
+                setDisplayPicture("");
+                setDescription("");
+                setPrice("");
+                setQuantity(1);
                 handleClose();
             }else{
                 setError("Some unexpected error occurred!");
@@ -89,7 +96,6 @@ const AddShopItem = ({setItems,items,id,currency}) => {
             const response = await authapi.post(ADD_CATEGORY_API,data);
             if(response && response.data && response.data.success){
                 setCategories([...categories,{name:data.name,id: response.data.addedCategory.insertId}]);
-                setNewCategory("");
                 setNewCategory("");
             }else{
                 setError("Some unexpected error occurred!");
@@ -137,6 +143,22 @@ const AddShopItem = ({setItems,items,id,currency}) => {
         }
     },[]);
 
+    useEffect(() => {
+        if(price<=0){
+            setInvalidPrice("Invalid price");
+        }else{
+            setInvalidPrice("");
+        }
+    },[price]);
+
+    useEffect(() => {
+        if(quantity<=0){
+            setInvalidQuantity("Invalid quantity");
+        }else{
+            setInvalidQuantity("");
+        }
+    },[quantity]);
+
   return (
     <>
       <Button className="add-shopitem-btn" onClick={handleShow}>
@@ -163,10 +185,12 @@ const AddShopItem = ({setItems,items,id,currency}) => {
                 <Form.Group  className="mb-3">
                     <Form.Label>Price {"("+currency.name+")"}</Form.Label>
                     <Form.Control value={price} onChange={(e)=>{setPrice(e.target.value)}} type="number" placeholder="Price" />
+                    {invalidPrice && <div class="error">{invalidPrice}</div>}
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Quantity</Form.Label>
+                    <Form.Label>Quantity</Form.Label>                    
                     <Form.Control value={quantity} onChange={(e)=>{setQuantity(e.target.value)}} type="number" placeholder="Quantity" />
+                    {invalidQuantity && <div class="error">{invalidQuantity}</div>}
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
@@ -195,7 +219,7 @@ const AddShopItem = ({setItems,items,id,currency}) => {
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button className="addshop-confirm_save-btn" onClick={addItem}>
+            <Button className="addshop-confirm_save-btn" onClick={addItem} disabled={invalidPrice || invalidQuantity}>
             Add
           </Button>
           <Button  className="addshop-cancel_save-btn" onClick={handleClose}>
