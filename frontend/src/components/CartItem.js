@@ -27,7 +27,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
         }else if(orderQuantity<-1000){
             setOrderQuantity(1);
         }
-        else if(((item.itemQuantity-item.itemSalesCount)<orderQuantity) || orderQuantity<=0){
+        else if(((item.itemQuantity)<orderQuantity) || orderQuantity<=0){
             let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
             invalidOrderCopy[index] = true;
             setInvalidOrder(invalidOrderCopy);
@@ -102,7 +102,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
-                        {(item.itemQuantity-item.itemSalesCount)<orderQuantity && <div className="mrgn-tp addcart-error">Out of Stock!</div>}
+                        {(item.itemQuantity)<orderQuantity && <div className="mrgn-tp addcart-error">Out of Stock!</div>}
                         {orderQuantity<=0 && <div className="mrgn-tp addcart-error">Invalid order quantity!</div>}
                     </Form.Group>
                     <Button className="cartitem_remove-btn" onClick={removeItem}>
