@@ -143,7 +143,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
     },[price]);
 
     useEffect(() => {
-        if(quantity<=0){
+        if(quantity<0){
             setInvalidQuantity("Invalid quantity");
         }else{
             setInvalidQuantity("");
