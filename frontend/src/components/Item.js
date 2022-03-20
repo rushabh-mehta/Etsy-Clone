@@ -44,7 +44,7 @@ const Item = ({index,items,setItems,currency,editRights}) => {
                     <Card.Text>
                         <div className="shopitem_price">{(currency && currency.name)+" "+price}</div>
                         <div className="shopitem_description">{description}</div>
-                        <div className="homeitem_sales_count">{quantity-salesCount+" pieces available!"}</div>
+                        <div className="homeitem_sales_count">{quantity+" pieces available!"}</div>
                         <div className="shopitem_sales_count">{salesCount+" pieces sold till now!"}</div>
                     </Card.Text>
                 </Card.Body>

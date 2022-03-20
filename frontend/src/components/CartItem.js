@@ -97,7 +97,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                         <div>{item.itemCategory}</div>
                         <div>{(currency && currency.name)+" "+item.itemPrice}</div>
                         <div>{item.itemDescription}</div>
-                        <div className="homeitem_sales_count">{(item.itemQuantity-item.itemSalesCount)+" pieces available!"}</div>
+                        <div className="homeitem_sales_count">{(item.itemQuantity)+" pieces available!"}</div>
                         <div className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="quantity">Quantity</Form.Label>
