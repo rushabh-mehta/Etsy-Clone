@@ -27,6 +27,14 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
     const [invalidPrice,setInvalidPrice] = useState("");
     const [invalidQuantity,setInvalidQuantity] = useState(""); 
 
+    
+    
+    const [copyDisplayPicture,setCopyDisplayPicture] = useState(displayPicture);
+    const [copyName,setCopyName] = useState(name);
+    const [copyCategory,setCopyCategory] = useState(category);
+    const [copyPrice,setCopyPrice] = useState(price);
+    const [copyQuantity,setCopyQuantity] = useState(quantity);
+    const [copyDescription,setCopyDescription] = useState(description);
 
     const getCategories = async ({id}) => {
         setGettingCategories(true);
@@ -49,7 +57,12 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
     
 
     const handleClose = () => {
-            setShow(false)
+            setCopyName(name);
+            setCopyPrice(price);
+            setCopyQuantity(quantity);
+            setCopyCategory(category);
+            setCopyDescription(description);
+            setShow(false);
     };
 
     const handleShow = () => {
@@ -61,20 +74,25 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
     const editItem = async ()=>{
         setEditingItem(true);
         const item = {};
-        item.displayPicture = displayPicture;
-        item.name = name;
-        item.price = price;
-        item.quantity = quantity;
-        item.category = category;
-        item.description = description;
+        item.displayPicture = copyDisplayPicture;
+        item.name = copyName;
+        item.price = copyPrice;
+        item.quantity = copyQuantity;
+        item.category = copyCategory;
+        item.description = copyDescription;
         item.id=id;
         items[index] = item;
         setItems(items);
         try{
             const response = await authapi.post(EDIT_ITEM_API,item);
             if(response && response.data && response.data.success){
+                setName(copyName);
+                setPrice(copyPrice);
+                setQuantity(copyQuantity);
+                setCategory(copyCategory);
+                setDescription(copyDescription);
                 setEditingItem(false);
-                handleClose();
+                setShow(false);
             }else{
                 setError("Some unexpected error occurred!");
                 setEditingItem(false);
@@ -82,7 +100,6 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         }catch(e){
             setEditingItem(false);
         }
-        handleClose();
     }
 
     const addCategory = async () => {
@@ -168,21 +185,21 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
                 </div>
                 <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
-                    <Form.Control onChange={(e)=>{setName(e.target.value)}} value={name} type="text" placeholder="Name" />
+                    <Form.Control onChange={(e)=>{setCopyName(e.target.value)}} value={copyName} type="text" placeholder="Name" />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Price {"("+currency.name+")"}</Form.Label>
-                    <Form.Control onChange={(e)=>{setPrice(e.target.value)}} value={price} type="number" placeholder="Price" />
+                    <Form.Control onChange={(e)=>{setCopyPrice(e.target.value)}} value={copyPrice} type="number" placeholder="Price" />
                     {invalidPrice && <div class="error">{invalidPrice}</div>}
                 </Form.Group>
                 <Form.Group  className="mb-3" >
                     <Form.Label>Quantity</Form.Label>
-                    <Form.Control onChange={(e)=>{setQuantity(e.target.value)}} value={quantity} type="number" placeholder="Quantity" />
+                    <Form.Control onChange={(e)=>{setCopyQuantity(e.target.value)}} value={copyQuantity} type="number" placeholder="Quantity" />
                     {invalidQuantity && <div class="error">{invalidQuantity}</div>}
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
-                    <Form.Select name="category" id="category" value={category} onChange={(e)=>{setCategory(e.target.value)}}>
+                    <Form.Select name="category" id="category" value={copyCategory} onChange={(e)=>{setCopyCategory(e.target.value)}}>
                         <option value="">Select Category</option>
                         {
                             categories.map((eachCategory,index)=>{
@@ -202,7 +219,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control onChange={(e)=>{setDescription(e.target.value)}} value={description}  as="textarea" placeholder="Description" />
+                    <Form.Control onChange={(e)=>{setCopyDescription(e.target.value)}} value={copyDescription}  as="textarea" placeholder="Description" />
                 </Form.Group>
             </Form>
         </Modal.Body>

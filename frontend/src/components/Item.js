@@ -22,7 +22,6 @@ const Item = ({index,items,setItems,currency,editRights}) => {
     const [description,setDescription] = useState(items[index].description);
     const navigate = useNavigate();
 
-    
 
     const viewItemOverview = ()=>{
         if(items[index]?.id) {
