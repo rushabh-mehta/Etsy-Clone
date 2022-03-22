@@ -129,12 +129,11 @@ class Order{
                                                         item.itemSalesCount+=eachCartItem.orderQuantity;
                                                         item.itemOrderQuantity=eachCartItem.orderQuantity;
                                                         item.itemDate = new Date();
+                                                        item.itemGift = eachCartItem.gift;
+                                                        item.itemCartDescription = eachCartItem.description;
                                                         updatedItems.push(item);
                                                     }
                                                 });
-                                                console.log(cartItems);
-                                                console.log(items)
-                                                console.log(updatedItems);
                                                 const orderId = uuidv4();
                                                 const createOrderQuery =  `INSERT INTO ${tableName} (userId,orderId) VALUES ("${userId}","${orderId}")`;
                                                 poolConnection.query(createOrderQuery,(err,orderCreated)=>{
@@ -144,7 +143,7 @@ class Order{
                                                         console.log(orderCreated);
                                                         let createOrderItemsQuery = "";
                                                         updatedItems.forEach((eachItem)=>{
-                                                            const query = `INSERT INTO ${orderItemTableName} (orderId,name,displayPicture,price,orderQuantity,date,shopName,itemId) VALUES ("${orderId}","${eachItem.itemName}","${eachItem.itemDisplayPicture}",${eachItem.itemPrice},"${eachItem.itemOrderQuantity}",${poolConnection.escape(eachItem.itemDate)},"${eachItem.shopName}","${eachItem.itemId}");`;
+                                                            const query = `INSERT INTO ${orderItemTableName} (orderId,name,displayPicture,price,orderQuantity,date,shopName,itemId,gift,description) VALUES ("${orderId}","${eachItem.itemName}","${eachItem.itemDisplayPicture}",${eachItem.itemPrice},"${eachItem.itemOrderQuantity}",${poolConnection.escape(eachItem.itemDate)},"${eachItem.shopName}","${eachItem.itemId}","${eachItem.itemGift}","${eachItem.itemCartDescription}");`;
                                                             createOrderItemsQuery+=query;
                                                         })
                                                         console.log(createOrderItemsQuery);

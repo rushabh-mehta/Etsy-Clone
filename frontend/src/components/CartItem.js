@@ -8,11 +8,14 @@ import '../styles/cartitem.css';
 const REMOVE_ITEM_CART_API = "/api/cart/delete";
 const UPDATE_ITEM_QUANTITY_CART_API = "/api/cart/item/quantity";
 const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
-
+const UPDATE_ITEM_GIFT_CART_API = "/api/cart/item/gift";
 
 const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCartItems,currency }) => {
     const navigate = useNavigate();
     const [orderQuantity, setOrderQuantity] = useState(item.orderQuantity);
+    const [gift,setGift] = useState(item.cartGift === 'true');
+    const [description, setDescription] = useState(item.cartDescription);
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
@@ -59,6 +62,42 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
             }
         }
     }, [orderQuantity]);
+
+    useEffect(async () => {
+        let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
+        invalidOrderCopy[index] = false;
+        setInvalidOrder(invalidOrderCopy);
+        item.gift = gift;
+        item.description = description;
+        const user = JSON.parse(localStorage.getItem("user"));
+        const data = {};
+        data.cartId = item.cartId;
+        data.userId = user.id;
+        data.itemId = item.itemId;
+        data.gift = gift;
+        if(gift){
+            data.description = description;   
+        }else{
+            setDescription("");
+            data.description = "";
+        }
+        try {
+            const response = await authapi.post(UPDATE_ITEM_GIFT_CART_API, data);
+            if (response && response.data && response.data.success) {
+                cartItems.forEach((eachCartItem) => {
+                    if(eachCartItem.cartId == item.cartId){
+                        eachCartItem.gift = item.gift;
+                        eachCartItem.description = item.description;  
+                    }
+                });
+                setCartItems([...cartItems]);
+            } else {
+                console.log("Error updating quantity");
+            }
+        } catch (e) {
+
+        }
+    }, [gift,description]);
 
     const removeItem = async () => {
         const data = {};
@@ -109,6 +148,14 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                         Delete
                     </Button>
                         <span className="cartitem-cost">{"Cost: "+(currency && currency.name)+" "+((item.itemPrice*orderQuantity)>0 ? (item.itemPrice*orderQuantity):0)}</span>
+                    <div>
+                        <Form.Check size="sm" className="exclude-filter" checked={gift} onChange={(e)=>{setGift(e.target.checked)}} type="checkbox" label="Gift Wrap"/>
+                        {gift && 
+                        <Form.Group className="mb-3">
+                            <Form.Control onChange={(e)=>{setDescription(e.target.value)}} value={description}  as="textarea" placeholder="Gift Description"/>
+                        </Form.Group>
+                        }
+                    </div>
                     </div>
                 </div>
             </div>
