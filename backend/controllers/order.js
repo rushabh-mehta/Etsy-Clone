@@ -6,14 +6,17 @@ const encrypt = require("../services/encrypt");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
-router.get("/get/:userId", auth, async (req, res) => {
+router.post("/get/:userId", auth, async (req, res) => {
     const response = {};
     const data = {};
     data.userId = req.params.userId;
+    data.skip = req.body.skip;
+    data.limit = req.body.limit;
     try{
         const items = await Order.getOrderItems(data);
-        response.items = items;
+        response.items = items.orders;
         response.success = true;
+        response.moreAvailable = items.moreAvailable;
         response.status = "200";
         return res.status(200).send(response);
     }catch(e){

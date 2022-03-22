@@ -7,3 +7,50 @@
 .order-items {
   min-height: 100vh;
 }
+
+.paginate-filter {
+  display: inline-block;
+  padding-left: 10px;
+  margin: 10px;
+  width: 30%;
+  cursor: pointer;
+}
+
+.order-heading {
+  display: inline-block;
+}
+
+.paginate-col {
+  display: inline-block;
+  width: 25%;
+  margin-left: 45%;
+}
+
+.prev-paginate {
+  cursor: pointer;
+  background-color: rgb(212, 209, 209);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.next-paginate {
+  cursor: pointer;
+  background-color: rgb(209, 206, 206);
+  border-radius: 10px;
+  padding: 10px;
+  margin-left: 1000px;
+}
+
+.next-paginate:hover {
+  cursor: pointer;
+  background-color: rgb(156, 156, 156);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.prev-paginate:hover {
+  cursor: pointer;
+  background-color: rgb(156, 156, 156);
+  border-radius: 10px;
+  padding: 10px;
+}

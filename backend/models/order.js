@@ -12,9 +12,10 @@ const shopTableName = "shop";
 
 class Order{
 
-    static getOrderItems = async ({userId})=>{
+    static getOrderItems = async ({userId,skip,limit})=>{
         return new Promise((resolve, reject) => {
-            const getUserOrdersSqlQuery = `select * from ${tableName} WHERE userId='${userId}' `;
+            let moreAvailable = false;
+            const getUserOrdersSqlQuery = `select * from ${tableName} WHERE userId='${userId}' LIMIT ${parseInt(skip)>0 ? parseInt(skip) : 0}, ${parseInt(limit)+1}`;
             con.query(getUserOrdersSqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
@@ -23,6 +24,10 @@ class Order{
                     const orderIds = results.map((eachOrder)=>{
                         return eachOrder.orderId;
                     });
+                    if(orderIds.length>limit){
+                        moreAvailable = true;
+                    }
+                    orderIds.pop();
                     let orderIdsQuery = "(";
                     orderIds.forEach((orderId,index) => {
                         if(orderIds.length-1==index){
@@ -59,8 +64,10 @@ class Order{
                                     orders[result.orderId] = [result];
                                 }
                             })
-                            console.log(orders)
-                            return resolve(orders);
+                            const response = {};
+                            response.orders = orders;
+                            response.moreAvailable = moreAvailable;
+                            return resolve(response);
                         }else{
                             return reject("Some unexpected error occurred!");
                         }

@@ -5,6 +5,7 @@ import {axiosInstance as authapi} from '../services/authpost';
 import MainFooter from './MainFooter';
 import MainNavbar from './MainNavbar';
 import '../styles/orders.css';
+import { Form, Button } from 'react-bootstrap';
 
 
 const ORDER_ITEMS_API = "/api/order/get/";
@@ -16,20 +17,25 @@ const Orders = ({searchQuery,setSearchQuery}) => {
   const navigate = useNavigate();
   const [orders,setOrders] = useState();
   const [currency,setCurrency] = useState({});
-
-
+  const [skip,setSkip] = useState(0);
+  const [limit,setLimit] = useState(5);
+  const [moreAvailable, setMoreAvailable] = useState();
   const getOrderItems = async ()=>{
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
+      const data = {};
+      data.limit = limit;
+      data.skip = skip;
       if(!token || !user){
           navigate(LOGIN_PAGE, {replace:true});
       }else{
           try{
-              const response = await authapi.get(ORDER_ITEMS_API+user.id);
+              const response = await authapi.post(ORDER_ITEMS_API+user.id,data);
               if(response && response.data){
                   if(response.data.success){
                       if(response.data.items){
                           setOrders(response.data.items);
+                          setMoreAvailable(response.data.moreAvailable);
                       }else{
                           setOrders([]);
                       }
@@ -66,6 +72,15 @@ const Orders = ({searchQuery,setSearchQuery}) => {
     const getOtherFilterItems = ()=>{
         navigate(HOME_PAGE);
     }
+
+    const getPrevOrders = ()=>{
+        setSkip((parseInt(skip)+parseInt(limit)>0) ? (parseInt(skip)-parseInt(limit)) : 0);
+    }
+
+    const getNextOrders = ()=>{
+        setSkip((parseInt(skip)+parseInt(limit)>0) ? (parseInt(skip)+parseInt(limit)) : 0);
+    }
+
   useEffect(() => {
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
@@ -77,11 +92,24 @@ const Orders = ({searchQuery,setSearchQuery}) => {
       }
   },[]);
 
+  useEffect(() => {
+    getOrderItems();
+  },[skip,limit])
+
   return (
     <div>
       <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
       <div className="container cart-heading">
-        <h1>Your Orders</h1>
+        <h1 className="order-heading">Your Orders</h1>
+        <span className="paginate-col">
+                <Form.Label htmlFor="paginate-order" size="sm">Show</Form.Label>
+                <Form.Select size="sm" className="paginate-filter" value={limit} onChange={(e)=>{setLimit(e.target.value)}} id="paginate-order" name="paginate-order">
+                  <option value="2">2</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                </Form.Select>
+                <Form.Label htmlFor="paginate-order" size="sm">results</Form.Label>
+              </span>
       </div>
         <div className="order-items">
             {orders && Object.keys(orders).map((eachOrderId)=>{
@@ -97,6 +125,10 @@ const Orders = ({searchQuery,setSearchQuery}) => {
             {!orders || !Object.keys(orders).length && 
                 <div className="container"> No past orders!</div>
             }
+        </div>
+        <div className="container mrgn-tp">
+            {skip>0 && <span className="prev-paginate" onClick={getPrevOrders}>&lt; Prev</span>}
+            {moreAvailable && <span className="next-paginate" onClick={getNextOrders}>Next &gt;</span>}
         </div>
        <MainFooter currency={currency} setCurrency={setCurrency}/>
     </div>
