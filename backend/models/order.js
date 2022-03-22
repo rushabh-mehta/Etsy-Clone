@@ -51,8 +51,16 @@ class Order{
                                 }
                                 eachItem.date = month+"/"+dt+"/"+year;
                             })
-                            console.log(results);
-                            return resolve(results);
+                            const orders = {};
+                            results.forEach((result)=>{
+                                if(result.orderId in orders){
+                                    orders[result.orderId].push(result);
+                                }else{
+                                    orders[result.orderId] = [result];
+                                }
+                            })
+                            console.log(orders)
+                            return resolve(orders);
                         }else{
                             return reject("Some unexpected error occurred!");
                         }

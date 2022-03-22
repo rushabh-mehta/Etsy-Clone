@@ -14,7 +14,7 @@ const HOME_PAGE = "/";
 
 const Orders = ({searchQuery,setSearchQuery}) => {
   const navigate = useNavigate();
-  const [orderItems,setOrderItems] = useState();
+  const [orders,setOrders] = useState();
   const [currency,setCurrency] = useState({});
 
 
@@ -29,10 +29,9 @@ const Orders = ({searchQuery,setSearchQuery}) => {
               if(response && response.data){
                   if(response.data.success){
                       if(response.data.items){
-                          console.log(response.data.items);
-                          setOrderItems(response.data.items);
+                          setOrders(response.data.items);
                       }else{
-                          setOrderItems([]);
+                          setOrders([]);
                       }
                   }else{
                       console.log(response);
@@ -85,10 +84,17 @@ const Orders = ({searchQuery,setSearchQuery}) => {
         <h1>Your Orders</h1>
       </div>
         <div className="order-items">
-            {orderItems && orderItems.map((eachOrderItem)=>{
-                return <OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/>
-                })}
-            {!orderItems || !orderItems.length && 
+            {orders && Object.keys(orders).map((eachOrderId)=>{
+                let orderTotal = 0;
+                return orders[eachOrderId] && orders[eachOrderId].map((eachOrderItem,index)=>{
+                    orderTotal += parseFloat(eachOrderItem.price);
+                    if(index===orders[eachOrderId].length-1){
+                        return <><OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/><div className="container">Order Total: {currency && currency.name+" "+orderTotal} </div></>
+                    }
+                    return <OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/>
+                })
+            })}
+            {!orders || !Object.keys(orders).length && 
                 <div className="container"> No past orders!</div>
             }
         </div>
