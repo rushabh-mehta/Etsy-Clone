@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 const config =  require('config');
 const { Currency } = require("../models/currency");
 const encrypt = require("../services/encrypt");
-const auth = require("../middleware/auth");
 const router = express.Router();
+const passport = require('passport');
 
-router.get("/", auth, async (req, res) => {
+router.get("/", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = {};
     try{
@@ -24,7 +24,7 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
-router.get("/:currencyId", auth, async (req, res) => {
+router.get("/:currencyId", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = {};
     data.currencyId = req.params.currencyId;

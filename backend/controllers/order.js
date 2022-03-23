@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 const config =  require('config');
 const { Order } = require("../models/order");
 const encrypt = require("../services/encrypt");
-const auth = require("../middleware/auth");
 const router = express.Router();
+const passport = require('passport');
 
-router.post("/get/:userId", auth, async (req, res) => {
+router.post("/get/:userId", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = {};
     data.userId = req.params.userId;
@@ -28,7 +28,7 @@ router.post("/get/:userId", auth, async (req, res) => {
     }
 });
 
-router.post("/place", auth, async (req, res) => {
+router.post("/place", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = req.body;
     try{

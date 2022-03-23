@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 const config =  require('config');
 const { FavoriteItem } = require("../models/favoriteitem.js");
 const encrypt = require("../services/encrypt");
-const auth = require("../middleware/auth");
 const router = express.Router();
+const passport = require('passport');
 
-router.post("/add", auth, async (req, res) => {
+router.post("/add", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = req.body;
     try{
@@ -24,7 +24,7 @@ router.post("/add", auth, async (req, res) => {
     }
 });
 
-router.post("/remove", auth, async (req, res) => {
+router.post("/remove", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = req.body;
     try{
@@ -42,7 +42,7 @@ router.post("/remove", auth, async (req, res) => {
     }
 });
 
-router.get("/:userId", auth, async (req, res) => {
+router.get("/:userId", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = {};
     data.userId = req.params.userId;
@@ -61,7 +61,7 @@ router.get("/:userId", auth, async (req, res) => {
     }
 });
 
-router.post("/filter", auth, async (req, res) => {
+router.post("/filter", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = req.body;
     try{

@@ -4,7 +4,6 @@ const config =  require('config');
 const { Shop } = require("../models/shop");
 const { Item } = require("../models/item");
 const encrypt = require("../services/encrypt");
-const auth = require("../middleware/auth");
 const router = express.Router();
 
 
@@ -14,7 +13,7 @@ const upload = multer({ dest: 'uploads/' });
 const { uploadFile, getFileStream } = require('../services/s3');
 
 
-router.get("/user/:id", auth, async (req, res) => {
+router.get("/user/:id", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = {};
     data.userId = req.params.id;
@@ -41,7 +40,7 @@ router.get("/user/:id", auth, async (req, res) => {
     }
 });
 
-router.post("/name", auth, async (req, res) => {
+router.post("/name", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = {};
     data.shopName = req.body.shopName;
@@ -68,7 +67,7 @@ router.post("/name", auth, async (req, res) => {
     }
 });
 
-router.post("/create", auth, async (req, res) => {
+router.post("/create", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = {};
     data.shopName = req.body.shopName;
@@ -138,7 +137,7 @@ router.get('/display-picture/:key', (req, res) => {
   }
 });
 
-router.post("/display-picture/upload", auth, upload.single("image"),async (req, res) => {
+router.post("/display-picture/upload", passport.authenticate('jwt', { session: false }), upload.single("image"),async (req, res) => {
     const file = req.file;
     const response = {};
     try{

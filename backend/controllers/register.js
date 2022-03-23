@@ -6,6 +6,7 @@ const {
 } = require('uuid');
 const { User } = require("../models/user");
 const encrypt = require("../services/encrypt");
+const passport = require('passport');
 
 const router = express.Router();
 

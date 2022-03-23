@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 const config =  require('config');
 const { Country } = require("../models/country");
 const encrypt = require("../services/encrypt");
-const auth = require("../middleware/auth");
 const router = express.Router();
+const passport = require('passport');
 
-router.get("/", auth, async (req, res) => {
+router.get("/", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     try{
         const countries = await Country.getCountries();

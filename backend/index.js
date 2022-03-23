@@ -15,17 +15,15 @@ const cart = require("./controllers/cart");
 const order = require("./controllers/order");
 const favoriteitem = require("./controllers/favoriteitem");
 const currency = require("./controllers/currency");
-
+const passport = require('passport');
 
 const app = express();
 
+require('./config/passport-config')(passport);
+
 app.use(cors());
 app.use(express.json());
-
-app.listen(3001, ()=>{
-    console.log('Listening on port 3001');
-})
-
+app.use(passport.initialize());
 
 app.use('/api/register',register);
 app.use('/api/login',login);
@@ -40,4 +38,8 @@ app.use('/api/order',order);
 app.use('/api/favoriteitem',favoriteitem);
 app.use('/api/currency',currency);
 
+
+app.listen(3001, ()=>{
+    console.log('Listening on port 3001');
+})
 
