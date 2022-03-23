@@ -5,6 +5,7 @@ const { Shop } = require("../models/shop");
 const { Item } = require("../models/item");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
+const passport = require('passport');
 
 
 const multer = require('multer');

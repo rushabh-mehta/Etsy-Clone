@@ -4,6 +4,7 @@ const config =  require('config');
 const { Category } = require("../models/category");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
+const passport = require('passport');
 
 router.get("/:userId",  passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
