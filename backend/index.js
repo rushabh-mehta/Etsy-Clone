@@ -16,8 +16,26 @@ const order = require("./controllers/order");
 const favoriteitem = require("./controllers/favoriteitem");
 const currency = require("./controllers/currency");
 const passport = require('passport');
+const mongoose = require('mongoose');
+const { mongoDB } = require('./config/mongo-config');
 
 const app = express();
+
+var options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+
+mongoose.connect(mongoDB, options, (err, res) => {
+    if (err) {
+        console.log(err);
+        console.log(`MongoDB Connection Failed`);
+    } else {
+        console.log(`MongoDB Connected`);
+    }
+});
+
+
 
 require('./config/passport-config')(passport);
 

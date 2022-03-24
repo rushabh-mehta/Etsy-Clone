@@ -4,7 +4,7 @@ const config =  require('config');
 const { 
   v4: uuidv4,
 } = require('uuid');
-const { User } = require("../models/user");
+const { User } = require("../services/user");
 const encrypt = require("../services/encrypt");
 
 const router = express.Router();

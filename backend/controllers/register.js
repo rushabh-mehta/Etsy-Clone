@@ -1,10 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
-const { 
-  v4: uuidv4,
-} = require('uuid');
-const { User } = require("../models/user");
+const { User } = require("../services/user");
 const encrypt = require("../services/encrypt");
 const passport = require('passport');
 
@@ -17,7 +14,6 @@ router.post("/", async (req, res) => {
     if(userRegObj.name && userRegObj.email && userRegObj.password){
         try{
             const exists = await User.checkExists(userRegObj);
-            console.log("exists"+JSON.stringify(exists));
             if(exists && exists.userFound){
                 response.success = false;
                 response.error = "User already exists";
@@ -27,10 +23,9 @@ router.post("/", async (req, res) => {
 
             const encryptedPassword = await encrypt.cryptPassword(password);
             userRegObj.password = encryptedPassword;
-            userRegObj.id = uuidv4();
-            userRegObj.country = 1;
-            userRegObj.currency = 1;
-            userRegObj.profilePicture = '3d07ffec355de8f5d8a483d2085b4a4e';
+            userRegObj.country = "623bc75595f732ed8d44697a";
+            userRegObj.currency = "623bc6d795f732ed8d446943";
+            userRegObj.profilePicture = "3d07ffec355de8f5d8a483d2085b4a4e";
             const result = await User.addUser(userRegObj);
             delete userRegObj.password;
             // Create token

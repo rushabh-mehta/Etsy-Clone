@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
-const { Country } = require("../models/country");
+const { Country } = require("../services/country");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
