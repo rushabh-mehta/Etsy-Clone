@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
-const { Category } = require("../models/category");
+const { Category } = require("../services/category");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
