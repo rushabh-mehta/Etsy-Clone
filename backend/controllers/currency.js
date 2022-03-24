@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
-const { Currency } = require("../models/currency");
+const { Currency } = require("../services/currency");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
@@ -30,7 +30,6 @@ router.get("/:currencyId", passport.authenticate('jwt', { session: false }), asy
     data.currencyId = req.params.currencyId;
     try{
         const currency = await Currency.getCurrency(data);
-        console.log(currency);
         response.currency = currency;
         response.success = true;
         response.status = "200";
