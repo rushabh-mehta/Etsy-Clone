@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
-const { Item } = require("../models/item");
+const { Item } = require("../services/item");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
@@ -119,7 +119,6 @@ router.post("/other", passport.authenticate('jwt', { session: false }), async (r
 router.post("/other/filter", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const response = {};
     const data = req.body;
-    console.log(data);
     try{
         const itemsResult = await Item.getOtherFilteredItems(data);
         response.items = itemsResult;
