@@ -1,8 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
-const { Shop } = require("../models/shop");
-const { Item } = require("../models/item");
+const { Shop } = require("../services/shop");
+const { Item } = require("../services/item");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');

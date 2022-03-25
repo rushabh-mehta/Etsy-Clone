@@ -56,7 +56,7 @@ const CreateShop = () => {
       try{
         const response = await authapi.post(SHOP_CREATE_API,reqBody);
         if(response && response.data && response.data.success){
-          let shopId = response.data.shop.insertId;
+          let shopId = response.data.shop.id;
           setCreatingShop(false);
           navigate(SHOP_HOME_PAGE+shopId);
         }else{

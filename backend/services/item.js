@@ -183,8 +183,6 @@ class Item{
             if(sortBy==="salesCount"){
                 sortQuery = {"salesCount":-1};
             }
-            console.log(JSON.stringify(itemQuery));
-            console.log(JSON.stringify(sortQuery));
             const items = await ItemModel.find(itemQuery).sort(sortQuery);
             if(items){
                  const itemIds = items.map((eachItem)=>{

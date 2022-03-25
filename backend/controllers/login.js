@@ -19,8 +19,9 @@ router.post("/", async (req, res) => {
             if(exists && exists.userFound){
                 const passwordMatch = await encrypt.comparePassword(userObj.password, exists.user.password);
                 if(passwordMatch){
+                    const user = JSON.parse(JSON.stringify(exists.user));
                     delete userObj.password;
-                    delete exists.user.password;
+                    delete user.password;
                     const token = jwt.sign(
                         userObj,
                         config.get("jwtPrivateKey"),
@@ -28,8 +29,9 @@ router.post("/", async (req, res) => {
                             expiresIn: "24h",
                         }
                     );
-                    exists.user.token = token;
-                    response.user = exists.user;
+                    user.token = token;
+                    response.user = user;
+                    response.token = token;
                     response.success = true;
                     response.status = "200";
                     return res.status(200).send(response);
