@@ -82,7 +82,7 @@ class Cart{
         });
     }
 
-    static updateItemOrderQuantity = ({orderQuantity,userId,itemId,cartId})=>{
+    static updateItemOrderQuantity = async ({orderQuantity,userId,itemId,cartId})=>{
         return new Promise((resolve, reject) => {
             const sqlQuery = `update ${tableName} set orderQuantity = '${orderQuantity}' where userId = '${userId}' AND itemId = '${itemId}' AND id='${cartId}'`;
             con.query(sqlQuery, (error, results) => {
@@ -98,7 +98,7 @@ class Cart{
         });
     }
 
-    static updateItemOrderGift = ({gift,description,userId,itemId,cartId})=>{
+    static updateItemOrderGift = async ({gift,description,userId,itemId,cartId})=>{
         return new Promise((resolve, reject) => {
             const sqlQuery = `update ${tableName} set gift = '${gift}',description = '${description}' where userId = '${userId}' AND itemId = '${itemId}' AND id='${cartId}'`;
             con.query(sqlQuery, (error, results) => {

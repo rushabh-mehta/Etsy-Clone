@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
-const { Cart } = require("../models/cart");
+const { Cart } = require("../services/cart");
 const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
