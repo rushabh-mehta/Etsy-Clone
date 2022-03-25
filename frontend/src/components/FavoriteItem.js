@@ -23,6 +23,7 @@ const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
         }
     }
     const removeFavoriteItem = async (event)=>{
+        console.log(item);
         event.stopPropagation();
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};

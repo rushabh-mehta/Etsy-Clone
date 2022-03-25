@@ -117,7 +117,8 @@ class Item{
             const itemQuery = {
                 "shop":{$nin:[mongoose.Types.ObjectId(shopId)]}
             }
-            const items = await ItemModel.find(itemQuery);
+            let items = await ItemModel.find(itemQuery);
+            items = JSON.parse(JSON.stringify(items));
             if(items){
                  const itemIds = items.map((eachItem)=>{
                     return mongoose.Types.ObjectId(eachItem.id);
@@ -135,7 +136,7 @@ class Item{
                 }
                 const favItems = await FavoriteItemModel.find(favItemQuery);
                 const favItemIds = favItems.map((eachFavItem)=>{
-                    return eachFavItem.item; //TODO check if works
+                    return eachFavItem.itemStr;
                 });
                 items.forEach((eachItem)=>{
                     if(favItemIds.includes(eachItem.id)){

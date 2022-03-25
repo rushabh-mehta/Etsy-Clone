@@ -256,6 +256,7 @@ const ViewProfile = ({searchQuery,setSearchQuery}) => {
                 </div>
                 <div className="viewprofile-favorite-items">
                     {favoriteItems && favoriteItems.map((eachFavoriteItem,index)=>{
+                        console.log(eachFavoriteItem);
                         return <FavoriteItem currency={currency} index={index} favoriteItems={favoriteItems} setFavoriteItems={setFavoriteItems} key={eachFavoriteItem.favoriteItemId} item={eachFavoriteItem}/>
                     })}
                     {!favoriteItems || !favoriteItems.length &&
