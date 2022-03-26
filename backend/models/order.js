@@ -147,7 +147,6 @@ class Order{
                                                     if(err){
                                                         return reject("Some unexpected error occurred");
                                                     }else{
-                                                        console.log(orderCreated);
                                                         let createOrderItemsQuery = "";
                                                         updatedItems.forEach((eachItem)=>{
                                                             const query = `INSERT INTO ${orderItemTableName} (orderId,name,displayPicture,price,orderQuantity,date,shopName,itemId,gift,description) VALUES ("${orderId}","${eachItem.itemName}","${eachItem.itemDisplayPicture}",${eachItem.itemPrice},"${eachItem.itemOrderQuantity}",${poolConnection.escape(eachItem.itemDate)},"${eachItem.shopName}","${eachItem.itemId}","${eachItem.itemGift}","${eachItem.itemCartDescription}");`;
@@ -178,12 +177,12 @@ class Order{
                                                                                 return reject("Some unexpected error occurred");
                                                                             }else{
                                                                             poolConnection.commit((err,commitResult)=>{
-                                                                                    if(err){
-                                                                                        console.log(err);
-                                                                                        return reject("Some unexpected error occurred");
-                                                                                    }else{
-                                                                                        resolve(commitResult);
-                                                                                    }
+                                                                                if(err){
+                                                                                    console.log(err);
+                                                                                    return reject("Some unexpected error occurred");
+                                                                                }else{
+                                                                                    resolve(commitResult);
+                                                                                }
                                                                             }) 
                                                                             }
                                                                         })
