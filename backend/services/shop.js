@@ -94,10 +94,11 @@ class Shop{
             const query = {
                 "_id": mongoose.Types.ObjectId(shopId)
             };
-            const shop = await ShopModel.findOne(query);
+            const shop = await ShopModel.findOne(query).populate('owner');
             let responseObj = {};
             if(shop){
-                if(shop.owner===userId){
+                console.log(shop.owner);
+                if(shop.owner.id===userId){
                     responseObj.editRights = true;
                 }
                 responseObj.shopFound = true;

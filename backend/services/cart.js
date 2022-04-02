@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-const CartModel = require('../mongo_models/category.js');
+const CartModel = require('../mongo_models/cart.js');
 
 class Cart{
 
@@ -56,7 +56,7 @@ class Cart{
             const query = {
                 "user": mongoose.Types.ObjectId(userId)
             };
-            let items = await CartModel.find(query);
+            let items = await CartModel.find(query).populate('item');
             if(items?.length){
                 return items;
             }else{

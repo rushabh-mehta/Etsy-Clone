@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var cartSchema = new Schema({
-  user: {type: mongoose.Schema.Types.ObjectId, ref: 'users',required: true},
-  item: {type: mongoose.Schema.Types.ObjectId, ref: 'items',required: true},
+  user: {type: mongoose.Schema.Types.ObjectId, ref: 'user',required: true},
+  item: {type: mongoose.Schema.Types.ObjectId, ref: 'item',required: true},
   orderQuantity: {type:Number, required: true},
-  description: {type:String, required: true},
-  gift: {type:String, required: true},
-
+  description: {type:String},
+  gift: {type:String},
 },
 {
     versionKey: false

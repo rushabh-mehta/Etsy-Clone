@@ -10,7 +10,7 @@ class FavoriteItem{
             const query = {
                 "user": mongoose.Types.ObjectId(userId)
             };
-            let items = await FavoriteItemModel.find(query);
+            let items = await FavoriteItemModel.find(query).populate('item');
             if(items?.length){
                 return items;
             }else{
@@ -63,14 +63,17 @@ class FavoriteItem{
     static getFilteredFavoriteItems = async ({searchQuery,userId})=>{
         try{
             const itemQuery = {
-                "user":mongoose.Types.ObjectId(userId)
             }
             itemQuery.$and = [];
+            itemQuery.$and.push({"user":mongoose.Types.ObjectId(userId)});
+            let searchRegex;
             if(searchQuery){
-                let searchRegex = new RegExp(`${searchQuery}`);
-                itemQuery.$and.push({"name":searchRegex}); 
+                searchRegex = new RegExp(`${searchQuery}`);
             }
-            const items = await FavoriteItemModel.find(itemQuery);
+            let items = await FavoriteItemModel.find(itemQuery).populate('item');
+            items = items.filter((eachItem)=>{
+                return eachItem.item.name.match(searchRegex);
+            })
             if(items){
                 return items;
             }else{

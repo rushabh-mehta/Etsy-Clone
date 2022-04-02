@@ -41,10 +41,6 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
     const [validName, setValidName] = useState(false);
     const [nameFocus, setNameFocus] = useState(false);
 
-    const [email, setEmail] = useState("");
-    const [validEmail, setValidEmail] = useState(false);
-    const [emailFocus, setEmailFocus] = useState(false);
-
     const [gender, setGender] = useState("");
     const [validGender, setValidGender] = useState(false);
     const [genderFocus, setGenderFocus] = useState(false);
@@ -89,9 +85,6 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
         setValidName(NAME_REGEX.test(name));
     }, [name])
 
-    useEffect(() => {
-        setValidEmail(EMAIL_REGEX.test(email));
-    }, [email])
 
     useEffect(() => {
         setValidPhone(PHONE_REGEX.test(phone));
@@ -167,9 +160,6 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
                 if(userObj.name){
                     setName(userObj.name);
                 }
-                if(userObj.email){
-                    setEmail(userObj.email);
-                }
                 if(userObj.gender){
                     setGender(userObj.gender);
                 }
@@ -216,9 +206,6 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
             if(name){
                 userObj.name = name;
             }
-            if(email){
-                userObj.email = email;
-            }
             if(gender){
                userObj.gender = gender;
             }
@@ -249,9 +236,6 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
                 }
                 if(userObj.name){
                     setName(userObj.name);
-                }
-                if(userObj.email){
-                    setEmail(userObj.email);
                 }
                 if(userObj.gender){
                     setGender(userObj.gender);
@@ -367,22 +351,6 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
                         </div>        
                         </div>
                         <div className="border-btm col-md-12">
-                        <label htmlFor="useremail" className="editprofile_item_label">Email</label>
-                                <input value={email} className="form-control editprofile_item_input" id="useremail" name="useremail" type="text" onChange={(e)=>{setEmail(e.target.value)}} onFocus={() => setEmailFocus(true)} 
-                                onBlur={() => setEmailFocus(false)}>
-                                </input>
-                                {validEmail && <FontAwesomeIcon color="green" icon={faCheck}/> }
-                                {(!validEmail && email) && <FontAwesomeIcon color="red" icon={faTimes} />}
-                            <div className="editprofile_input_error">
-                                {emailFocus && !validEmail && 
-                                    <small className="form-text text-muted editprofile_item_text_container">
-                                        <FontAwesomeIcon icon={faInfoCircle} />
-                                        <span className="editprofile_item_text">Invalid Email</span>
-                                    </small>
-                                }
-                            </div>
-                        </div> 
-                        <div className="border-btm col-md-12">
                             <div>Gender</div>
                             <Form.Check type="radio" name="gender" id="gender" label="Male" checked={gender === 'Male'} value="Male" onClick={() => setGender('Male')} onChange={() => {}}/>
                             <Form.Check type="radio" name="gender" id="gender" label="Female" checked={gender === 'Female'} value="Female" onClick={() => setGender('Female')} onChange={() => {}} />
@@ -484,7 +452,7 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
                 </div>
                 <div className="container">
                     <div className="col-md-12">
-                        <button className="btn editprofile_save-btn" onClick={()=>{editProfile(user)}} disabled={editingProfile || !validName || !validEmail || !validPhone || !validAddress || !validCity || !validAbout || !validDob}>Save</button>
+                        <button className="btn editprofile_save-btn" onClick={()=>{editProfile(user)}} disabled={editingProfile || !validName || !validPhone || !validAddress || !validCity || !validAbout || !validDob}>Save</button>
                         <button className="btn editprofile_cancel-btn" onClick={()=>{navigate("/view-profile")}} disabled={editingProfile}>Cancel</button>
                     </div>
                 </div>

@@ -13,23 +13,24 @@ router.post("/add", passport.authenticate('jwt', { session: false }), async (req
     const item = req.body;
     try{
         const addItem = await Cart.addItem(item);
-        response.addedItem = addItem;
-        response.success = true;
-        response.status = "200";
-        return res.status(200).send(response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        if(e.itemExists){
+        if(addItem.itemExists){
+            response.success = false;
             response.itemExists = true;
             response.error = "Item already added";
             response.status = "400";
-            res.status(400).send(response);
+            return res.status(400).send(response);
         }else{
-            response.error = "Some error occurred. Please try again later";
-            response.status = "500";
-            res.status(500).send(response);
+            response.addedItem = addItem;
+            response.success = true;
+            response.status = "200";
+            return res.status(200).send(response);
         }
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
     }
 });
 

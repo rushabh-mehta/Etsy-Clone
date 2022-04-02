@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 const OrderModel = require('../mongo_models/order.js');
 const OrderItemModel = require('../mongo_models/orderitem.js');
-const Item = require('../mongo_models/item.js');
+const CartModel = require('../mongo_models/cart.js');
+const ItemModel = require('../mongo_models/item.js');
+
 
 class Order{
 
@@ -11,17 +13,19 @@ class Order{
                 "user": mongoose.Types.ObjectId(userId)
             };
             let moreAvailable = false;
-            let orders = await OrderModel.find(query);
+            let orders = await OrderModel.find(query).skip(skip).limit(parseInt(limit)+1);
             orders = JSON.parse(JSON.stringify(orders));
             const response = {};
             if(orders?.length){
-                const orderIds = results.map((eachOrder)=>{
-                    return eachOrder.orderId;
+                const orderIds = orders.map((eachOrder)=>{
+                    return eachOrder.id;
                 });
                 if(orderIds.length>limit){
                     moreAvailable = true;
                 }
-                orderIds.pop();
+                if(orderIds.length>limit){
+                    orderIds.pop();
+                }
                 const orderitemsFindQuery = {
                     order:{$in:orderIds}
                 }
@@ -46,14 +50,15 @@ class Order{
                 });
                 const groupedOrders = {};
                 orderItems.forEach((eachItem)=>{
-                    if(eachItem.orderId in orders){
-                        groupedOrders[eachItem.orderId].push(result);
+                    if(eachItem.id in orders){
+                        groupedOrders[eachItem.id].push(eachItem);
                     }else{
-                        groupedOrders[eachItem.orderId] = [result];
+                        groupedOrders[eachItem.id] = [eachItem];
                     }
                 });
                 response.orders = groupedOrders;
                 response.moreAvailable = moreAvailable;
+                return response;
             }else{
                 response.orders = {};
                 response.moreAvailable = false;
@@ -74,33 +79,35 @@ class Order{
                 const cartItemQuery = {
                     "user": mongoose.Types.ObjectId(userId)
                 };
-                let cartItems = await CartModel.find(cartItemQuery);
+                let cartItems = await CartModel.find(cartItemQuery).populate('item');
                 cartItems = JSON.parse(JSON.stringify(cartItems));
                 if(cartItems?.length){
                     const cartItemIds = cartItems.map((eachCartItem)=>{
-                        return mongoose.Types.ObjectId(eachCartItem.item);
+                        return mongoose.Types.ObjectId(eachCartItem.item.id);
                     });
                     const itemQuery = {
                         "_id": {$in:cartItemIds}
                     };
-                    const items = await ItemModel.find(query);
+                    let items = await ItemModel.find(itemQuery).populate('shop');
                     items = JSON.parse(JSON.stringify(items));
                     if(items?.length){
                         const updatedItems = [];
                         cartItems.forEach((eachCartItem)=>{
                             let item = items.filter((eachItem)=>{
-                                return eachCartItem.itemId==eachItem.itemId;
+                                return eachCartItem.item.id==eachItem.id;
                             });
                             item = item[0];
-                            if(item.itemQuantity<eachCartItem.orderQuantity){
-                                return reject("Item out of stock");
+                            if(item.quantity<eachCartItem.orderQuantity){
+                                throw new Error("Item out of stock");
                             }else{
-                                item.itemQuantity-=eachCartItem.orderQuantity;
-                                item.itemSalesCount+=eachCartItem.orderQuantity;
-                                item.itemOrderQuantity=eachCartItem.orderQuantity;
-                                item.itemDate = new Date();
-                                item.itemGift = eachCartItem.gift;
-                                item.itemCartDescription = eachCartItem.description;
+                                item.quantity-=eachCartItem.orderQuantity;
+                                item.salesCount+=eachCartItem.orderQuantity;
+                                item.orderQuantity=eachCartItem.orderQuantity;
+                                item.date = new Date();
+                                item.gift = eachCartItem.gift;
+                                item.cartDescription = eachCartItem.description;
+                                item.shopName = item.shop.name;
+                                item.item = item.id;
                                 updatedItems.push(item);
                             }
                         });
@@ -112,14 +119,19 @@ class Order{
                         if(orderCreateResult){
                             const createOrderItemsQuery = [];
                             updatedItems.forEach((eachItem)=>{
+                                eachItem.order = orderCreateResult.id;
+                                let eachItemCopy = JSON.parse(JSON.stringify(eachItem));
+                                delete eachItemCopy.id;
+                                delete eachItemCopy._id;
                                 const query = {
                                     "insertOne":{
-                                        "document":eachItem,
+                                        "document":eachItemCopy,
                                     }
                                 };
                                 createOrderItemsQuery.push(query);
                             });
                             const orderItemsCreateResult = await OrderItemModel.bulkWrite(createOrderItemsQuery);
+                            
                             if(orderItemsCreateResult){
                                 const updateItemsQuery = [];
                                 updatedItems.forEach((eachItem)=>{
@@ -129,8 +141,8 @@ class Order{
                                                 "_id":mongoose.Types.ObjectId(eachItem.id)
                                             },
                                             "update":{
-                                                "quantity":eachItem.itemQuantity,
-                                                "salesCount":eachItem.itemSalesCount
+                                                "quantity":eachItem.quantity,
+                                                "salesCount":eachItem.salesCount
                                             }
                                         }
                                     };
@@ -141,7 +153,7 @@ class Order{
                                     const deleteCartItemsQuery = {
                                         "user":mongoose.Types.ObjectId(userId),
                                     }
-                                    const deleteCartItemsResult = await FavoriteItemModel.deleteMany(deleteCartItemsQuery);
+                                    const deleteCartItemsResult = await CartModel.deleteMany(deleteCartItemsQuery);
                                     if(deleteCartItemsResult){
                                         await session.commitTransaction();
                                         const response = {};

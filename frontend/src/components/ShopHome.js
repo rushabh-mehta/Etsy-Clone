@@ -139,13 +139,13 @@ const ShopHome = () => {
                                 <div><img src={(shop && shop.profilePicture) ? (GET_PROFILE_PIC_API+shop.profilePicture):""} className="view_profile_picture"></img></div>
                             </div>
                             <div className="mrgn-tp viewprofile_useremail col-md-12 col-sm-12">
-                                {shop && shop.ownerName}
+                                {shop && shop.owner.name}
                             </div>
                             <div className="viewprofile_useremail col-md-12 col-sm-12">
-                                {shop && shop.ownerEmail}
+                                {shop && shop.owner.email}
                             </div>
                             <div className="viewprofile_useremail col-md-12 col-sm-12">
-                                {shop && shop.ownerPhone}
+                                {shop && shop.owner.phone}
                             </div>
                             {editRights && <div className="viewprofile_useremail col-md-12 col-sm-12">
                                 {"Total Sales: "+(currency && currency.name+" ")+totalSales}

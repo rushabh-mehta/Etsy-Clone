@@ -33,6 +33,7 @@ const Orders = ({searchQuery,setSearchQuery}) => {
               const response = await authapi.post(ORDER_ITEMS_API+user.id,data);
               if(response && response.data){
                   if(response.data.success){
+                      console.log(JSON.stringify(response.data));
                       if(response.data.items){
                           setOrders(response.data.items);
                           setMoreAvailable(response.data.moreAvailable);

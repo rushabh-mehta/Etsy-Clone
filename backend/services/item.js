@@ -3,12 +3,6 @@ const ItemModel = require('../mongo_models/item.js');
 const ShopModel = require('../mongo_models/shop.js');
 const FavoriteItemModel = require('../mongo_models/favoriteitem.js');
 
-
-const tableName = "item";
-const shopTableName = "shop";
-const favoriteItemTableName = "favoriteitem";
-const categoryTableName = "category";
-
 class Item{
 
     static getShopItems = async ({shopId})=>{
@@ -33,13 +27,14 @@ class Item{
             const query = {
                 "_id": mongoose.Types.ObjectId(itemId)
             };
-            const item = await ItemModel.findOne(query);
+            let item = await ItemModel.findOne(query).populate('shop').populate('category');
+            item = JSON.parse(JSON.stringify(item)); 
             if(item){
                 const favItemQuery = {
                     "item": mongoose.Types.ObjectId(itemId),
                     "user": mongoose.Types.ObjectId(userId)
                 };  
-                const favoriteItem = FavoriteItemModel.findOne(favItemQuery);
+                const favoriteItem = await FavoriteItemModel.findOne(favItemQuery);
                 if(favoriteItem && Object.keys(favoriteItem)?.length){
                  item.favorite = true;   
                 }else{
@@ -93,7 +88,7 @@ class Item{
                 price,
                 quantity
             }
-            const result = await UserModel.updateOne(findCondition,updateCondition);
+            const result = await ItemModel.updateOne(findCondition,updateCondition);
             const itemObj = {};
             if(result){
                 itemObj.itemEdited = true;
@@ -117,7 +112,7 @@ class Item{
             const itemQuery = {
                 "shop":{$nin:[mongoose.Types.ObjectId(shopId)]}
             }
-            let items = await ItemModel.find(itemQuery);
+            let items = await ItemModel.find(itemQuery).populate('shop').populate('category');
             items = JSON.parse(JSON.stringify(items));
             if(items){
                  const itemIds = items.map((eachItem)=>{
@@ -174,6 +169,9 @@ class Item{
             if(inStock){
                  itemQuery.$and.push({"quantity":{"$gt":0}}); 
             }
+            if(!itemQuery?.$and?.length){
+                delete itemQuery.$and;
+            }
             let sortQuery = {};
             if(sortBy==="price"){
                 sortQuery = {"price":1};
@@ -184,7 +182,7 @@ class Item{
             if(sortBy==="salesCount"){
                 sortQuery = {"salesCount":-1};
             }
-            const items = await ItemModel.find(itemQuery).sort(sortQuery);
+            const items = await ItemModel.find(itemQuery).sort(sortQuery).populate('shop').populate('category');
             if(items){
                  const itemIds = items.map((eachItem)=>{
                     return mongoose.Types.ObjectId(eachItem.id);
@@ -202,7 +200,7 @@ class Item{
                 }
                 const favItems = await FavoriteItemModel.find(favItemQuery);
                 const favItemIds = favItems.map((eachFavItem)=>{
-                    return eachFavItem.item; //TODO check if works
+                    return eachFavItem.item;
                 });
                 items.forEach((eachItem)=>{
                     if(favItemIds.includes(eachItem.id)){
@@ -217,7 +215,7 @@ class Item{
             }
         }catch(err){
             console.log(err);
-            throw new Error("Some unexpected error occurred while getting user by id");
+            throw new Error("Some unexpected error occurred while getting filtered items");
         }
     }
 

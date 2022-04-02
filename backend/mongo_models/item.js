@@ -4,12 +4,12 @@ const Schema = mongoose.Schema;
 var itemSchema = new Schema({
     name: {type: String, required: true},
     displayPicture: {type: String},
-    category:{type:mongoose.Schema.Types.ObjectId, ref: 'categories',required: true},
+    category:{type:mongoose.Schema.Types.ObjectId, ref: 'category',required: true},
     description:{type:String},
     price:{type:Number, required:true},
     quantity:{type:Number, required:true},
     salesCount:{type:Number, required:true},
-    shop:{type:mongoose.Schema.Types.ObjectId, ref: 'shops',required: true}
+    shop:{type:mongoose.Schema.Types.ObjectId, ref: 'shop',required: true}
 },
 {
     versionKey: false

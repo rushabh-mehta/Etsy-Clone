@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 var favoriteitemSchema = new Schema({
     user:{type:mongoose.Schema.Types.ObjectId, ref: 'users',required: true},
-    item:{type:mongoose.Schema.Types.ObjectId, ref: 'items',required: true},
+    item:{type:mongoose.Schema.Types.ObjectId, ref: 'item',required: true},
 },
 {
     versionKey: false

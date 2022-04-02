@@ -148,7 +148,7 @@ const Cart = ({searchQuery,setSearchQuery}) => {
         let totalCost = 0;
         cartItems.forEach((eachCartItem)=>{
             console.log(eachCartItem);
-            totalCost+=parseInt(eachCartItem.orderQuantity)*parseFloat(eachCartItem.itemPrice);
+            totalCost+=parseInt(eachCartItem.orderQuantity)*parseFloat(eachCartItem.item.price);
         });
         setTotalOrderCost(totalCost);
   },[cartItems]);

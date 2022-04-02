@@ -23,11 +23,10 @@ const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
         }
     }
     const removeFavoriteItem = async (event)=>{
-        console.log(item);
         event.stopPropagation();
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
-        data.itemId = item.itemId;
+        data.itemId = item.item.id;
         data.userId = user.id;
         try{
             const response = await authapi.post(REMOVE_FAVORITE_ITEM_API,data);
@@ -58,18 +57,18 @@ const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
     return (
         <>
             {item && <Card className="favoriteitem_card" onClick={()=>{viewItemOverview(item)}}>
-                <Card.Img variant="top" className="favoriteitem_picture" src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} />
+                <Card.Img variant="top" className="favoriteitem_picture" src={GET_ITEM_DISPLAY_PIC_API+item.item.displayPicture} />
                 <Card.Body>
                     <Card.Title>
                         <div className="row">
-                            <div className="col-md-8"><span className="favoriteitem_name">{item.itemName}</span></div>
+                            <div className="col-md-8"><span className="favoriteitem_name">{item.item.name}</span></div>
                             <div className="col-md-4 favoriteitem-favorite-icon"><FontAwesomeIcon onClick={removeFavoriteItem} icon={faHeartSolid} color="red"/></div>
                         </div>
                     </Card.Title>
                     <Card.Text>
-                        <div className="favoriteitem_price">{(currency && currency.name)+" "+item.itemPrice}</div>
-                        <div className="favoriteitem_description">{item.itemDescription}</div>
-                        <div className="favoriteitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
+                        <div className="favoriteitem_price">{(currency && currency.name)+" "+item.item.price}</div>
+                        <div className="favoriteitem_description">{item.item.description}</div>
+                        <div className="favoriteitem_sales_count">{item.item.salesCount+" pieces sold till now!"}</div>
                     </Card.Text>
                 </Card.Body>
             </Card>}            

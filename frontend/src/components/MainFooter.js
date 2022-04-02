@@ -26,6 +26,7 @@ const MainFooter = ({currency,setCurrency}) => {
         try{
             const response = await authapi.get(GET_COUNTRY_API);
             if(response && response.data && response.data.success && response.data.countries){
+                console.log(response.data);
                 setCountries(response.data.countries);
                 setGettingCountries(false);
             }else{
@@ -107,7 +108,7 @@ const MainFooter = ({currency,setCurrency}) => {
       <MDBContainer fluid className="text-center text-md-left">
         <MDBRow>
           <MDBCol md="4">
-            <div>{countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)}) && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0] && countries.filter((eachCountry)=>{return user.country===parseInt(eachCountry.id)})[0].name}</div>
+            <div>{countries.filter((eachCountry)=>{return user.country===eachCountry.id}) && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0] && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0].name}</div>
           </MDBCol>
           <MDBCol md="4">
             <Form.Group className="mb-3">

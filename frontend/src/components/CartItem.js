@@ -30,7 +30,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
         }else if(orderQuantity<-1000){
             setOrderQuantity(1);
         }
-        else if(((item.itemQuantity)<orderQuantity) || orderQuantity<=0){
+        else if(((item.item.quantity)<orderQuantity) || orderQuantity<=0){
             let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
             invalidOrderCopy[index] = true;
             setInvalidOrder(invalidOrderCopy);
@@ -42,14 +42,14 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
                 const data = {};
-                data.cartId = item.cartId;
+                data.cartId = item.id;
                 data.userId = user.id;
-                data.itemId = item.itemId;
+                data.itemId = item.item.id;
                 data.orderQuantity = orderQuantity;
                 const response = await authapi.post(UPDATE_ITEM_QUANTITY_CART_API, data);
                 if (response && response.data && response.data.success) {
                     cartItems.forEach((eachCartItem) => {
-                        if(eachCartItem.cartId == item.cartId){
+                        if(eachCartItem.cartId === item.cartId){
                             eachCartItem.orderQuantity = item.orderQuantity;  
                         }
                     });
@@ -101,7 +101,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
 
     const removeItem = async () => {
         const data = {};
-        data.id = item.cartId;
+        data.id = item.id;
         try {
             const response = await authapi.post(REMOVE_ITEM_CART_API, data);
             if (response && response.data) {
@@ -127,17 +127,17 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
             <div className="container cartitem-container">
                 <div className="row">
                     <div className="col-md-5">
-                        <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="cartitem_display_picture"></img></div>
+                        <div><img src={GET_ITEM_DISPLAY_PIC_API+item.item.displayPicture} className="cartitem_display_picture"></img></div>
                     </div>
                     <div className="mrgn-tp col-md-4">
                         <div>
-                            <span className="overview-name">{item.itemName}</span>
+                            <span className="overview-name">{item.item.name}</span>
                         </div>
                         <div>{item.itemCategory}</div>
-                        <div>{(currency && currency.name)+" "+item.itemPrice}</div>
+                        <div>{(currency && currency.name)+" "+item.item.price}</div>
                         <div>{item.itemDescription}</div>
-                        <div className="homeitem_sales_count">{(item.itemQuantity)+" pieces available!"}</div>
-                        <div className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
+                        <div className="homeitem_sales_count">{(item.item.quantity)+" pieces available!"}</div>
+                        <div className="homeitem_sales_count">{item.item.salesCount+" pieces sold till now!"}</div>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
@@ -147,7 +147,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                     <Button className="cartitem_remove-btn" onClick={removeItem}>
                         Delete
                     </Button>
-                        <span className="cartitem-cost">{"Cost: "+(currency && currency.name)+" "+((item.itemPrice*orderQuantity)>0 ? (item.itemPrice*orderQuantity):0)}</span>
+                        <span className="cartitem-cost">{"Cost: "+(currency && currency.name)+" "+((item.item.price*orderQuantity)>0 ? (item.item.price*orderQuantity):0)}</span>
                     <div>
                         <Form.Check size="sm" className="exclude-filter" checked={gift} onChange={(e)=>{setGift(e.target.checked)}} type="checkbox" label="Gift Wrap"/>
                         {gift && 

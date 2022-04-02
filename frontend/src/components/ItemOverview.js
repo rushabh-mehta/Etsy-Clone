@@ -110,7 +110,7 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
     const removeFavoriteItem = async ()=>{
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
-        data.itemId = item.itemId;
+        data.itemId = item.id;
         data.userId = user.id;
         try{
             const response = await authapi.post(REMOVE_FAVORITE_ITEM_API,data);
@@ -139,7 +139,7 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
     const addFavoriteItem = async ()=>{
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
-        data.itemId = item.itemId;
+        data.itemId = item.id;
         data.userId = user.id;
         try{
             const response = await authapi.post(ADD_FAVORITE_ITEM_API,data);
@@ -211,7 +211,9 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
     },[orderQuantity]);
 
     return (
-        <div>
+    <div>
+        {!itemLoading &&
+            <div>
             <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems} setItems={setItems}/>
             <div className="container itemoverview-container">
                 <div className="row">
@@ -220,16 +222,16 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
                     </div>
                     <div className="mrgn-tp col-md-4">
                         <div>
-                            <span className="overview-name">{item.itemName}</span>
-                            {item.favorite && <span><FontAwesomeIcon onClick={removeFavoriteItem} color="red" icon={faHeartSolid}/></span>}
-                            {!item.favorite && <span><FontAwesomeIcon onClick={addFavoriteItem} color="red" icon={faHeartRegular}/></span>}
+                            <span className="overview-name">{item.name}</span>
+                            {item.favorite && <span className="homeitem-favorite-icon"><FontAwesomeIcon onClick={removeFavoriteItem} color="red" icon={faHeartSolid}/></span>}
+                            {!item.favorite && <span className="homeitem-favorite-icon"><FontAwesomeIcon onClick={addFavoriteItem} color="red" icon={faHeartRegular}/></span>}
                         </div>
-                        <Link className="overview-shop" to={SHOP_HOME_PAGE+item.shopId}>{item.shopName}</Link>
-                        <div data-testid="itemoverview-name">{item.categoryName}</div>
-                        <div data-testid="itemoverview-price">{currency.name+" "+item.itemPrice}</div>
-                        <div data-testid="itemoverview-description">{item.itemDescription}</div>
-                        <div data-testid="itemoverview-quantity" className="homeitem_sales_count">{(item.itemQuantity)+" pieces available!"}</div>
-                        <div data-testid="itemoverview-salescount" className="homeitem_sales_count">{item.itemSalesCount+" pieces sold till now!"}</div>
+                        <Link className="overview-shop" to={SHOP_HOME_PAGE+item.shop.id}>{item.shop.name}</Link>
+                        <div data-testid="itemoverview-name">{item.categoryname}</div>
+                        <div data-testid="itemoverview-price">{currency.name+" "+item.price}</div>
+                        <div data-testid="itemoverview-description">{item.description}</div>
+                        <div data-testid="itemoverview-quantity" className="homeitem_sales_count">{(item.quantity)+" pieces available!"}</div>
+                        <div data-testid="itemoverview-salescount" className="homeitem_sales_count">{item.salesCount+" pieces sold till now!"}</div>
                     <Form.Group className="mb-3 mrgn-tp">
                         <Form.Label className="add-cart-quantity" htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control className="add-cart-quantity" value={orderQuantity} onChange={(e)=>{setOrderQuantity(e.target.value)}}  type="number" id="quantity" />
@@ -243,6 +245,8 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
             </div>
             {!gettingCurrency && !itemsLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
         </div>  
+        }
+    </div>
     )
 }
 
