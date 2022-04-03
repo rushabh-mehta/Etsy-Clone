@@ -13,8 +13,8 @@ const UPDATE_ITEM_GIFT_CART_API = "/api/cart/item/gift";
 const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCartItems,currency }) => {
     const navigate = useNavigate();
     const [orderQuantity, setOrderQuantity] = useState(item.orderQuantity);
-    const [gift,setGift] = useState(item.cartGift === 'true');
-    const [description, setDescription] = useState(item.cartDescription);
+    const [gift,setGift] = useState(item.gift === 'true');
+    const [description, setDescription] = useState(item.description);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -64,16 +64,13 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
     }, [orderQuantity]);
 
     useEffect(async () => {
-        let invalidOrderCopy = JSON.parse(JSON.stringify(invalidOrder));
-        invalidOrderCopy[index] = false;
-        setInvalidOrder(invalidOrderCopy);
         item.gift = gift;
         item.description = description;
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
-        data.cartId = item.cartId;
+        data.cartId = item.id;
         data.userId = user.id;
-        data.itemId = item.itemId;
+        data.itemId = item.item.id;
         data.gift = gift;
         if(gift){
             data.description = description;   
@@ -141,7 +138,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="quantity">Quantity</Form.Label>
                         <Form.Control value={orderQuantity} onChange={(e) => { setOrderQuantity(e.target.value) }} type="number" id="quantity" />
-                        {(item.itemQuantity)<orderQuantity && <div className="mrgn-tp addcart-error">Out of Stock!</div>}
+                        {(item.item.quantity)<orderQuantity && <div className="mrgn-tp addcart-error">Out of Stock!</div>}
                         {orderQuantity<=0 && <div className="mrgn-tp addcart-error">Invalid order quantity!</div>}
                     </Form.Group>
                     <Button className="cartitem_remove-btn" onClick={removeItem}>

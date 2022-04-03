@@ -183,6 +183,7 @@ class Order{
             }
         }catch(err){
             await session.abortTransaction();
+            throw new Error("Some unexpected error occurred while placing order");
         }finally{
             session.endSession();
         }

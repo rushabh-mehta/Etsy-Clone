@@ -28,6 +28,7 @@ const Cart = ({searchQuery,setSearchQuery}) => {
     const [orderPlaceErrorMsg, setOrderPlaceErrorMsg] = useState("");
     const [totalOrderCost,setTotalOrderCost] = useState(0);
     const [orderPlaceSuccessMsg,setOrderPlaceSuccessMsg] = useState("");
+    const [gettingCartItems,setGettingCartItems] = useState(true);
 
  const getUserCurrency = async ({currency})=>{
       try{
@@ -47,6 +48,7 @@ const Cart = ({searchQuery,setSearchQuery}) => {
   }
 
   const getCartItems = async ()=>{
+      setGettingCartItems(true);
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
       if(!token || !user){
@@ -58,25 +60,29 @@ const Cart = ({searchQuery,setSearchQuery}) => {
                   if(response.data.success){
                       if(response.data.items){
                           setCartItems(response.data.items);
-                          console.log(response.data.items);
                           let invalidOrderCopy = [];
                           response.data.items.forEach((item)=>{
                                 invalidOrderCopy.push(false);
                           })
                           setInvalidOrder(invalidOrderCopy);
+                          setGettingCartItems(false);
                       }else{
-                          setCartItems([]);
+                        setCartItems([]);
+                        setGettingCartItems(false);
                       }
                   }else{
                       console.log(response);
+                        setGettingCartItems(false);
                   }
               }else{
                   console.log(response);
+                setGettingCartItems(false);
               }
           }catch(err){
               if(err && err.response && err.response.data && err.response.data.error){
                   console.log(err.response.data.error);
               }
+              setGettingCartItems(false);
           }
       }
   }
@@ -97,7 +103,7 @@ const Cart = ({searchQuery,setSearchQuery}) => {
               const response = await authapi.post(PLACE_ORDER_API,data);
               if(response && response.data){
                   if(response.data.success){
-                    setOrderPlaceSuccessMsg("Order placed successfully!");  
+                    setOrderPlaceSuccessMsg("Order placed successfully!"); 
                     setTimeout(()=>{
                         setOrderPlaceSuccessMsg("");
                         navigate(ORDERS_PAGE, {replace:true});
@@ -154,26 +160,30 @@ const Cart = ({searchQuery,setSearchQuery}) => {
   },[cartItems]);
 
   return (
-    <div>
-      <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
-      <div className="container cart-heading">
-        <h1>Your Cart</h1>
-      </div>
-      <div className="cart-items-container">
-        {cartItems && cartItems.map((eachCartItem,index)=>{  
-            return <CartItem index={index} invalidOrder={invalidOrder} setInvalidOrder={setInvalidOrder} currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
-            })}
-        {!cartItems || !cartItems.length &&
-            <div className="container cart-heading ">Cart Empty!</div>
-        }
-        <div className="container">
-            <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder || !cartItems || !cartItems.length}>Place Order</Button>
-            <span className="cart-cost">{"Total Cost: "+(currency && currency.name)+" "+totalOrderCost}</span>
-            {orderPlaceErrorMsg && <div className="addcart-error">{orderPlaceErrorMsg}</div>}
-            {orderPlaceSuccessMsg && <div className="addcart-success">{orderPlaceSuccessMsg}</div>}
+    <div>{
+        !gettingCartItems && 
+        <div>
+        <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
+        <div className="container cart-heading">
+            <h1>Your Cart</h1>
         </div>
+        <div className="cart-items-container">
+            {cartItems && cartItems.map((eachCartItem,index)=>{  
+                return <CartItem key={index} index={index} invalidOrder={invalidOrder} setInvalidOrder={setInvalidOrder} currency={currency} key={eachCartItem.cartId} cartItems={cartItems} setCartItems={setCartItems} item={eachCartItem}/>
+                })}
+            {!cartItems || !cartItems.length &&
+                <div className="container cart-heading ">Cart Empty!</div>
+            }
+            <div className="container">
+                <Button className="cart_order-btn" onClick={placeOrder} disabled={!canPlaceOrder || !cartItems || !cartItems.length}>Place Order</Button>
+                <span className="cart-cost">{"Total Cost: "+(currency && currency.name)+" "+totalOrderCost}</span>
+                {orderPlaceErrorMsg && <div className="addcart-error">{orderPlaceErrorMsg}</div>}
+                {orderPlaceSuccessMsg && <div className="addcart-success">{orderPlaceSuccessMsg}</div>}
+            </div>
+            </div>
+        <MainFooter currency={currency} setCurrency={setCurrency}/>
         </div>
-       <MainFooter currency={currency} setCurrency={setCurrency}/>
+    }
     </div>
   )
 }
