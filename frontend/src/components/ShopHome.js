@@ -136,7 +136,7 @@ const ShopHome = () => {
                                 SHOP OWNER
                             </div>
                             <div className="mrgn-tp col-md-2 col-sm-12">
-                                <div><img src={(shop && shop.profilePicture) ? (GET_PROFILE_PIC_API+shop.profilePicture):""} className="view_profile_picture"></img></div>
+                                <div><img src={(shop && shop.owner.profilePicture) ? (GET_PROFILE_PIC_API+shop.owner.profilePicture):""} className="view_profile_picture"></img></div>
                             </div>
                             <div className="mrgn-tp viewprofile_useremail col-md-12 col-sm-12">
                                 {shop && shop.owner.name}
