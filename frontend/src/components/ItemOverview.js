@@ -218,7 +218,7 @@ const ItemOverview = ({searchQuery,setSearchQuery,getOtherFilterItems,setItems,g
             <div className="container itemoverview-container">
                 <div className="row">
                     <div className="mrgn-tp col-md-5">
-                        <div><img src={GET_ITEM_DISPLAY_PIC_API+item.itemDisplayPicture} className="itemoverview_display_picture"></img></div>
+                        <div><img src={GET_ITEM_DISPLAY_PIC_API+item.displayPicture} className="itemoverview_display_picture"></img></div>
                     </div>
                     <div className="mrgn-tp col-md-4">
                         <div>

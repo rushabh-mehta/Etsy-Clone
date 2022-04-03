@@ -17,9 +17,9 @@ const GET_ITEM_DISPLAY_PIC_API = config.baseUrl+"/api/item/display-picture/";
 const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
     const navigate = useNavigate();
 
-    const viewItemOverview = ({itemId})=>{
-        if(itemId) {
-             navigate("/item/overview/"+itemId);
+    const viewItemOverview = ({item})=>{
+        if(item?.id) {
+             navigate("/item/overview/"+item.id);
         }
     }
     const removeFavoriteItem = async (event)=>{
