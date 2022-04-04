@@ -5,58 +5,19 @@ import {axiosInstance as authapi} from '../services/authpost';
 import {useNavigate, Link} from "react-router-dom";
 import '../styles/mainfooter.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import { connect } from "react-redux";
+import { getCountries } from "../redux/actions/actions.js";
+import { getCurrencies } from "../redux/actions/actions.js";
 
-const GET_CURRENCIES_API = "/api/currency/";
 const UPDATE_USER_CURRENCY = "api/user/currency/update";
-const GET_COUNTRY_API = '/api/country/';
 
 
-const MainFooter = ({currency,setCurrency}) => {
+const ConnectedMainFooter = ({currency,setCurrency,getCountries,getCurrencies,countries,currencies}) => {
   const navigate = useNavigate();
-  const [currencies,setCurrencies] = useState([]);
   const [gettingCurrencies,setGettingCurrencies] = useState(true);
   const [error, setError] = useState("");
   const [user,setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  const [countries,setCountries] = useState([]);
-  const [gettingCountries,setGettingCountries] = useState(true);
 
-  
-  const getCountries = async () => {
-        setGettingCountries(true);
-        try{
-            const response = await authapi.get(GET_COUNTRY_API);
-            if(response && response.data && response.data.success && response.data.countries){
-                console.log(response.data);
-                setCountries(response.data.countries);
-                setGettingCountries(false);
-            }else{
-                setError("Some unexpected error occurred!");
-                setGettingCountries(false);
-            }
-        }catch(e){
-            console.log(e);
-            setError("Some unexpected error occurred!");
-            setGettingCountries(false);
-        }
-    }
-
-  const getCurrencies = async () => {
-      setGettingCurrencies(true);
-      try{
-          const response = await authapi.get(GET_CURRENCIES_API);
-          if(response && response.data && response.data.success && response.data.currencies){
-              setCurrencies(response.data.currencies);
-              setGettingCurrencies(false);
-          }else{
-              setError("Some unexpected error occurred!");
-              setGettingCurrencies(false);
-          }
-      }catch(e){
-          console.log(e);
-          setError("Some unexpected error occurred!");
-          setGettingCurrencies(false);
-      }
-  }
 
   const changeUserCurrency = async ()=>{
     if(currency && currency.id && currency.name){
@@ -84,7 +45,6 @@ const MainFooter = ({currency,setCurrency}) => {
       return eachCurrency.id == e.target.value;
     })
     const currencyObj = selectedCurrency[0];
-    console.log(currencyObj);
     setCurrency(currencyObj);
   }
 
@@ -133,5 +93,22 @@ const MainFooter = ({currency,setCurrency}) => {
     </MDBFooter>
   );
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getCountries: () => dispatch(getCountries()),
+    getCurrencies: () => dispatch(getCurrencies()),
+  };
+}
+
+
+const mapStateToProps = state => {
+  return { 
+    countries: state.countries,
+    currencies: state.currencies
+   };
+};
+
+const MainFooter = connect(mapStateToProps,mapDispatchToProps)(ConnectedMainFooter);
 
 export default MainFooter;

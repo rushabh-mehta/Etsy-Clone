@@ -12,10 +12,10 @@ import { Navbar, Nav, Container, NavDropdown, InputGroup, FormControl} from 'rea
 import config from '../config/config';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/viewprofile.css';
+import { connect } from "react-redux";
 
 
 const GET_USER_API = '/api/user/';
-const GET_COUNTRY_API = '/api/country/';
 const GET_FAVORITE_ITEMS_API = 'api/favoriteitem/';
 const GET_FAVORITE_ITEMS_FILTER_API = 'api/favoriteitem/filter';
 const GET_USER_CURRENCY_API = "api/currency/";
@@ -23,8 +23,19 @@ const UPLOAD_PROFILE_PIC_API = "api/user/profile-picture/upload";
 const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
 const HOME_PAGE = "/";
 
-const ViewProfile = ({searchQuery,setSearchQuery}) => {
-    
+const ConnectedViewProfile = ({searchQuery,setSearchQuery,countries}) => {
+
+    const [favoriteItems, setFavoriteItems] = useState([]);
+    const [user, setUser] = useState("");
+    const [error, setError] = useState(false);
+    const [viewProfileLoading, setViewProfileLoading] = useState(true);
+    const [gettingFavoriteItems, setGettingFavoriteItems] = useState(true);
+    const [profilePicture,setProfilePicture] = useState("");
+    const [currency,setCurrency] = useState({});
+    const [gettingCurrency, setGettingCurrency] = useState(true);
+    const [searchQueryFav, setSearchQueryFav] = useState("");
+    const navigate = useNavigate();
+
     const getUser = async ({id})=>{
         setViewProfileLoading(true);
         try{
@@ -54,23 +65,6 @@ const ViewProfile = ({searchQuery,setSearchQuery}) => {
         }
     }
 
-    const getCountries = async () => {
-        setGettingCountries(true);
-        try{
-            const response = await authapi.get(GET_COUNTRY_API);
-            if(response && response.data && response.data.success && response.data.countries){
-                setCountries(response.data.countries);
-                setGettingCountries(false);
-            }else{
-                setError("Some unexpected error occurred!");
-                setGettingCountries(false);
-            }
-        }catch(e){
-            console.log(e);
-            setError("Some unexpected error occurred!");
-            setGettingCountries(false);
-        }
-    }
 
     const getFavoriteItems = async () => {
         setGettingFavoriteItems(true);
@@ -143,19 +137,6 @@ const ViewProfile = ({searchQuery,setSearchQuery}) => {
         }
     }
 
-    const [countries, setCountries] = useState([]);
-    const [favoriteItems, setFavoriteItems] = useState([]);
-    const [user, setUser] = useState("");
-    const [error, setError] = useState(false);
-    const [viewProfileLoading, setViewProfileLoading] = useState(true);
-    const [gettingCountries, setGettingCountries] = useState(true);
-    const [gettingFavoriteItems, setGettingFavoriteItems] = useState(true);
-    const [profilePicture,setProfilePicture] = useState("");
-    const [currency,setCurrency] = useState({});
-    const [gettingCurrency, setGettingCurrency] = useState(true);
-    const [searchQueryFav, setSearchQueryFav] = useState("");
-    const navigate = useNavigate();
-
     useEffect(() => {
         const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user"));
@@ -163,7 +144,6 @@ const ViewProfile = ({searchQuery,setSearchQuery}) => {
             navigate("/login", {replace:true});
         }else{
             getUser(user);
-            getCountries();
             getFavoriteItems();
             getUserCurrency(user);
             setProfilePicture(user.profilePicture);
@@ -200,7 +180,7 @@ const ViewProfile = ({searchQuery,setSearchQuery}) => {
     <div>
         <MainNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
          <div className="view_profile_home_body">
-            {!gettingCurrency && !gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <div>
+            {!gettingCurrency && !gettingFavoriteItems && !viewProfileLoading && <div>
                     <div className="row">
                         <div className="col-md-2 col-sm-12">
                             <div><img src={(user && user.profilePicture) ? (GET_PROFILE_PIC_API+user.profilePicture) : ""} className="view_profile_picture"></img></div>
@@ -267,9 +247,17 @@ const ViewProfile = ({searchQuery,setSearchQuery}) => {
             </div>}
             {viewProfileLoading && <span><LoadingIcons.ThreeDots height="5px" width="30px" stroke="black" fill="black"/></span>}
          </div>
-        {!gettingCurrency && !gettingFavoriteItems && !gettingCountries && !viewProfileLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
+        {!gettingCurrency && !gettingFavoriteItems && !viewProfileLoading && <MainFooter currency={currency} setCurrency={setCurrency}/>}
     </div>
   )
 }
+
+const mapStateToProps = state => {
+  return { 
+    countries: state.countries,
+   };
+};
+
+const ViewProfile = connect(mapStateToProps,null)(ConnectedViewProfile);
 
 export default ViewProfile

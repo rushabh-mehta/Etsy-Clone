@@ -14,12 +14,12 @@ import LoadingIcons from 'react-loading-icons';
 import config from '../config/config';
 import '../styles/editprofile.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import { connect } from "react-redux";
 
 
 
 const GET_USER_API = '/api/user/';
 const EDIT_USER_API = '/api/user/';
-const GET_COUNTRY_API = '/api/country/';
 const GET_USER_CURRENCY_API = "api/currency/";
 const GET_PROFILE_PIC_API = config.baseUrl+"/api/user/profile-picture/";
 const UPLOAD_PROFILE_PIC_API = "api/user/profile-picture/upload";
@@ -32,7 +32,7 @@ const ADDRESS_REGEX = /^[A-z0-9-_ ,]{3,100}$/;
 const CITY_REGEX = /^[A-z][A-z-_ ,]{3,10}$/;
 const ABOUT_REGEX = /^[A-z][A-z0-9-_ ,]{3,100}$/;
 
-const EditProfile = ({searchQuery,setSearchQuery}) => {
+const ConnectedEditProfile = ({searchQuery,setSearchQuery,countries}) => {
     const [user, setUser] = useState({});
 
     const [profilePicture, setProfilePicture] = useState("");
@@ -69,11 +69,9 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
     const [validAbout, setValidAbout] = useState();
     const [aboutFocus, setAboutFocus] = useState();
 
-    const [countries, setCountries] = useState([]);
 
     const[editProfileLoading, setEditProfileLoading] = useState(true);
     const[editingProfile, setEditingProfile] = useState(false);
-    const [gettingCountries, setGettingCountries] = useState(true);
     
     const [error, setError] = useState();
     
@@ -124,29 +122,9 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
             navigate("/login", {replace:true});
         }else{
             getUser(user);
-            getCountries();
             getUserCurrency(user);
         }
     },[]);
-
-
-    const getCountries = async () => {
-        setGettingCountries(true);
-        try{
-            const response = await authapi.get(GET_COUNTRY_API);
-            if(response && response.data && response.data.success && response.data.countries){
-                setCountries(response.data.countries);
-                setGettingCountries(false);
-            }else{
-                setError("Some unexpected error occurred!");
-                setGettingCountries(false);
-            }
-        }catch(e){
-            console.log(e);
-            setError("Some unexpected error occurred!");
-            setGettingCountries(false);
-        }
-    }
 
     const getUser = async ({id})=>{
         try{
@@ -318,7 +296,7 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
   return (
     <div>
         <MainNavbar  searchQuery={searchQuery} setSearchQuery={setSearchQuery} getOtherFilterItems={getOtherFilterItems}/>
-        {!editProfileLoading && !gettingCountries && 
+        {!editProfileLoading && 
             <div className="edit_profile_home_body">
                 <div className="container">
                     <h3 className="edit_profile_header">Your Public Profile</h3>
@@ -463,5 +441,14 @@ const EditProfile = ({searchQuery,setSearchQuery}) => {
     </div>
   )
 }
+
+
+const mapStateToProps = state => {
+  return { 
+    countries: state.countries,
+   };
+};
+
+const EditProfile = connect(mapStateToProps,null)(ConnectedEditProfile);
 
 export default EditProfile
