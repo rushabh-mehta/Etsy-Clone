@@ -8,7 +8,6 @@ import { faCartShopping, faMagnifyingGlass, faShop} from "@fortawesome/free-soli
 
 import {axiosInstance as authapi} from '../services/authpost';
 import { connect } from "react-redux";
-import { removeToken, removeUser } from "../redux/actions/actions.js";
 import '../styles/mainnavbar.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -18,12 +17,10 @@ const LOGIN_PAGE = "/login";
 const SHOP_HOME_PAGE = "/shop/home/";
 const SHOP_CREATE_PAGE = "/shop/create";
 
-const ConnectedMainNavBar = ({searchQuery, getOtherFilterItems, setSearchQuery,removeUser,removeToken})=>{
+const MainNavBar = ({searchQuery, getOtherFilterItems, setSearchQuery})=>{
     const navigate = useNavigate();
 
     const logout = ()=>{
-        removeUser();
-        removeToken();
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         navigate(LOGIN_PAGE,{replace:true});
@@ -96,12 +93,4 @@ const ConnectedMainNavBar = ({searchQuery, getOtherFilterItems, setSearchQuery,r
     )
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    removeUser: () => dispatch(removeUser()),
-    removeToken: () => dispatch(removeToken())
-  };
-}
-
-const MainNavbar = connect(null,mapDispatchToProps)(ConnectedMainNavBar);
-export default MainNavbar
+export default MainNavBar

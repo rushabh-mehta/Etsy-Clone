@@ -7,8 +7,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/register.css';
 import LoadingIcons from 'react-loading-icons';
 import {Link} from 'react-router-dom';
-import { connect } from "react-redux";
-import { addUser } from "../redux/actions/actions.js";
 
 const USER_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -17,7 +15,7 @@ const REGISTER_API = '/api/register';
 const HOMEPAGE = "/"; 
 const LOGIN_URL = "/login";
 
-const ConnectedRegister = ({user,addUser}) => {
+const Register = ({}) => {
     const nameRef = useRef();
 
     const [name, setName] = useState('');
@@ -85,7 +83,6 @@ const ConnectedRegister = ({user,addUser}) => {
                         localStorage.setItem("token",user.token);
                         delete user.token;
                         localStorage.setItem("user",JSON.stringify(user));
-                        addUser(user);
                         setRegistering(false);
                         setSuccess(true);
                         navigate(HOMEPAGE,{replace:true});
@@ -200,16 +197,4 @@ const ConnectedRegister = ({user,addUser}) => {
    
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addUser: user => dispatch(addUser(user))
-  };
-}
-
-
-const mapStateToProps = state => {
-  return { user: state.user };
-};
-
-const Register = connect(mapStateToProps,mapDispatchToProps)(ConnectedRegister);
 export default Register

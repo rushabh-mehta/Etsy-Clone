@@ -7,8 +7,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/login.css';
 import LoadingIcons from 'react-loading-icons';
 import {Link, useNavigate, useLocation } from "react-router-dom";
-import { connect } from "react-redux";
-import { addUser,addToken } from "../redux/actions/actions.js";
 
 
 
@@ -19,7 +17,7 @@ const HOMEPAGE = "/";
 const REGISTER_URL = "/register";
 
 
-const ConnectedLogin = ({user,addUser,token,addToken}) => {
+const Login = ({}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
@@ -75,10 +73,8 @@ const ConnectedLogin = ({user,addUser,token,addToken}) => {
                     const user = response.data.user;
                     if(user && user.token){
                         const token = user.token;
-                        addToken(token);
                         localStorage.setItem("token",token);
                         delete user.token;
-                        addUser(user);
                         localStorage.setItem("user",JSON.stringify(user));
                         setLoggingIn(false);
                         setSuccess(true);
@@ -163,17 +159,4 @@ const ConnectedLogin = ({user,addUser,token,addToken}) => {
    
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addUser: user => dispatch(addUser(user)),
-    addToken: token => dispatch(addToken(token))
-  };
-}
-
-
-const mapStateToProps = state => {
-  return { user: state.user, token: state.token };
-};
-
-const Login = connect(mapStateToProps,mapDispatchToProps)(ConnectedLogin);
 export default Login;
