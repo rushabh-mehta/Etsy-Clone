@@ -3,6 +3,8 @@ import { ADD_USER,REMOVE_USER } from "../action-types/action-types.js";
 import {ADD_TOKEN,REMOVE_TOKEN } from "../action-types/action-types.js";
 import { GET_COUNTRIES } from "../action-types/action-types";
 import { GET_CURRENCIES } from "../action-types/action-types";
+import { ADD_CART_ITEMS } from "../action-types/action-types";
+
 
 
 const GET_COUNTRY_API = '/api/country/';
@@ -57,3 +59,8 @@ export function getCurrencies() {
     });
   }
 }
+
+export function addCartItems(payload) {
+   return { type: ADD_CART_ITEMS, payload };
+}
+

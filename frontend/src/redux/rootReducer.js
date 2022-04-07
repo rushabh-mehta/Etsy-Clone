@@ -4,12 +4,13 @@ import { ADD_TOKEN } from "./action-types/action-types";
 import { REMOVE_TOKEN } from "./action-types/action-types";
 import { GET_COUNTRIES } from "./action-types/action-types";
 import { GET_CURRENCIES } from "./action-types/action-types";
-
+import { ADD_CART_ITEMS } from "./action-types/action-types";
 
 const initialState = {
   user: {},
   token:"",
-  countries:[]
+  countries:[],
+  cart:[]
 };
 
 
@@ -48,6 +49,12 @@ function rootReducer(state = initialState, action) {
       console.log("getting currencies");
       return Object.assign({}, state, {
         currencies: action.payload
+      }); 
+    }
+    if(action.type===ADD_CART_ITEMS){
+      console.log("adding cart items");
+      return Object.assign({}, state, {
+        cart: action.payload
       }); 
     }
     return state;

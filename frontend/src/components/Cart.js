@@ -7,6 +7,9 @@ import { Form, Button } from 'react-bootstrap';
 import MainFooter from './MainFooter';
 import MainNavbar from './MainNavbar';
 import '../styles/cart.css';
+import { addCartItems } from "../redux/actions/actions.js";
+import { connect } from "react-redux";
+
 
 
 const CART_ITEMS_API = "/api/cart/get/";
@@ -18,7 +21,7 @@ const HOME_PAGE = "/";
 
 
 
-const Cart = ({searchQuery,setSearchQuery}) => {
+const ConnectedCart = ({searchQuery,setSearchQuery,addCartItems}) => {
     const navigate = useNavigate();
     const [cartItems,setCartItems] = useState([]);
     const [currency,setCurrency] = useState({});
@@ -60,6 +63,7 @@ const Cart = ({searchQuery,setSearchQuery}) => {
                   if(response.data.success){
                       if(response.data.items){
                           setCartItems(response.data.items);
+                          addCartItems(response.data.items);
                           let invalidOrderCopy = [];
                           response.data.items.forEach((item)=>{
                                 invalidOrderCopy.push(false);
@@ -188,4 +192,14 @@ const Cart = ({searchQuery,setSearchQuery}) => {
   )
 }
 
-export default Cart
+function mapDispatchToProps(dispatch) {
+  return {
+    addCartItems: (cartItems) => dispatch(addCartItems(cartItems)),
+  };
+}
+
+
+
+const Cart = connect(null,mapDispatchToProps)(ConnectedCart);
+
+export default Cart;

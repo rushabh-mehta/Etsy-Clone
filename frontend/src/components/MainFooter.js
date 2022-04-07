@@ -68,7 +68,7 @@ const ConnectedMainFooter = ({currency,setCurrency,getCountries,getCurrencies,co
       <MDBContainer fluid className="text-center text-md-left">
         <MDBRow>
           <MDBCol md="4">
-            <div>{countries.filter((eachCountry)=>{return user.country===eachCountry.id}) && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0] && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0].name}</div>
+            <div>{countries && countries.filter((eachCountry)=>{return user.country===eachCountry.id}) && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0] && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0].name}</div>
           </MDBCol>
           <MDBCol md="4">
             <Form.Group className="mb-3">
