@@ -5,6 +5,8 @@ var Login = require('./kafka_services/login.js');
 var Register = require('./kafka_services/register.js');
 var Country = require('./kafka_services/country.js');
 var Category = require('./kafka_services/category.js');
+var User = require('./kafka_services/user.js');
+
 
 
 const mongoose = require('mongoose');
@@ -64,6 +66,7 @@ handleTopicRequest("login",Login);
 handleTopicRequest("register",Register);
 handleTopicRequest("country",Country);
 handleTopicRequest("category",Category);
+handleTopicRequest("user",User);
 
 
 
