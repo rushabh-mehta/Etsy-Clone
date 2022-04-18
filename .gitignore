@@ -105,7 +105,7 @@ dist
 
 #config files
 backend/config/
-
+kafka_backend/config/
 
 #editor files
 .vscode/
