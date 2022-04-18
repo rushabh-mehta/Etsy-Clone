@@ -2,6 +2,9 @@ var connection =  new require('./kafka/Connection');
 //topics files
 //var signin = require('./services/signin.js');
 var Login = require('./kafka_services/login.js');
+var Register = require('./kafka_services/register.js');
+
+
 const mongoose = require('mongoose');
 const { mongoDB } = require('./config/mongo-config');
 
@@ -56,3 +59,5 @@ function handleTopicRequest(topic_name,fname){
 //first argument is topic name
 //second argument is a function that will handle this topic request
 handleTopicRequest("login",Login)
+handleTopicRequest("register",Register)
+
