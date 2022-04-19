@@ -1,58 +1,11 @@
-const { Cart } = require("../mongo_services/cart");
+const { Item } = require("../mongo_services/item");
 
-
-const addItem = async (msg,callback) => {
+const getShopItems = async (msg,callback) => {
     const response = {};
     const data = {};
-    const item = msg.body;
+    data.shopId = msg.shopId;
     try{
-        const addItem = await Cart.addItem(item);
-        if(addItem.itemExists){
-            response.success = false;
-            response.itemExists = true;
-            response.error = "Item already added";
-            response.status = 400;
-            callback(null,response);
-        }else{
-            response.addedItem = addItem;
-            response.success = true;
-            response.status = 200;
-            callback(null,response);
-        }
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = 500;
-        callback(null,response);
-    }
-}
-
-const deleteItem = async (msg,callback) => {
-    const response = {};
-    const data = {};
-    const item = msg.body;
-    try{
-        const removeItem = await Cart.removeItem(item);
-        response.removedItem = removeItem;
-        response.success = true;
-        response.status = 200;
-        callback(null,response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = 500;
-        callback(null,response);
-    }
-}
-
-const getCart = async (msg,callback)=>{
-    const response = {};
-    const data = {};
-    data.userId = msg.userId;
-    try{
-        const items = await Cart.getCartItems(data);
+        const items = await Item.getShopItems(data);
         response.items = items;
         response.success = true;
         response.status = 200;
@@ -66,12 +19,14 @@ const getCart = async (msg,callback)=>{
     }
 }
 
-const updateItemQuantity = async (msg,callback)=>{
+const getItem = async (msg,callback) => {
     const response = {};
-    const data = msg.body;
+    const data = {};
+    data.itemId = msg.itemId;
+    data.userId = msg.userId;
     try{
-        const updatedItem = await Cart.updateItemOrderQuantity(data);
-        response.updatedItem = updatedItem;
+        const item = await Item.getItem(data);
+        response.item = item;
         response.success = true;
         response.status = 200;
         callback(null,response);
@@ -84,13 +39,66 @@ const updateItemQuantity = async (msg,callback)=>{
     }
 }
 
-const updateItemGift = async (msg,callback)=>{
+const addItem = async (msg,callback)=>{
     const response = {};
-    const data = req.body;
+    const item = msg.body;
     try{
-        console.log(data);
-        const updatedItem = await Cart.updateItemOrderGift(data);
-        response.updatedItem = updatedItem;
+        const itemResult= await Item.addItem(item);
+        response.item = itemResult;
+        response.success = true;
+        response.status = 200;
+        callback(null,response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = 500;
+        callback(null,response);
+    }
+}
+
+const editItem = async(msg,callback)=>{
+    const response = {};
+    const item = msg.body;
+    try{
+        const itemResult = await Item.editItem(item);
+        response.item = itemResult;
+        response.success = true;
+        response.status = 200;
+        callback(null,response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = 500;
+        callback(null,response);
+    }
+}
+
+const otherItem = async(msg,callback)=>{
+    const response = {};
+    const data = msg.body;
+    try{
+        const itemsResult = await Item.getOtherItems(data);
+        response.items = itemsResult;
+        response.success = true;
+        response.status = 200;
+        callback(null,response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = 500;
+        callback(null,response);
+    }
+}
+
+const otherItemFilter = async(msg,callback)=>{
+    const response = {};
+    const data = msg.body;
+    try{
+        const itemsResult = await Item.getOtherFilteredItems(data);
+        response.items = itemsResult;
         response.success = true;
         response.status = 200;
         callback(null,response);
@@ -105,16 +113,18 @@ const updateItemGift = async (msg,callback)=>{
 
 function handle_request(msg, callback) {
   console.log(msg);
-  if (msg.path === "add_item") {
+  if (msg.path === "get_shop_items") {
+    getShopItems(msg, callback);
+  }else if(msg.path === "get_item"){
+    getItem(msg, callback);
+  }else if(msg.path === "add_item"){
     addItem(msg, callback);
-  }else if (msg.path === "delete_item") {
-    deleteItem(msg, callback);
-  }else if(msg.path === "get_cart"){
-    getCart(msg, callback);
-  }else if(msg.path === "update_item_quantity"){
-    updateItemQuantity(msg, callback);
-  }else if(msg.path === "update_item_gift"){
-    updateItemGift(msg, callback);
+  }else if(msg.path === "edit_item"){
+    editItem(msg, callback);
+  }else if(msg.path === "other_item"){
+    otherItem(msg, callback);
+  }else if(msg.path === "other_item_filter"){
+    otherItemFilter(msg, callback);
   }
 }
 

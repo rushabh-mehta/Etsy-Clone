@@ -12,22 +12,21 @@ const upload = multer({ dest: 'uploads/' });
 const { uploadFile, getFileStream } = require('../services/s3');
 
 router.get("shop/:shopId", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = {};
-    data.shopId = req.params.shopId;
-    try{
-        const items = await Item.getShopItems(data);
-        response.items = items;
-        response.success = true;
-        response.status = "200";
-        return res.status(200).send(response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    const msg = {};
+    msg.shopId = req.params.shopId;
+    msg.path = "get_shop_items";
+    kafka.make_request('item',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
+        }else{
+            res.status(results.status).send(results);
+        }
+    });
+   
 });
 
 router.get('/display-picture/:key', (req, res) => {
@@ -41,97 +40,90 @@ router.get('/display-picture/:key', (req, res) => {
 });
 
 router.get("/:itemId/:userId", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = {};
-    data.itemId = req.params.itemId;
-    data.userId = req.params.userId;
-    try{
-        const item = await Item.getItem(data);
-        response.item = item;
-        response.success = true;
-        response.status = "200";
-        return res.status(200).send(response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    const msg = {};
+    msg.itemId = req.params.itemId;
+    msg.userId = req.params.userId;
+    msg.path = "get_item";
+    kafka.make_request('item',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
+        }else{
+            res.status(results.status).send(results);
+        }
+    });
 });
 
 router.post("/add", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = {};
-    const item = req.body;
-    try{
-        const itemResult= await Item.addItem(item);
-        response.item = itemResult;
-        response.success = true;
-        response.status = "200";
-        return res.status(200).send(response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    const msg = {};
+    msg.body = req.body;
+    msg.path = "add_item";
+    kafka.make_request('item',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
+        }else{
+            res.status(results.status).send(results);
+        }
+    });
 });
 
 router.post("/edit", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = {};
-    const item = req.body;
-    try{
-        const itemResult = await Item.editItem(item);
-        response.item = itemResult;
-        response.success = true;
-        response.status = "200";
-        return res.status(200).send(response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    const msg = {};
+    msg.body = req.body;
+    msg.path = "edit_item";
+    kafka.make_request('item',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
+        }else{
+            res.status(results.status).send(results);
+        }
+    });
+    
 });
 
 router.post("/other", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = req.body;
-    try{
-        const itemsResult = await Item.getOtherItems(data);
-        response.items = itemsResult;
-        response.success = true;
-        response.status = "200";
-        return res.status(200).send(response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    const msg = {};
+    msg.body = req.body;
+    msg.path = "other_item";
+    kafka.make_request('item',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
+        }else{
+            res.status(results.status).send(results);
+        }
+    });
 });
 
 router.post("/other/filter", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = req.body;
-    try{
-        const itemsResult = await Item.getOtherFilteredItems(data);
-        response.items = itemsResult;
-        response.success = true;
-        response.status = "200";
-        return res.status(200).send(response);
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    const msg = {};
+    msg.body = req.body;
+    msg.path = "other_item_filter";
+    kafka.make_request('item',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
+        }else{
+            res.status(results.status).send(results);
+        }
+    });
 });
 
 
