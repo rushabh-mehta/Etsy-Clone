@@ -15,117 +15,75 @@ const { uploadFile, getFileStream } = require('../services/s3');
 
 
 router.get("/user/:id", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = {};
-    data.userId = req.params.id;
-    try{
-        const result = await Shop.getUserShop(data);
-        if(result && result.shopFound && result.shop){
-            response.shop = result.shop;
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
+    const msg = {};
+    msg.userId = req.params.id;
+    msg.path = "get_user_shop";
+    kafka.make_request('shop',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
         }else{
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
+            res.status(results.status).send(results);
         }
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    });
+    
 });
 
 router.post("/name", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = {};
-    data.shopName = req.body.shopName;
-    try{
-        const result = await Shop.checkNameAvailable(data);
-        if(result && result.shopFound && result.shop){
-            response.shop = result.shop;
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
+    const msg = {};
+    msg.shopName = req.body.shopName;
+    msg.path = "verify_shop_name";
+    kafka.make_request('shop',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
         }else{
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
+            res.status(results.status).send(results);
         }
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    });
+    
 });
 
 router.post("/create", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const response = {};
-    const data = {};
-    data.shopName = req.body.shopName;
-    data.user = req.body.user;
-    try{
-        const result = await Shop.createShop(data);
-        if(result && result.shopCreated && result.shop){
-            response.shop = result.shop;
-            response.shopCreated = result.shopCreated;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
+    const msg = {};
+    msg.shopName = req.body.shopName;
+    msg.user = req.body.user;
+    msg.path = "create_shop";
+    kafka.make_request('shop',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
         }else{
-            response.shopCreated = result.shopCreated;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
+            res.status(results.status).send(results);
         }
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    });
+    
 });
 
 router.post("/home/", async (req, res) => {
-    const response = {};
-    const data = req.body;
-    try{
-        const result = await Shop.getShopById(data);
-        const itemData = {};
-        itemData.shopId = result.shop.id;
-        const itemResult = await Item.getShopItems(itemData);
-        if(result && result.shopFound && result.shop){
-            response.shop = result.shop;
-            response.editRights = result.editRights;
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            console.log(itemResult);
-            response.shopItems = itemResult;
-            return res.status(200).send(response);
+    const msg = {};
+    msg.body = req.body;
+    msg.path = "shop_home";
+    kafka.make_request('shop',msg, function(err,results){
+        if (err){
+            console.log("kafka error");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
         }else{
-            response.shopFound = result.shopFound;
-            response.success = true;
-            response.status = "200";
-            return res.status(200).send(response);
+            res.status(results.status).send(results);
         }
-    }catch(e){
-        console.log(e);
-        response.success = false;
-        response.error = "Some error occurred. Please try again later";
-        response.status = "500";
-        res.status(500).send(response);
-    }
+    });
 });
 
 router.get('/display-picture/:key', (req, res) => {
