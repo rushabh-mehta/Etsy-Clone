@@ -7,6 +7,7 @@ var Country = require('./kafka_services/country.js');
 var Category = require('./kafka_services/category.js');
 var User = require('./kafka_services/user.js');
 var Cart = require('./kafka_services/cart.js');
+var FavoriteItem = require('./kafka_services/favoriteitem.js');
 
 
 
@@ -69,7 +70,6 @@ handleTopicRequest("country",Country);
 handleTopicRequest("category",Category);
 handleTopicRequest("user",User);
 handleTopicRequest("cart",Cart);
-
-
+handleTopicRequest("favoriteitem",FavoriteItem);
 
 
