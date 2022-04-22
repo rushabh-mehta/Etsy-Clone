@@ -22,6 +22,26 @@ const app = express();
 
 require('./config/passport-config')(passport);
 
+
+
+const mongoose = require('mongoose');
+const { mongoDB } = require('./config/mongo-config');
+
+var options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+
+
+mongoose.connect(mongoDB, options, (err, res) => {
+    if (err) {
+        console.log(err);
+        console.log(`MongoDB Connection Failed`);
+    } else {
+        console.log(`MongoDB Connected`);
+    }
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());

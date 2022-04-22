@@ -1,10 +1,7 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const config =  require('config');
-const { Category } = require("../services/category");
-const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
+const kafka = require("../kafka/client");
 
 
 router.get("/:userId",  passport.authenticate('jwt', { session: false }), async (req, res) => {

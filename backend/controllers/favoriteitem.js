@@ -1,10 +1,7 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const config =  require('config');
-const { FavoriteItem } = require("../services/favoriteitem.js");
-const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
+const kafka = require("../kafka/client");
 
 router.post("/add", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const msg = {};

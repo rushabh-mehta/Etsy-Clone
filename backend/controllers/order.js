@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const passport = require('passport');
+const kafka = require("../kafka/client");
+
 
 router.post("/get/:userId", passport.authenticate('jwt', { session: false }), async (req, res) => {
     const msg = {};

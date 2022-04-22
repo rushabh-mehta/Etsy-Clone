@@ -1,9 +1,8 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const config =  require('config');
 const { User } = require("../services/user");
 const passport = require('passport');
 const router = express.Router();
+const kafka = require("../kafka/client");
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
