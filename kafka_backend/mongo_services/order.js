@@ -50,12 +50,13 @@ class Order{
                 });
                 const groupedOrders = {};
                 orderItems.forEach((eachItem)=>{
-                    if(eachItem.id in orders){
-                        groupedOrders[eachItem.id].push(eachItem);
+                    if(eachItem.order in groupedOrders){
+                        groupedOrders[eachItem.order].push(eachItem);
                     }else{
-                        groupedOrders[eachItem.id] = [eachItem];
+                        groupedOrders[eachItem.order] = [eachItem];
                     }
                 });
+                console.log(groupedOrders);
                 response.orders = groupedOrders;
                 response.moreAvailable = moreAvailable;
                 return response;
