@@ -47,7 +47,6 @@ class FavoriteItem{
                 "user":mongoose.Types.ObjectId(userId),
                 "item":mongoose.Types.ObjectId(itemId)
             }
-            console.log(itemQuery);
             const item = await FavoriteItemModel.deleteOne(itemQuery);
             if(item){
                 return item;
@@ -61,6 +60,8 @@ class FavoriteItem{
     }
 
     static getFilteredFavoriteItems = async ({searchQuery,userId})=>{
+        console.log(searchQuery);
+        console.log(userId);
         try{
             const itemQuery = {
             }
@@ -68,11 +69,11 @@ class FavoriteItem{
             itemQuery.$and.push({"user":mongoose.Types.ObjectId(userId)});
             let searchRegex;
             if(searchQuery){
-                searchRegex = new RegExp(`${searchQuery}`);
+                searchRegex = new RegExp(`${searchQuery.toLowerCase()}`);
             }
             let items = await FavoriteItemModel.find(itemQuery).populate('item');
             items = items.filter((eachItem)=>{
-                return eachItem.item.name.match(searchRegex);
+                return eachItem.item.name.toLowerCase().match(searchRegex);
             })
             if(items){
                 return items;

@@ -1,4 +1,5 @@
 const { Shop } = require("../mongo_services/shop");
+const { Item } = require("../mongo_services/item");
 
 const getUserShop = async (msg,callback) => {
     const response = {};
@@ -96,7 +97,6 @@ const shopHome = async (msg,callback) => {
             response.shopFound = result.shopFound;
             response.success = true;
             response.status = 200;
-            console.log(itemResult);
             response.shopItems = itemResult;
             callback(null,response);
         }else{
@@ -115,7 +115,6 @@ const shopHome = async (msg,callback) => {
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "get_user_shop") {
     getUserShop(msg, callback);
   }else if(msg.path === "verify_shop_name"){

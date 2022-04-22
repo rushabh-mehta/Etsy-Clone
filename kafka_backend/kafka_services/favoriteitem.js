@@ -75,14 +75,13 @@ const getUserFilteredFavoriteItems = async (msg,callback) => {
 
 
 function handle_request(msg, callback) {
-  console.log(msg);
-  if (msg.path === "add_favorite_item") {
+    if (msg.path === "add_favorite_item") {
     addFavoriteItem(msg, callback);
-  }else if(msg.path="remove_favorite_item"){
+  }else if(msg.path === "remove_favorite_item"){
     removeFavoriteItem(msg, callback);
-  }else if(msg.path="get_user_favorite_item"){
+  }else if(msg.path === "get_user_favorite_item"){
     getUserFavoriteItems(msg,callback);
-  }else if(msg.path="get_user_filtered_favorite_item"){
+  }else if(msg.path === "get_user_filtered_favorite_item"){
     getUserFilteredFavoriteItems(msg,callback);
   }
 }

@@ -86,9 +86,8 @@ const updateItemQuantity = async (msg,callback)=>{
 
 const updateItemGift = async (msg,callback)=>{
     const response = {};
-    const data = req.body;
+    const data = msg.body;
     try{
-        console.log(data);
         const updatedItem = await Cart.updateItemOrderGift(data);
         response.updatedItem = updatedItem;
         response.success = true;
@@ -104,7 +103,6 @@ const updateItemGift = async (msg,callback)=>{
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "add_item") {
     addItem(msg, callback);
   }else if (msg.path === "delete_item") {

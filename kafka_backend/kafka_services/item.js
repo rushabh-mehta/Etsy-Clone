@@ -112,7 +112,6 @@ const otherItemFilter = async(msg,callback)=>{
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "get_shop_items") {
     getShopItems(msg, callback);
   }else if(msg.path === "get_item"){

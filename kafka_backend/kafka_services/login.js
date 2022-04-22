@@ -58,7 +58,6 @@ const login = async (msg,callback) => {
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "login") {
     login(msg, callback);
   }

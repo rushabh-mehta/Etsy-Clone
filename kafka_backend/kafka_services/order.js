@@ -42,7 +42,6 @@ const placeOrder = async (msg,callback) => {
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "get_user_orders") {
     getUserOrders(msg, callback);
   }else if(msg.path === "place_order"){

@@ -21,9 +21,10 @@ const register = async (msg,callback) => {
             userRegObj.password = encryptedPassword;
             userRegObj.country = "623bc75595f732ed8d44697a";
             userRegObj.currency = "623bc6d795f732ed8d446943";
-            userRegObj.profilePicture = "3d07ffec355de8f5d8a483d2085b4a4e";
-            const result = await User.addUser(userRegObj);
-            delete userRegObj.password;
+            userRegObj.profilePicture = "";
+            let result = await User.addUser(userRegObj);
+            result = JSON.parse(JSON.stringify(result));
+            delete result.password;
             // Create token
             const token = jwt.sign(
                 userRegObj,
@@ -32,8 +33,8 @@ const register = async (msg,callback) => {
                     expiresIn: "24h",
                 }
             );
-            userRegObj.token = token;
-            response.user = userRegObj;
+            result.token = token;
+            response.user = result;
             response.success = true;
             response.status = 200;
             response.result = result;
@@ -55,7 +56,6 @@ const register = async (msg,callback) => {
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "register") {
     register(msg, callback);
   }

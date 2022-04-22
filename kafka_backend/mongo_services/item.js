@@ -157,7 +157,7 @@ class Item{
             }
             itemQuery.$and = [];
             if(searchQuery){
-                let searchRegex = new RegExp(`${searchQuery}`);
+                let searchRegex = new RegExp(`${searchQuery}`,"i");
                 itemQuery.$and.push({"name":searchRegex}); 
             }
             if(minPrice){

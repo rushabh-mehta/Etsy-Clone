@@ -26,6 +26,7 @@ const FavoriteItem = ({item,favoriteItems,setFavoriteItems,index,currency}) => {
         event.stopPropagation();
         const user = JSON.parse(localStorage.getItem("user"));
         const data = {};
+        console.log(item);
         data.itemId = item.item.id;
         data.userId = user.id;
         try{

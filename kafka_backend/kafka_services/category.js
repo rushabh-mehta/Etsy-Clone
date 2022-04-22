@@ -21,7 +21,7 @@ const userCategory = async (msg,callback) => {
 
 const addCategory = async (msg,callback) => {
     const response = {};
-    const data = req.body;
+    const data = msg.body;
     try{
         const addedCategory = await Category.addCategory(data);
         response.addedCategory = addedCategory;
@@ -38,7 +38,6 @@ const addCategory = async (msg,callback) => {
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "user_category") {
     userCategory(msg, callback);
   }

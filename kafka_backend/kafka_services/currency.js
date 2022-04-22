@@ -38,7 +38,6 @@ const getSpecificCurrency = async (msg,callback) => {
 }
 
 function handle_request(msg, callback) {
-  console.log(msg);
   if (msg.path === "get_all_currency") {
     getAllCurrencies(msg, callback);
   }else if (msg.path === "get_specific_currency") {
