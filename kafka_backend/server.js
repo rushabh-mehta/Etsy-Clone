@@ -11,6 +11,7 @@ var FavoriteItem = require('./kafka_services/favoriteitem.js');
 var Order = require('./kafka_services/order.js');
 var Shop = require('./kafka_services/shop.js');
 var Item = require('./kafka_services/item.js');
+var Currency = require('./kafka_services/currency.js');
 
 
 
@@ -77,6 +78,7 @@ handleTopicRequest("favoriteitem",FavoriteItem);
 handleTopicRequest("order",Order);
 handleTopicRequest("shop",Shop);
 handleTopicRequest("item",Item);
+handleTopicRequest("currency",Currency);
 
 
 

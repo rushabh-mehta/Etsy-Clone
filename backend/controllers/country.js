@@ -8,7 +8,6 @@ router.get("/", passport.authenticate('jwt', { session: false }), async (req, re
     msg.body = {};
     msg.path = "country";
     kafka.make_request('country',msg, function(err,results){
-        console.log("here");
         if (err){
             console.log("kafka error");
             res.json({
