@@ -56,7 +56,6 @@ class Order{
                         groupedOrders[eachItem.order] = [eachItem];
                     }
                 });
-                console.log(groupedOrders);
                 response.orders = groupedOrders;
                 response.moreAvailable = moreAvailable;
                 return response;
