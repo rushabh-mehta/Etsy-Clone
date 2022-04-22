@@ -47,7 +47,6 @@ class FavoriteItem{
                 "user":mongoose.Types.ObjectId(userId),
                 "item":mongoose.Types.ObjectId(itemId)
             }
-            console.log(itemQuery);
             const item = await FavoriteItemModel.deleteOne(itemQuery);
             if(item){
                 return item;

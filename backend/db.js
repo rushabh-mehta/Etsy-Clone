@@ -24,7 +24,6 @@ module.exports = mysql.createPool({
 //  if(err){
 //      throw err;
 //  }else{
-//      console.log("mysql connected");
 //  }
 // });
 

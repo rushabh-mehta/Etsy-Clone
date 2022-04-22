@@ -97,7 +97,6 @@ class Shop{
             const shop = await ShopModel.findOne(query).populate('owner');
             let responseObj = {};
             if(shop){
-                console.log(shop.owner);
                 if(shop.owner.id===userId){
                     responseObj.editRights = true;
                 }

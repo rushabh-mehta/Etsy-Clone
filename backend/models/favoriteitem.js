@@ -29,7 +29,6 @@ class FavoriteItem{
                             console.log(error);
                             return reject(error);
                         }
-                        console.log("ADD Item RESULTS: ", results);
                         return resolve(results);
                     });
                 }catch(e){
@@ -53,7 +52,6 @@ class FavoriteItem{
                             console.log(error);
                             return reject(error);
                         }
-                        console.log("DELETE Item RESULTS: ", results);
                         return resolve(results);
                     });
                 }catch(e){

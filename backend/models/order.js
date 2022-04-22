@@ -152,7 +152,6 @@ class Order{
                                                             const query = `INSERT INTO ${orderItemTableName} (orderId,name,displayPicture,price,orderQuantity,date,shopName,itemId,gift,description) VALUES ("${orderId}","${eachItem.itemName}","${eachItem.itemDisplayPicture}",${eachItem.itemPrice},"${eachItem.itemOrderQuantity}",${poolConnection.escape(eachItem.itemDate)},"${eachItem.shopName}","${eachItem.itemId}","${eachItem.itemGift}","${eachItem.itemCartDescription}");`;
                                                             createOrderItemsQuery+=query;
                                                         })
-                                                        console.log(createOrderItemsQuery);
                                                         poolConnection.query(createOrderItemsQuery,(err,orderItemsCreated)=>{
                                                             if(err){
                                                                 console.log(err);
@@ -163,13 +162,11 @@ class Order{
                                                                     const query = `UPDATE ${itemTableName} SET quantity=${eachItem.itemQuantity}, salesCount=${eachItem.itemSalesCount} where id=${eachItem.itemId};`;
                                                                     updateItemsQuery+=query;
                                                                 })
-                                                                console.log(updateItemsQuery);
                                                                 poolConnection.query(updateItemsQuery,(err, updatedItemsResult)=>{
                                                                     if(err){
                                                                         console.log(err);
                                                                         return reject("Some unexpected error occurred");
                                                                     }else{
-                                                                        console.log(updatedItemsResult);
                                                                         const deleteUserCartQuery = `DELETE FROM ${cartTableName} WHERE userId="${userId}"`;
                                                                         con.query(deleteUserCartQuery,(err,deleteCartResult)=>{
                                                                             if(err){

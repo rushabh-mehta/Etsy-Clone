@@ -15,7 +15,6 @@ class User{
                             console.log(error);
                             return reject(error);
                         }
-                        console.log("ADD USER RESULTS: ", results);
                         return resolve(results);
                     });
                 }catch(e){
@@ -32,13 +31,11 @@ class User{
     static checkExists = async ({email})=>{
         return new Promise((resolve, reject) => {
             const sqlQuery = `select * from ${tableName} WHERE email="${email}"`;
-            console.log("SQL: ", sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
                     return reject(error);
                 }
-                console.log("USER EXISTS RESULTS: ", results);
                 let userObj = {};
                 if(results && results.length){
                     userObj.userFound = true;
@@ -54,13 +51,11 @@ class User{
     static getUserById = async ({id})=>{
         return new Promise((resolve, reject) => {
             const sqlQuery = `select id,profilePicture,name,email,gender,dob,phone,address,city,country,about,currency from ${tableName} WHERE id="${id}"`;
-            console.log("SQL: ", sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
                     return reject(error);
                 }
-                console.log("USER EXISTS RESULTS: ", results);
                 let userObj = {};
                 if(results && results.length){
                     userObj.userFound = true;
@@ -77,7 +72,6 @@ class User{
         return new Promise((resolve, reject) => {
             const sqlQuery = `update ${tableName} set profilePicture = '${profilePicture}', name = '${name}', email = '${email}', gender = '${gender}', dob = '${dob}', phone = '${phone}', address = '${address}', city = '${city}', country = '${country}', about = '${about}' where id = '${id}'`;
             con.query(sqlQuery, (error, result) => {
-                console.log("USER UPDATED RESULT"+JSON.stringify(result));
                 if (error) {
                     console.log(error);
                     return reject(error);
@@ -97,7 +91,6 @@ class User{
         return new Promise((resolve, reject) => {
             const sqlQuery = `update ${tableName} set currency = '${currencyId}' where id = '${userId}'`;
             con.query(sqlQuery, (error, result) => {
-                console.log("USER UPDATED RESULT"+JSON.stringify(result));
                 if (error) {
                     console.log(error);
                     return reject(error);
@@ -117,7 +110,6 @@ class User{
         return new Promise((resolve, reject) => {
             const sqlQuery = `update ${tableName} set profilePicture = '${key}' where id = '${userId}'`;
             con.query(sqlQuery, (error, result) => {
-                console.log("USER UPDATED RESULT"+JSON.stringify(result));
                 if (error) {
                     console.log(error);
                     return reject(error);

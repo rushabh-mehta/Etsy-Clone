@@ -62,7 +62,6 @@ class Item{
                             console.log(error);
                             return reject(error);
                         }
-                        console.log("ADD Item RESULTS: ", results);
                         return resolve(results);
                     });
                 }catch(e){
@@ -86,7 +85,6 @@ class Item{
                             console.log(error);
                             return reject(error);
                         }
-                        console.log("ADD Item RESULTS: ", results);
                         return resolve(results);
                     });
                 }catch(e){
@@ -219,7 +217,6 @@ class Item{
         return new Promise((resolve, reject) => {
             const sqlQuery = `update ${tableName} set displayPicture = '${key}' where id = '${itemId}'`;
             con.query(sqlQuery, (error, result) => {
-                console.log("USER UPDATED RESULT"+JSON.stringify(result));
                 if (error) {
                     console.log(error);
                     return reject(error);

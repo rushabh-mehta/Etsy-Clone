@@ -72,13 +72,11 @@ class Shop{
     static getShopByUser = async ({userId})=>{
         return new Promise((resolve, reject) => {
             const sqlQuery = `select ${tableName}.id,${tableName}.name,${tableName}.owner,${tableName}.displayPicture, ${userTableName}.name as ownerName, ${userTableName}.email as ownerEmail, ${userTableName}.phone as ownerPhone, ${userTableName}.profilePicture from ${tableName} INNER JOIN ${userTableName} ON owner=${userTableName}.id WHERE owner="${userId}"`;
-            console.log("SQL: ", sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
                     return reject(error);
                 }
-                console.log("USER EXISTS RESULTS: ", results);
                 let userObj = {};
                 if(results && results.length){
                     userObj.shopFound = true;
@@ -94,13 +92,11 @@ class Shop{
     static getShopById = async ({userId,shopId})=>{
         return new Promise((resolve, reject) => {
             const sqlQuery = `select ${tableName}.id,${tableName}.name,${tableName}.owner,${tableName}.displayPicture, ${userTableName}.name as ownerName, ${userTableName}.email as ownerEmail, ${userTableName}.phone as ownerPhone, ${userTableName}.profilePicture from ${tableName} INNER JOIN ${userTableName} ON owner=${userTableName}.id WHERE ${tableName}.id="${shopId}"`;
-            console.log("SQL: ", sqlQuery);
             con.query(sqlQuery, (error, results) => {
                 if (error) {
                     console.log(error);
                     return reject(error);
                 }
-                console.log("USER EXISTS RESULTS: ", results);
                 let userObj = {};
                 userObj.editRights = false;
                 if(results && results.length){
@@ -121,7 +117,6 @@ class Shop{
         return new Promise((resolve, reject) => {
             const sqlQuery = `update ${tableName} set displayPicture = '${key}' where id = '${shopId}'`;
             con.query(sqlQuery, (error, result) => {
-                console.log("USER UPDATED RESULT"+JSON.stringify(result));
                 if (error) {
                     console.log(error);
                     return reject(error);
