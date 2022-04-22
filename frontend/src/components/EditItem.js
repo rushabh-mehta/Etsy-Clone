@@ -83,6 +83,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         item.id=id;
         items[index] = item;
         setItems(items);
+        console.log(item);
         try{
             const response = await authapi.post(EDIT_ITEM_API,item);
             if(response && response.data && response.data.success){
@@ -91,6 +92,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
                 setQuantity(copyQuantity);
                 setCategory(copyCategory);
                 setDescription(copyDescription);
+                setDisplayPicture(copyDisplayPicture);
                 setEditingItem(false);
                 setShow(false);
             }else{
@@ -132,7 +134,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         try{
             const response = await authapi.post(UPLOAD_ITEM_DISPLAY_PIC_API, formData, { headers: {'Content-Type': 'multipart/form-data'}});
             if(response && response.data && response.data.imageKey){
-                setDisplayPicture(response.data.imageKey);
+                setCopyDisplayPicture(response.data.imageKey);
             }else{
                 console.log(response);
             }
@@ -177,7 +179,7 @@ const EditItem = ({items,setItems,index,id,name,setName,displayPicture,setDispla
         <Modal.Body>
             <Form>
                 <div className="col-md-12">
-                    <div><img src={GET_ITEM_DISPLAY_PIC_API+displayPicture} className="view_profile_picture"></img></div>
+                    <div><img src={GET_ITEM_DISPLAY_PIC_API+copyDisplayPicture} className="view_profile_picture"></img></div>
                     <div>
                         <label className="viewprofile-editimg"htmlFor="profile-pic"><FontAwesomeIcon icon={faCamera}/></label>
                         <input data-testid="profile-pic" onChange={itemDisplayPictureSelected} style={{display: "none"}} id="profile-pic" type="file"></input>

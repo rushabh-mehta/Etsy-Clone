@@ -206,7 +206,7 @@ const ConnectedViewProfile = ({searchQuery,setSearchQuery,countries}) => {
                                     {user && user.gender && user.gender+", "}{countries.filter((eachCountry)=>{return user.country===eachCountry.id}) && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0] && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0].name ? countries.filter((eachCountry)=>{return user.country===eachCountry.id}) && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0] && countries.filter((eachCountry)=>{return user.country===eachCountry.id})[0].name:""}
                                 </div>
                                 <div data-testid="user-dob" className="viewprofile_userdob col-md-12 col-sm-12">
-                                    {user && <span>{user.dob}</span>}
+                                    {user && user.dob!=="NaN/NaN/NaN" && <span>{user.dob}</span>}
                                 </div>
                                 <div data-testid="user-phone" className="viewprofile_userphone col-md-12 col-sm-12">
                                     {user && <span>{user.phone}</span>}

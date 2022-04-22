@@ -24,6 +24,7 @@ const Item = ({index,items,setItems,currency,editRights}) => {
 
 
     const viewItemOverview = ()=>{
+        console.log(items);
         if(items[index]?.id) {
              navigate("/item/overview/"+items[index].id);
         }

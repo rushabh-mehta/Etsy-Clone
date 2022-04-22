@@ -159,6 +159,7 @@ const ShopHome = () => {
                     </div>
                 <div className="shop-items-container">
                         {items && items.map((eachItem,index)=>{
+                            console.log(eachItem);
                             return <Item editRights={editRights} currency={currency} key={eachItem.id} index={index} setItems={setItems} items={items}/>
                         })}
                         {!items || !items.length &&

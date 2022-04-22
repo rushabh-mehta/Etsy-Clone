@@ -21,7 +21,7 @@ const register = async (msg,callback) => {
             userRegObj.password = encryptedPassword;
             userRegObj.country = "623bc75595f732ed8d44697a";
             userRegObj.currency = "623bc6d795f732ed8d446943";
-            userRegObj.profilePicture = "";
+            userRegObj.profilePicture = "c392af743cdddf42b260faffad353a3d";
             let result = await User.addUser(userRegObj);
             result = JSON.parse(JSON.stringify(result));
             delete result.password;
