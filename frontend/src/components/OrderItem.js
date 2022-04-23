@@ -31,10 +31,10 @@ const OrderItem = ({item, currency}) => {
                         <div>{"Price: "+currency.name+" "+item.price*item.orderQuantity+" ("+currency.name+" "+item.price+" per piece)"}</div>
                         <div>{"Shop Name: "+item.shopName}</div>
                         <div>{"Quantity: "+item.orderQuantity}</div>
-                        <div>{"Date: "+item.date}</div>
+                        <div>{"Date: "+item.dateFormatted}</div>
                         {item.gift==='true' && <div className="add-border">
                             <div>{item.gift==='true' ? "This item was a gift!":"" }</div>
-                            <div>{item.gift==='true' ? "Gift Message: "+item.description : ""}</div>
+                            <div>{item.gift==='true' ? "Gift Message: "+item.cartDescription : ""}</div>
                         </div>}
                         <div className="homeitem_sales_count">{item.orderId}</div>
                     </div>

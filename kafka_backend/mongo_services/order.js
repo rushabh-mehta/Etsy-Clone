@@ -12,8 +12,11 @@ class Order{
             const query = {
                 "user": mongoose.Types.ObjectId(userId)
             };
+            const orderSortQuery = {
+                createdDate:-1
+            }
             let moreAvailable = false;
-            let orders = await OrderModel.find(query).skip(skip).limit(parseInt(limit)+1);
+            let orders = await OrderModel.find(query).skip(skip).limit(parseInt(limit)+1).sort(orderSortQuery);
             orders = JSON.parse(JSON.stringify(orders));
             const response = {};
             if(orders?.length){
@@ -46,7 +49,7 @@ class Order{
                     if (month < 10) {
                     month = '0' + month;
                     }
-                    eachItem.date = month+"/"+dt+"/"+year;
+                    eachItem.dateFormatted = month+"/"+dt+"/"+year;
                 });
                 const groupedOrders = {};
                 orderItems.forEach((eachItem)=>{
@@ -56,7 +59,20 @@ class Order{
                         groupedOrders[eachItem.order] = [eachItem];
                     }
                 });
-                response.orders = groupedOrders;
+                let sortedGroupedOrders = [];
+                for (var orderId in groupedOrders) {
+                    sortedGroupedOrders.push([orderId, groupedOrders[orderId]]);
+                }
+
+                sortedGroupedOrders.sort(function(a, b) {
+                     console.log(new Date(b[1][0].date));
+                     return new Date(b[1][0].date) - new Date(a[1][0].date);
+                });
+
+                console.log("=================");
+                console.log(JSON.stringify(sortedGroupedOrders));
+                console.log("=================");
+                response.orders = sortedGroupedOrders;
                 response.moreAvailable = moreAvailable;
                 return response;
             }else{

@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'users',required: true},
+    createdDate : { type: Date, default: Date.now }
 },
 {
-    versionKey: false
+    versionKey: false,
 });
 
 orderSchema.set('toObject', { virtuals: true })

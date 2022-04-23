@@ -113,11 +113,13 @@ const Orders = ({searchQuery,setSearchQuery}) => {
               </span>
       </div>
         <div className="order-items">
-            {orders && Object.keys(orders).map((eachOrderId)=>{
+            {orders && orders.map((eachOrder,eachOrderIndex)=>{
+                let eachOrderId = eachOrder[0];
+                let eachOrderItems = eachOrder[1];
                 let orderTotal = 0;
-                return orders[eachOrderId] && orders[eachOrderId].map((eachOrderItem,index)=>{
+                return eachOrderItems && eachOrderItems.map((eachOrderItem,index)=>{
                     orderTotal += parseFloat(eachOrderItem.price);
-                    if(index===orders[eachOrderId].length-1){
+                    if(index===eachOrderItems.length-1){
                         return <><OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/><div className="container">Order Total: {currency && currency.name+" "+orderTotal} </div></>
                     }
                     return <OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/>
