@@ -118,7 +118,7 @@ const Orders = ({searchQuery,setSearchQuery}) => {
                 let eachOrderItems = eachOrder[1];
                 let orderTotal = 0;
                 return eachOrderItems && eachOrderItems.map((eachOrderItem,index)=>{
-                    orderTotal += parseFloat(eachOrderItem.price);
+                    orderTotal += parseFloat(eachOrderItem.price*eachOrderItem.orderQuantity);
                     if(index===eachOrderItems.length-1){
                         return <><OrderItem currency={currency} key={eachOrderItem.id} item={eachOrderItem}/><div className="container">Order Total: {currency && currency.name+" "+orderTotal} </div></>
                     }

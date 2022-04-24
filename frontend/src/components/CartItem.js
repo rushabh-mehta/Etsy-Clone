@@ -104,7 +104,7 @@ const CartItem = ({index, invalidOrder,setInvalidOrder, item, cartItems, setCart
             if (response && response.data) {
                 if (response.data.success) {
                     const filteredCartItems = cartItems.filter((eachCartItem) => {
-                        return eachCartItem.cartId != item.cartId;
+                        return eachCartItem.id != item.id;
                     });
                     setCartItems(filteredCartItems);
                 } else {
