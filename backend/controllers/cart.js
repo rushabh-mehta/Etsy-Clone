@@ -1,95 +1,112 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const config =  require('config');
+const { Cart } = require("../services/cart");
+const encrypt = require("../services/encrypt");
 const router = express.Router();
 const passport = require('passport');
-const kafka = require("../kafka/client");
 
 
 router.post("/add", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const msg = {};
-    msg.body = req.body;
-    msg.path = "add_item";
-    kafka.make_request('cart',msg, function(err,results){
-        if (err){
-            console.log("kafka error");
-            res.json({
-                status:"error",
-                msg:"System Error, Try Again."
-            })
+    const response = {};
+    const data = {};
+    const item = req.body;
+    try{
+        const addItem = await Cart.addItem(item);
+        if(addItem.itemExists){
+            response.success = false;
+            response.itemExists = true;
+            response.error = "Item already added";
+            response.status = "400";
+            return res.status(400).send(response);
         }else{
-            res.status(results.status).send(results);
+            response.addedItem = addItem;
+            response.success = true;
+            response.status = "200";
+            return res.status(200).send(response);
         }
-    });
-    
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
 });
 
 router.post("/delete", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const msg = {};
-    msg.body = req.body;
-    msg.path = "delete_item";
-    kafka.make_request('cart',msg, function(err,results){
-        if (err){
-            console.log("kafka error");
-            res.json({
-                status:"error",
-                msg:"System Error, Try Again."
-            })
-        }else{
-            res.status(results.status).send(results);
-        }
-    });
-    
+    const response = {};
+    const data = {};
+    const item = req.body;
+    try{
+        const removeItem = await Cart.removeItem(item);
+        response.removedItem = removeItem;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
 });
 
 router.get("/get/:userId", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const msg = {};
-    msg.userId = req.params.userId;;
-    msg.path = "get_cart";
-    kafka.make_request('cart',msg, function(err,results){
-        if (err){
-            console.log("kafka error");
-            res.json({
-                status:"error",
-                msg:"System Error, Try Again."
-            })
-        }else{
-            res.status(results.status).send(results);
-        }
-    });
+    const response = {};
+    const data = {};
+    data.userId = req.params.userId;
+    try{
+        const items = await Cart.getCartItems(data);
+        response.items = items;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
 });
 
 router.post("/item/quantity", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const msg = {};
-    msg.body = req.body;
-    msg.path = "update_item_quantity";
-    kafka.make_request('cart',msg, function(err,results){
-        if (err){
-            console.log("kafka error");
-            res.json({
-                status:"error",
-                msg:"System Error, Try Again."
-            })
-        }else{
-            res.status(results.status).send(results);
-        }
-    });
-    
+    const response = {};
+    const data = req.body;
+    try{
+        const updatedItem = await Cart.updateItemOrderQuantity(data);
+        response.updatedItem = updatedItem;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
 });
 
 router.post("/item/gift", passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const msg = {};
-    msg.body = req.body;
-    msg.path = "update_item_gift";
-    kafka.make_request('cart',msg, function(err,results){
-        if (err){
-            console.log("kafka error");
-            res.json({
-                status:"error",
-                msg:"System Error, Try Again."
-            })
-        }else{
-            res.status(results.status).send(results);
-        }
-    });
+    const response = {};
+    const data = req.body;
+    try{
+        console.log(data);
+        const updatedItem = await Cart.updateItemOrderGift(data);
+        response.updatedItem = updatedItem;
+        response.success = true;
+        response.status = "200";
+        return res.status(200).send(response);
+    }catch(e){
+        console.log(e);
+        response.success = false;
+        response.error = "Some error occurred. Please try again later";
+        response.status = "500";
+        res.status(500).send(response);
+    }
 });
 
 
