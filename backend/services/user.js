@@ -46,6 +46,8 @@ class User{
     }
 
     static getUserById = async ({id})=>{
+        console.log("Here==========");
+        console.log(id);
         try{
             const query = {
                 _id:mongoose.Types.ObjectId(id)

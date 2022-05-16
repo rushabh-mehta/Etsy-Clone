@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/register.css';
 import LoadingIcons from 'react-loading-icons';
 import {Link} from 'react-router-dom';
+import { gql, useMutation } from '@apollo/client';
+import { registerUserMutation } from '../mutations/mutations.js';
 
 const USER_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -106,14 +108,49 @@ const Register = ({}) => {
             setRegistering(false);
         }
     }
+
+    const registerUserGraphQL = async ()=>{
+        setRegistering(true);
+        registerUserMutationExec({
+                variables:{
+                    name:name,
+                    email:email,
+                    password:password
+                }
+            });
+    }
+
+    const registerUserMutationExecResult = async(data)=>{
+        const user = data.createuser;
+        if(user && user.token){
+            localStorage.setItem("token",user.token);
+            delete user.token;
+            localStorage.setItem("user",JSON.stringify(user));
+            setRegistering(false);
+            setSuccess(true);
+            navigate(HOMEPAGE,{replace:true});
+        }else{
+            // TODO show error message from response
+            setSuccess(false);
+            setErrorMsg("Some unexpected error occurred!");
+            setRegistering(false);
+        }
+    }
     
     
     const handleUserRegistrationSubmit = (e)=>{
         e.preventDefault();
+        // if(validName && validEmail && validPassword && validMatchPassword && !registering){
+        //     registerUser();
+        // }
         if(validName && validEmail && validPassword && validMatchPassword && !registering){
-            registerUser();
+            registerUserGraphQL();
         }
     }
+
+     const [registerUserMutationExec, { data: registeredUserData }] = useMutation(registerUserMutation,{
+        onCompleted:registerUserMutationExecResult
+    });
 
     return (
         <section>
@@ -197,4 +234,4 @@ const Register = ({}) => {
    
 }
 
-export default Register
+export default Register;
