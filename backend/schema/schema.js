@@ -42,12 +42,12 @@ const ItemType = new GraphQLObjectType({
         _id: { type: GraphQLID },
         name: { type: GraphQLString },
         displayPicture: { type: GraphQLString },
-        category: { type: CategoryType },
+        category: { type: GraphQLString },
         description: { type: GraphQLString },
         price: { type: GraphQLFloat },
         quantity: {type: GraphQLInt},
         salesCount: { type:GraphQLInt},
-        shop: { type:ShopType }
+        shop: { type:GraphQLString }
     })
 });
 
@@ -166,6 +166,25 @@ const Mutation = new GraphQLObjectType({
                 }else{
                     return {};
                 }
+            }
+        },
+        additem:{
+            type: ItemType,
+            args: {
+                name: { type: GraphQLString },
+                displayPicture: { type: GraphQLString }, 
+                category: { type: GraphQLString },
+                description: { type: GraphQLString },
+                price: { type: GraphQLString },
+                quantity: { type: GraphQLInt },
+                salesCount: { type: GraphQLInt },
+                shopId: { type: GraphQLString }
+            },
+            resolve: async (parent, args) => {
+                console.log("efdsgdfgdf");
+                const itemResult= await Item.addItem(args);
+                console.log(itemResult);
+                return itemResult;
             }
         }
 

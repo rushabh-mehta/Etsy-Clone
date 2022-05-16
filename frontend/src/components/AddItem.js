@@ -7,7 +7,8 @@ import { faPen, faCamera } from "@fortawesome/free-solid-svg-icons";
 import '../styles/addshopitem.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import config from '../config/config';
-
+import { gql, useMutation } from '@apollo/client';
+import { addShopItemMutation } from '../mutations/addshopitem.js';
 
 const GET_CATEGORIES_API = "/api/category/";
 const ADD_ITEM_API = "/api/item/add";
@@ -159,6 +160,50 @@ const AddShopItem = ({setItems,items,id,currency}) => {
         }
     },[quantity]);
 
+    const addShopItemMutationExecResult = async(data)=>{
+                const item = data.additem;
+                item.id = item._id;
+                setItems([...items,item]);
+                setAddingItem(false);
+                setName("");
+                setDisplayPicture("");
+                setDescription("");
+                setPrice("");
+                setQuantity(1);
+                handleClose();
+    }
+
+    const [addShopItemMutationExec, { data: itemData }] = useMutation(addShopItemMutation,{
+        onCompleted:addShopItemMutationExecResult
+    });
+
+    const addItemGraphQL = async () => {
+        setAddingItem(true);
+        const variables = {
+                    name:name,
+                    displayPicture:displayPicture+"fdsfs",
+                    category:category,
+                    description:description,
+                    price:price,
+                    quantity:quantity,
+                    salesCount:0,
+                    shopId:id
+                };
+        console.log(variables);
+        addShopItemMutationExec({
+                variables:{
+                    name:name,
+                    displayPicture:displayPicture+"fdsfs",
+                    category:category,
+                    description:description,
+                    price:price,
+                    quantity:quantity,
+                    salesCount:0,
+                    shopId:id
+                }
+            });
+    }
+
   return (
     <>
       <Button className="add-shopitem-btn" onClick={handleShow}>
@@ -219,7 +264,7 @@ const AddShopItem = ({setItems,items,id,currency}) => {
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button className="addshop-confirm_save-btn" onClick={addItem} disabled={invalidPrice || invalidQuantity}>
+            <Button className="addshop-confirm_save-btn" onClick={addItemGraphQL} disabled={invalidPrice || invalidQuantity}>
             Add
           </Button>
           <Button  className="addshop-cancel_save-btn" onClick={handleClose}>

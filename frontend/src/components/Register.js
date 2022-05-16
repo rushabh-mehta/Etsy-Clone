@@ -8,7 +8,7 @@ import '../styles/register.css';
 import LoadingIcons from 'react-loading-icons';
 import {Link} from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
-import { registerUserMutation } from '../mutations/mutations.js';
+import { registerUserMutation } from '../mutations/registeruser.js';
 
 const USER_REGEX = /^[A-z][A-z0-9-_ ]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -148,7 +148,7 @@ const Register = ({}) => {
         }
     }
 
-     const [registerUserMutationExec, { data: registeredUserData }] = useMutation(registerUserMutation,{
+    const [registerUserMutationExec, { data: registeredUserData }] = useMutation(registerUserMutation,{
         onCompleted:registerUserMutationExecResult
     });
 
