@@ -143,7 +143,7 @@ const Mutation = new GraphQLObjectType({
                         userRegObj.password = encryptedPassword;
                         userRegObj.country = "623bc75595f732ed8d44697a";
                         userRegObj.currency = "623bc6d795f732ed8d446943";
-                        userRegObj.profilePicture = "3d07ffec355de8f5d8a483d2085b4a4e";
+                        userRegObj.profilePicture = "c392af743cdddf42b260faffad353a3d";
                         const result = await User.addUser(userRegObj);
                         delete userRegObj.password;
                         // Create token
@@ -181,7 +181,7 @@ const Mutation = new GraphQLObjectType({
                 shopId: { type: GraphQLString }
             },
             resolve: async (parent, args) => {
-                console.log("efdsgdfgdf");
+                console.log(args);
                 const itemResult= await Item.addItem(args);
                 console.log(itemResult);
                 return itemResult;

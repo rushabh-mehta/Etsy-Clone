@@ -181,7 +181,7 @@ const AddShopItem = ({setItems,items,id,currency}) => {
         setAddingItem(true);
         const variables = {
                     name:name,
-                    displayPicture:displayPicture+"fdsfs",
+                    displayPicture:displayPicture,
                     category:category,
                     description:description,
                     price:price,
@@ -193,7 +193,7 @@ const AddShopItem = ({setItems,items,id,currency}) => {
         addShopItemMutationExec({
                 variables:{
                     name:name,
-                    displayPicture:displayPicture+"fdsfs",
+                    displayPicture:displayPicture,
                     category:category,
                     description:description,
                     price:price,
