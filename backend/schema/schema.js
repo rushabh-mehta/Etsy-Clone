@@ -4,6 +4,9 @@ const {Item} = require('../services/item.js');
 const encrypt = require("../services/encrypt");
 const jwt = require("jsonwebtoken");
 const config =  require('config');
+const { Cart } = require("../services/cart");
+const { Shop } = require("../services/shop");
+const { Order } = require("../services/order");
 
 
 const {
@@ -20,6 +23,14 @@ const {
 
 const CategoryType = new GraphQLObjectType({
     name: 'Category',
+    fields: () => ({
+        _id: { type: GraphQLID },
+        name: { type: GraphQLString }
+    })
+});
+
+const OrderType = new GraphQLObjectType({
+    name: 'Order',
     fields: () => ({
         _id: { type: GraphQLID },
         name: { type: GraphQLString }
@@ -97,12 +108,47 @@ const RootQuery = new GraphQLObjectType({
             type: UserType,
             args: { id: { type: GraphQLID } },
             async resolve(parent, args) {
-                console.log("herereer");
                 const result = await User.getUserById(args);
                 console.log(result);
                 return result.user;
             }
         },
+        getcart : {
+            type: new GraphQLList(ItemType),
+            args: { userId: { type: GraphQLString } },
+            async resolve(parent, args) {
+                const result = await Cart.getCartItems(args);
+                console.log(result);
+                return result;
+            }
+        },
+        getshop : {
+            type: ShopType,
+            args: { userId: { type: GraphQLString } },
+            async resolve(parent, args) {
+                const result = await Shop.getUserShop(args);
+                console.log(result);
+                return result;
+            }
+        },
+        getuser : {
+            type: UserType,
+            args: { id: { type: GraphQLString } },
+            async resolve(parent, args) {
+                const result = await User.getUserById(args);
+                console.log(result);
+                return result;
+            }
+        },
+        getorder:{
+            type: new GraphQLList(ItemType) ,
+            args: { userId: { type: GraphQLString } },
+            async resolve(parent, args) {
+                const order = await Order.getOrderItems(args);
+                console.log(order);
+                return order;
+            }
+        }
     }
 });
 
@@ -186,9 +232,130 @@ const Mutation = new GraphQLObjectType({
                 console.log(itemResult);
                 return itemResult;
             }
-        }
-
-        
+        },
+        edititem:{
+            type: ItemType,
+            args: {
+                name: { type: GraphQLString },
+                displayPicture: { type: GraphQLString }, 
+                category: { type: GraphQLString },
+                description: { type: GraphQLString },
+                price: { type: GraphQLString },
+                quantity: { type: GraphQLInt },
+                salesCount: { type: GraphQLInt },
+                shopId: { type: GraphQLString }
+            },
+            resolve: async (parent, args) => {
+                console.log(args);
+                const itemResult= await Item.editItem(args);
+                console.log(itemResult);
+                return itemResult;
+            }
+        },
+        addcartitem:{
+            type: ItemType,
+            args: {
+                userId: { type: GraphQLString },
+                itemId: { type: GraphQLString }, 
+                orderQuantity: { type: GraphQLInt },
+            },
+            resolve: async (parent, args) => {
+                console.log(args);
+                const itemResult= await Cart.addItem(args);
+                console.log(itemResult);
+                return itemResult;
+            }
+        },
+        removecartitem:{
+            type: ItemType,
+            args: {
+                id: { type: GraphQLString },
+            },
+            resolve: async (parent, args) => {
+                console.log(args);
+                const itemResult = await Cart.removeItem(args);
+                console.log(itemResult);
+                return itemResult;
+            }
+        },
+        login:{
+            type: UserType,
+            args: {
+                email: { type: GraphQLString },
+                password: { type: GraphQLString },
+            },
+            resolve: async(parent,args)=>{
+                const {email,password} = args;
+                const userObj = {email,password};
+                const response = {};
+                if(userObj.email && userObj.password){
+                    try{
+                        const exists = await User.checkExists(userObj);
+                        if(exists && exists.userFound){
+                            const passwordMatch = await encrypt.comparePassword(userObj.password, exists.user.password);
+                            if(passwordMatch){
+                                const user = JSON.parse(JSON.stringify(exists.user));
+                                delete userObj.password;
+                                delete user.password;
+                                const token = jwt.sign(
+                                    userObj,
+                                    config.get("jwtPrivateKey"),
+                                    {
+                                        expiresIn: "24h",
+                                    }
+                                );
+                                user.token = token;
+                                return user;
+                            }else{
+                                return {};
+                            }
+                        }else{
+                            return {}; 
+                        }
+                    }catch(e){
+                        return {};
+                    }
+                }else{
+                    return {};
+                }
+            }
+        },
+        placeOrder:{
+            type: new GraphQLList(ItemType),
+            args: {
+                items: { type: new GraphQLList(ItemType) }
+            },
+            resolve: async(parent,args)=>{
+                console.log(args);
+                const order = await Order.placeOrder(args);
+                console.log(order);
+                return order;
+            }
+        },
+        edituser:{
+            type: UserType,
+            args: { 
+                id: { type: GraphQLString },
+                name: { type: GraphQLString },
+                email: { type: GraphQLString },
+                password: { type: GraphQLString },
+                profilePicture: { type: GraphQLString },
+                country: { type: GraphQLID },
+                currency: { type: GraphQLID },
+                about: {type: GraphQLString },
+                address : { type:GraphQLString},
+                city: { type:GraphQLString },
+                date: { type: GraphQLString},
+                gender: { type:GraphQLString },
+                phone: { type:GraphQLString },
+                token: { type:GraphQLString },
+             },
+            async resolve(parent, args) {
+                const result = await User.editUser(args);
+                console.log(result);
+                return result;
+            }
+        }    
     }
 });
 
